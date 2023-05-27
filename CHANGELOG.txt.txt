@@ -1,0 +1,3 @@
+26/5/2023: 
+- Cree la navegacion de las paginas, instalando los paquetes de react navigation
+- 
