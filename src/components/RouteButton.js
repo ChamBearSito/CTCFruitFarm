@@ -1,29 +1,31 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React from "react";
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
-const RouteButton = () => {
+//! Nombres : adduser,search1
+const RouteButton = ({ nombre = "adduser", packageName = "AntDesign" }) => {
+  const IconComponent = packageName === "AntDesign" ? AntDesign : FontAwesome;
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.viewContainer}>
-        <Text>RouteButton</Text>
+        <IconComponent name={nombre} size={90} color="white" />
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default RouteButton
+export default RouteButton;
 
 const styles = StyleSheet.create({
-  container:{
-    width:120,
-    height:120,
-    backgroundColor:'green',
-    borderRadius:10,
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center'
+  container: {
+    width: 120,
+    height: 120,
+    backgroundColor: "#1D5E33",
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  viewContainer:{
-    
-  }
-})
+  viewContainer: {},
+});
