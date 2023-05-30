@@ -9,16 +9,16 @@ const PruebaHome = () => {
   return (
     <Layout>
       <View style={styles.viewContainer}>
-        <RouteButton />
-        <RouteButton nombre="medkit" packageName="FontAwesome " />
+        <RouteButton size={90} />
+        <RouteButton nombre="medkit" packageName="FontAwesome " size={90} />
       </View>
       <View style={styles.viewContainer2}>
-        <RouteButton nombre="map-o" packageName="FontAwesome " />
-        <RouteButton nombre="briefcase" packageName="FontAwesome " />
+        <RouteButton nombre="map-o" packageName="FontAwesome " size={90} />
+        <RouteButton nombre="briefcase" packageName="FontAwesome " size={90} />
       </View>
       <View style={styles.viewContainer2}>
-        <RouteButton nombre="search1" packageName="AntDesign" />
-        <RouteButton nombre="solution1" packageName="AntDesign" />
+        <RouteButton nombre="search1" packageName="AntDesign" size={90} />
+        <RouteButton nombre="solution1" packageName="AntDesign" size={90} />
       </View>
     </Layout>
   );

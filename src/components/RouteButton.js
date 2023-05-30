@@ -4,12 +4,16 @@ import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 //! Nombres : adduser,search1
-const RouteButton = ({ nombre = "adduser", packageName = "AntDesign" }) => {
+const RouteButton = ({
+  nombre = "adduser",
+  packageName = "AntDesign",
+  size = 90,
+}) => {
   const IconComponent = packageName === "AntDesign" ? AntDesign : FontAwesome;
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.viewContainer}>
-        <IconComponent name={nombre} size={90} color="white" />
+        <IconComponent name={nombre} size={size} color="white" />
       </View>
     </TouchableOpacity>
   );

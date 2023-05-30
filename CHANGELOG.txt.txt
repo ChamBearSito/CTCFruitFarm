@@ -4,7 +4,7 @@
 -Cree la carpeta Sreen pruebas asi hago alguna screen ahi modo prueba sin tocar la definitiva, es pa organizarme mejor jeje
 -Color Base:#1D5E33
 -Agregue a assets el fondo de pantalla de el diseño que hicimos en canva.
--Instale tailwind bueno hay que ver xq no me funca
+
 -Se agrego logo a Assets
 -avanece la pantalla de home,agregandole el fondo, posicionando los botones y agregandoles sus iconos dentro.
 -Separe la barra inferior y la barra superior en componentes y cree el LAYOUT para estar mas ordenados
