@@ -6,6 +6,7 @@ const Stack = createStackNavigator();
 
 import HomeScreen from "../screens/HomeScreen";
 import PruebaHome from "../ScreensPruebas/PruebaHome";
+import PruebaInfo from "../ScreensPruebas/PruebaInfo";
 export const RootStack = () => {
   return (
     <NavigationContainer>
