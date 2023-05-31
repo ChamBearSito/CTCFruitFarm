@@ -18,7 +18,7 @@ const InformationSreen = () => {
           size={50}
           color="#1D5E33"
         />
-        <Text style={styles.subtitulo}>Crear Usuario`</Text>
+        <Text style={styles.subtitulo}>Crear Usuario</Text>
       </View>
 
       <View style={[styles.container, { top: "37%" }]}>

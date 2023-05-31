@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Alert, Modal, Text, Pressable } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const BarraInferior = () => {
   const navigation = useNavigation();
@@ -81,19 +82,37 @@ const BarraInferior = () => {
             style={styles.optionButton}
             onPress={() => handleSubOptionPress("Suboption 2.1")}
           >
-            <Text style={styles.optionText}>Suboption 2.1</Text>
+            <FontAwesome5
+              style={styles.iconocentrado}
+              name="user-plus"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Alta Usuarios</Text>
           </Pressable>
           <Pressable
             style={styles.optionButton}
             onPress={() => handleSubOptionPress("Suboption 2.2")}
           >
-            <Text style={styles.optionText}>Suboption 2.2</Text>
+            <FontAwesome5
+              style={styles.iconocentrado}
+              name="user-minus"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Baja Usuarios</Text>
           </Pressable>
           <Pressable
             style={styles.optionButton}
             onPress={() => handleSubOptionPress("Suboption 2.3")}
           >
-            <Text style={styles.optionText}>Suboption 2.3</Text>
+            <FontAwesome5
+              style={styles.iconocentrado}
+              name="user-edit"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Actualizar Usuarios</Text>
           </Pressable>
         </>
       );
@@ -113,7 +132,13 @@ const BarraInferior = () => {
             style={styles.optionButton}
             onPress={() => handleOptionPress("Option 1")}
           >
-            <Text style={styles.optionText}>Option 1</Text>
+            <AntDesign
+              style={styles.iconocentrado}
+              name="user"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Usuarios</Text>
           </Pressable>
           <Pressable
             style={styles.optionButton}
@@ -235,5 +260,8 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  iconocentrado: {
+    alignSelf: "center",
   },
 });
