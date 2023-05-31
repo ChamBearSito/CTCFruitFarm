@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginTop: 200,
+    marginTop: 185,
     marginHorizontal: 50,
   },
   viewContainer2: {
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: -160,
     marginHorizontal: 50,
+    marginTop: 30,
   },
 });
 

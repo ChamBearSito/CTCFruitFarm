@@ -4,7 +4,9 @@
 -Cree la carpeta Sreen pruebas asi hago alguna screen ahi modo prueba sin tocar la definitiva, es pa organizarme mejor jeje
 -Color Base:#1D5E33
 -Agregue a assets el fondo de pantalla de el diseño que hicimos en canva.
-
 -Se agrego logo a Assets
 -avanece la pantalla de home,agregandole el fondo, posicionando los botones y agregandoles sus iconos dentro.
 -Separe la barra inferior y la barra superior en componentes y cree el LAYOUT para estar mas ordenados
+-Realize pagina de Informacion ( para que sirve cada cosa)
+-Pronto diseño de form de Alta Usuarios
+-Increiblemente quedo pronto el de zonas, con el google maps incluido ejejje, hay que ver algo ahi de el scroll pero se rema

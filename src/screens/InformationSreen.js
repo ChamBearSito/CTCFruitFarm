@@ -5,7 +5,7 @@ import RouteButton from "../components/RouteButton";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-const PruebaInfo = () => {
+const InformationSreen = () => {
   return (
     <Layout>
       <View style={styles.viewInfo}>
@@ -72,7 +72,7 @@ const PruebaInfo = () => {
   );
 };
 
-export default PruebaInfo;
+export default InformationSreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -5,6 +5,7 @@ import {
   View,
   Image,
   StyleSheet,
+  KeyboardAvoidingView,
 } from "react-native";
 import BarraInferior from "../BarraInferior";
 import BarraSuperior from "../BarraSuperior";
@@ -12,36 +13,18 @@ import BarraSuperior from "../BarraSuperior";
 const Layout = ({ children }) => {
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.container}>
-          <Image
-            style={styles.imageBackground}
-            source={require("../../../assets/FondodePantalla.png")}
-          />
-          <BarraSuperior />
+      <Image
+        style={styles.imageBackground}
+        source={require("../../../assets/FondodePantalla.png")}
+      />
+      <BarraSuperior />
 
-          {children}
-        </View>
-        {/* VER SI PONEMOS EL BOTON DE INFO EN LA PANTALLA PRINCIPAL O EN EL MODAL DEL MENU */}
-        {/* <View style={styles.info}>
-        <Text style={{ marginBottom: 40, color: "white" }}>
-          <Ionicons name="ios-information-circle" size={40} color="white" />
-          Informacion
-        </Text>
-      </View> */}
-
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled" // Evita el cierre automático del teclado al tocar la pantalla
+      >
+        <View style={styles.container}>{children}</View>
         <BarraInferior />
-
-        {/* <View style={styles.FooterContainer}>
-        <View style={styles.FooterView}>
-          <View style={{ marginHorizontal: 50 }}>
-            <AntDesign name="home" size={100} color="white" />
-          </View>
-          <View style={{ marginHorizontal: 50 }}>
-            <Ionicons name="menu" size={100} color="white" />
-          </View>
-        </View>
-      </View> */}
       </ScrollView>
     </SafeAreaView>
   );
