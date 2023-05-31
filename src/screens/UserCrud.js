@@ -1,52 +1,58 @@
-import React from "react";
+import React, { useReducer, useContext } from "react";
 import Layout from "../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { UserProvider } from "../provider/userProvider";
+import UserContext from "../provider/userProvider";
 
 const UserCrud = () => {
+  // const { dispatch } = useContext(UserContext);
+
   return (
-    <Layout>
-      <View style={styles.distancia}>
-        <View style={styles.container}>
-          <Text style={styles.titulo}>Alta Usuario</Text>
-        </View>
+    <UserProvider>
+      <Layout>
+        <View style={styles.distancia}>
+          <View style={styles.container}>
+            <Text style={styles.titulo}>Alta Usuario</Text>
+          </View>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Nombre</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="default"
-            placeholder="Ingrese su Nombre"
-            placeholderTextColor="#888"
-          />
-        </View>
+          <View style={styles.container}>
+            <Text style={styles.subtitulo}>Nombre</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="default"
+              placeholder="Ingrese su Nombre"
+              placeholderTextColor="#888"
+            />
+          </View>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Apellido</Text>
-          <TextInput
-            keyboardType="default"
-            style={styles.input}
-            placeholder="Ingrese su Apellido"
-            placeholderTextColor="#888"
-          />
-        </View>
+          <View style={styles.container}>
+            <Text style={styles.subtitulo}>Apellido</Text>
+            <TextInput
+              keyboardType="default"
+              style={styles.input}
+              placeholder="Ingrese su Apellido"
+              placeholderTextColor="#888"
+            />
+          </View>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Cédula</Text>
-          <TextInput
-            keyboardType="numeric"
-            style={styles.input}
-            placeholder="Ingrese su Cédula"
-            placeholderTextColor="#888"
-          />
+          <View style={styles.container}>
+            <Text style={styles.subtitulo}>Cédula</Text>
+            <TextInput
+              keyboardType="numeric"
+              style={styles.input}
+              placeholder="Ingrese su Cédula"
+              placeholderTextColor="#888"
+            />
+          </View>
+          <View style={styles.container}>
+            <TouchableOpacity style={styles.buttonContainer}>
+              <Text style={styles.buttonText}>Crear Usuario</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Crear Usuario</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Layout>
+      </Layout>
+    </UserProvider>
   );
 };
 

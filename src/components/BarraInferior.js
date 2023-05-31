@@ -4,6 +4,7 @@ import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Alert, Modal, Text, Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const BarraInferior = () => {
   const navigation = useNavigation();
@@ -13,12 +14,6 @@ const BarraInferior = () => {
 
   const handlePress = () => {
     navigation.navigate("Home");
-  };
-  const cerraryNavegar = ({ donde }) => {
-    navigation.navigate({
-      name: donde,
-    });
-    hideModal();
   };
 
   const handleMenuPress = () => {
@@ -52,70 +47,319 @@ const BarraInferior = () => {
 
   const renderMenuOptions = () => {
     if (subOption !== null) {
-      return (
-        <>
-          <Pressable style={styles.optionButton} onPress={handleBackPress}>
-            <AntDesign name="arrowleft" size={24} color="white" />
-          </Pressable>
-
-          <Pressable
-            style={styles.optionButton}
-            onPress={() => handleSubOptionPress("Suboption 1.1")}
-          >
-            <Text style={styles.optionText}>Suboption 1.1</Text>
-          </Pressable>
-          <Pressable
-            style={styles.optionButton}
-            onPress={() => handleSubOptionPress("Suboption 1.2")}
-          >
-            <Text style={styles.optionText}>Suboption 1.2</Text>
-          </Pressable>
-        </>
-      );
+      return <></>;
     } else if (selectedOption !== null) {
-      return (
-        <>
-          <Pressable style={styles.optionButton} onPress={handleBackPress}>
-            <AntDesign name="arrowleft" size={24} color="black" />
-          </Pressable>
-          <Pressable
-            style={styles.optionButton}
-            onPress={() => handleSubOptionPress("Suboption 2.1")}
-          >
-            <FontAwesome5
-              style={styles.iconocentrado}
-              name="user-plus"
-              size={24}
-              color="#1D5E33"
-            />
-            <Text style={styles.optionText}>Alta Usuarios</Text>
-          </Pressable>
-          <Pressable
-            style={styles.optionButton}
-            onPress={() => handleSubOptionPress("Suboption 2.2")}
-          >
-            <FontAwesome5
-              style={styles.iconocentrado}
-              name="user-minus"
-              size={24}
-              color="#1D5E33"
-            />
-            <Text style={styles.optionText}>Baja Usuarios</Text>
-          </Pressable>
-          <Pressable
-            style={styles.optionButton}
-            onPress={() => handleSubOptionPress("Suboption 2.3")}
-          >
-            <FontAwesome5
-              style={styles.iconocentrado}
-              name="user-edit"
-              size={24}
-              color="#1D5E33"
-            />
-            <Text style={styles.optionText}>Actualizar Usuarios</Text>
-          </Pressable>
-        </>
-      );
+      if (selectedOption === "Option 1") {
+        return (
+          <>
+            <Pressable style={styles.optionButton} onPress={handleBackPress}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("AltaUsuario");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="user-plus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Alta Usuarios</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="user-minus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Baja Usuarios</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="user-edit"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Editar Usuarios</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("Listado");
+                hideModal();
+              }}
+            >
+              <AntDesign
+                style={styles.iconocentrado}
+                name="solution1"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Lista Usuarios</Text>
+            </Pressable>
+          </>
+        );
+      } else if (selectedOption === "Option 2") {
+        return (
+          <>
+            <Pressable style={styles.optionButton} onPress={handleBackPress}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("AltaZona");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="plus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Alta Zona</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="minus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Baja Zona</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="edit"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Editar Zona</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("Listado");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="list"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Lista de Zonas</Text>
+            </Pressable>
+          </>
+        );
+      } else if (selectedOption === "Option 3") {
+        return (
+          <>
+            <Pressable style={styles.optionButton} onPress={handleBackPress}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("AltaObservacion");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="plus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Alta Observación</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="minus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Baja Observación</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="edit"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Editar Observación</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("Listado");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="list"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Lista de Observaciónes</Text>
+            </Pressable>
+          </>
+        );
+      } else if (selectedOption === "Option 4") {
+        return (
+          <>
+            <Pressable style={styles.optionButton} onPress={handleBackPress}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("AltaInsumos");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="plus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Alta Insumo</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="minus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Baja Insumo</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="edit"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Editar Insumo</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("Listado");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="list"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Lista de Insumos</Text>
+            </Pressable>
+          </>
+        );
+      } else if (selectedOption === "Option 5") {
+        return (
+          <>
+            <Pressable style={styles.optionButton} onPress={handleBackPress}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("AltaZona");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="plus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Alta Tratamiento</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="minus"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Baja Tratamiento</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => handleSubOptionPress("Suboption 1.2")}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="edit"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Editar Tratamiento</Text>
+            </Pressable>
+            <Pressable
+              style={styles.optionButton}
+              onPress={() => {
+                navigation.navigate("Listado");
+                hideModal();
+              }}
+            >
+              <FontAwesome5
+                style={styles.iconocentrado}
+                name="list"
+                size={24}
+                color="#1D5E33"
+              />
+              <Text style={styles.optionText}>Lista Tratamientos</Text>
+            </Pressable>
+          </>
+        );
+      }
     } else {
       return (
         <>
@@ -130,6 +374,18 @@ const BarraInferior = () => {
           </Pressable>
           <Pressable
             style={styles.optionButton}
+            onPress={() => handleOptionPress("Option 2")}
+          >
+            <FontAwesome
+              style={styles.iconocentrado}
+              name="map-o"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Zona</Text>
+          </Pressable>
+          <Pressable
+            style={styles.optionButton}
             onPress={() => handleOptionPress("Option 1")}
           >
             <AntDesign
@@ -140,17 +396,43 @@ const BarraInferior = () => {
             />
             <Text style={styles.optionText}>Usuarios</Text>
           </Pressable>
+
           <Pressable
             style={styles.optionButton}
-            onPress={() => handleOptionPress("Option 2")}
+            onPress={() => handleOptionPress("Option 4")}
           >
-            <Text style={styles.optionText}>Option 2</Text>
+            <FontAwesome
+              style={styles.iconocentrado}
+              name="briefcase"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Insumos</Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.optionButton}
+            onPress={() => handleOptionPress("Option 5")}
+          >
+            <FontAwesome
+              style={styles.iconocentrado}
+              name="medkit"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Tratamientos</Text>
           </Pressable>
           <Pressable
             style={styles.optionButton}
             onPress={() => handleOptionPress("Option 3")}
           >
-            <Text style={styles.optionText}>Option 3</Text>
+            <AntDesign
+              style={styles.iconocentrado}
+              name="search1"
+              size={24}
+              color="#1D5E33"
+            />
+            <Text style={styles.optionText}>Observaciones</Text>
           </Pressable>
         </>
       );
