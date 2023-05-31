@@ -10,3 +10,10 @@
 -Realize pagina de Informacion ( para que sirve cada cosa)
 -Pronto diseño de form de Alta Usuarios
 -Increiblemente quedo pronto el de zonas, con el google maps incluido ejejje, hay que ver algo ahi de el scroll pero se rema
+-el que mapafunca es el que dentro de todo dicer algo xd los otros ahi ma o meno
+31/05/2023:
+-Creacion de pagina de Alta Insumo
+-Creacion de la navegacion de los botones de la pagina de Home
+-Creacion de pagina Alta Zona.
+-Creacion de Pagina de Listar Usuario, hay que ver que no se puede poner una flatlist dentro de un scrollview
+que en realidad es sacar el scrollview del layout pero despues vemos porque tal vez nos complica con lo otro

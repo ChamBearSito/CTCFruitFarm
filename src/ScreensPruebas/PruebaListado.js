@@ -12,7 +12,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
-const ListTreataments = () => {
+const PruebaListado = () => {
   // Array de tratamientos de ejemplo
   const tratamientos = [
     { id: 1, nombre: "MICHELO", numero: "#0001" },
@@ -64,7 +64,7 @@ const ListTreataments = () => {
   );
 };
 
-export default ListTreataments;
+export default PruebaListado;
 
 const styles = StyleSheet.create({
   container: {

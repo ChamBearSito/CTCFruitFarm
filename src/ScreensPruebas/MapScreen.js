@@ -1,117 +1,220 @@
-// import React, { useState, useEffect } from "react";
-// import { View, Text, Button, TextInput } from "react-native";
+// import React, { useState } from "react";
+// import Layout from "../components/Layout/Layout";
+// import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+// import { TextInput } from "react-native-gesture-handler";
+// import ModalDropdown from "react-native-modal-dropdown";
 // import MapView, { Marker } from "react-native-maps";
-// import * as Location from "expo-location";
+// import Geocoder from "react-native-geocoding";
 
-// export default function MapScreen() {
-//   const [location, setLocation] = useState(null);
-//   const [selectedLocation, setSelectedLocation] = useState(null);
-//   const [latitude, setLatitude] = useState("");
-//   const [longitude, setLongitude] = useState("");
+// // Configura la API de geocodificación con tu clave de API de Google Maps
+// Geocoder.init("TU_CLAVE_DE_API");
 
-//   useEffect(() => {
-//     (async () => {
-//       let { status } = await Location.requestForegroundPermissionsAsync();
-//       if (status !== "granted") {
-//         console.log("Permission to access location was denied");
-//         return;
-//       }
+// const MapaFunca = () => {
+//   const [place, setPlace] = useState("");
+//   const [Departamento, setDepartamento] = useState("");
+//   const [latitude, setLatitude] = useState(null);
+//   const [longitude, setLongitude] = useState(null);
+//   const [selectedDepartamento, setSelectedDepartamento] = useState("");
 
-//       let location = await Location.getCurrentPositionAsync({});
-//       setLocation(location);
-//     })();
-//   }, []);
-
-//   const handleMapPress = (event) => {
-//     const { coordinate } = event.nativeEvent;
-//     setSelectedLocation(coordinate);
-//     setLatitude(coordinate.latitude.toString());
-//     setLongitude(coordinate.longitude.toString());
+//   const handlePlaceChange = (value) => {
+//     setPlace(value);
 //   };
 
+//   const handleDepartamentoChange = (value) => {
+//     setDepartamento(value);
+//   };
+
+//   const handleLocationSelect = async (event) => {
+//     const { latitude, longitude } = event.nativeEvent.coordinate;
+//     setLatitude(latitude);
+//     setLongitude(longitude);
+
+//     try {
+//       const response = await Geocoder.from(latitude, longitude);
+//       const address = response.results[0].formatted_address;
+//       const departamento = extractDepartamentoFromAddress(address);
+//       setSelectedDepartamento(departamento);
+//     } catch (error) {
+//       console.error("Error al obtener información del departamento:", error);
+//     }
+//   };
+
+//   const extractDepartamentoFromAddress = (address) => {
+//     // Realiza el procesamiento necesario para extraer el departamento del texto de dirección
+//     // Puedes adaptar esto según el formato que devuelve la API de geocodificación
+//     // Por ejemplo, si la dirección es "Departamento de Canelones, Uruguay", puedes extraer "Canelones"
+//     // Aquí se asume que el departamento está entre "Departamento de" y ","
+//     const startIndex = address.indexOf("Departamento de") + 15;
+//     const endIndex = address.indexOf(",", startIndex);
+//     return address.substring(startIndex, endIndex).trim();
+//   };
+
+//   const handleSubmit = () => {
+//     console.log("Lugar seleccionado:", place);
+//     console.log("Departamento seleccionado:", Departamento);
+//     console.log("Latitud:", latitude);
+//     console.log("Longitud:", longitude);
+//     console.log("Departamento obtenido:", selectedDepartamento);
+//   };
+
+//   const departamentoOptions = [
+//     "Artigas",
+//     "Canelones",
+//     "Cerro Largo",
+//     "Colonia",
+//     "Durazno",
+//     "Flores",
+//     "Florida",
+//     "Lavalleja",
+//     "Maldonado",
+//     "Montevideo",
+//     "Paysandú",
+//     "Río Negro",
+//     "Rivera",
+//     "Rocha",
+//     "Salto",
+//     "San José",
+//     "Soriano",
+//     "Tacuarembó",
+//     "Treinta y Tres",
+//   ];
+
 //   return (
-//     <View style={{ flex: 1 }}>
-//       {location ? (
-//         <MapView
-//           style={{ flex: 1 }}
-//           initialRegion={{
-//             latitude: location.coords.latitude,
-//             longitude: location.coords.longitude,
-//             latitudeDelta: 0.0922,
-//             longitudeDelta: 0.0421,
-//           }}
-//           onPress={handleMapPress}
-//         >
-//           {selectedLocation && <Marker coordinate={selectedLocation} />}
-//         </MapView>
-//       ) : (
-//         <Text>Cargando mapa...</Text>
-//       )}
-//       <TextInput
-//         value={latitude}
-//         placeholder="Latitud"
-//         onChangeText={(text) => setLatitude(text)}
-//       />
-//       <TextInput
-//         value={longitude}
-//         placeholder="Longitud"
-//         onChangeText={(text) => setLongitude(text)}
-//       />
-//       <Button
-//         title="Obtener Coordenadas"
-//         onPress={() => {
-//           console.log("Latitud:", latitude);
-//           console.log("Longitud:", longitude);
-//         }}
-//       />
-//     </View>
+//     <Layout>
+//       <View style={styles.distancia}>
+//         <View style={styles.container}>
+//           <Text style={styles.titulo}>Alta Zona</Text>
+//         </View>
+
+//         <View style={styles.container}>
+//           <Text style={styles.subtitulo}>Lugar</Text>
+//           <ModalDropdown
+//             options={["Estancia", "Quinta", "Plantación"]}
+//             defaultValue="Selecciona un lugar"
+//             onSelect={handlePlaceChange}
+//             textStyle={{ fontSize: 30 }}
+//           />
+//         </View>
+
+//         <View style={styles.container}>
+//           <Text style={styles.subtitulo}>Departamento</Text>
+//           <ModalDropdown
+//             options={departamentoOptions}
+//             defaultValue="Selecciona un Depto"
+//             onSelect={handleDepartamentoChange}
+//             textStyle={{ fontSize: 30 }}
+//           />
+//         </View>
+
+//         <View style={styles.container}>
+//           <Text style={styles.subtitulo}>Trabajadores</Text>
+//           <TextInput
+//             keyboardType="numeric"
+//             style={styles.input}
+//             placeholder="Ingrese cantidad de Trabajadores"
+//             placeholderTextColor="#888"
+//           />
+//         </View>
+
+//         <View style={styles.container}>
+//           <Text style={styles.subtitulo}>Ubicacion</Text>
+//           <MapView
+//             style={styles.map}
+//             initialRegion={{
+//               latitude: -34.312977,
+//               longitude: -57.230646,
+//               latitudeDelta: 0.09,
+//               longitudeDelta: 0.04,
+//             }}
+//             onPress={handleLocationSelect}
+//           >
+//             {latitude && longitude && (
+//               <Marker
+//                 coordinate={{ latitude, longitude }}
+//                 draggable
+//                 onDragEnd={handleLocationSelect}
+//               />
+//             )}
+//           </MapView>
+//         </View>
+
+//         {selectedDepartamento !== "" && (
+//           <View style={styles.container}>
+//             <Text style={styles.subtitulo}>Departamento obtenido:</Text>
+//             <Text style={styles.departamentoText}>{selectedDepartamento}</Text>
+//           </View>
+//         )}
+
+//         <View style={styles.container}>
+//           <TouchableOpacity
+//             style={styles.buttonContainer}
+//             onPress={handleSubmit}
+//           >
+//             <Text style={styles.buttonText}>Crear Zona</Text>
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     </Layout>
 //   );
-// }
+// };
 
-import React, { useState } from "react";
-import MapView, { Marker } from "react-native-maps";
-import { View, StyleSheet } from "react-native";
+// export default MapaFunca;
 
-const Mapdegoogle = () => {
-  const [origin, setOrigin] = useState({
-    latitude: -34.312977,
-    longitude: -57.230646,
-  });
-
-  const handleMarkerDragEnd = (event) => {
-    const { coordinate } = event.nativeEvent;
-    setOrigin(coordinate);
-    console.log("Latitud:", coordinate.latitude);
-    console.log("Longitud:", coordinate.longitude);
-  };
-
-  return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: origin.latitude,
-          longitude: origin.longitude,
-          latitudeDelta: 0.09,
-          longitudeDelta: 0.04,
-        }}
-      >
-        <Marker draggable coordinate={origin} onDragEnd={handleMarkerDragEnd} />
-      </MapView>
-    </View>
-  );
-};
-
-export default Mapdegoogle;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingHorizontal: 20,
+//     marginTop: 40,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   distancia: {
+//     marginTop: 100,
+//   },
+//   viewInfo: {
+//     alignSelf: "center",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     display: "flex",
+//     width: "100%",
+//     marginBottom: 20,
+//   },
+//   titulo: {
+//     fontSize: 30,
+//     fontWeight: "bold",
+//     color: "#1D5E33",
+//   },
+//   subtitulo: {
+//     fontSize: 20,
+//     fontWeight: "bold",
+//     color: "#1D5E33",
+//   },
+//   input: {
+//     width: "80%",
+//     height: 40,
+//     borderWidth: 1,
+//     borderColor: "#1D5E33",
+//     borderRadius: 5,
+//     paddingHorizontal: 10,
+//     fontSize: 16,
+//     color: "#333",
+//   },
+//   buttonContainer: {
+//     backgroundColor: "#1D5E33",
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     borderRadius: 5,
+//     alignSelf: "center",
+//     marginBottom: 15,
+//   },
+//   buttonText: {
+//     color: "white",
+//     fontSize: 40,
+//     fontWeight: "bold",
+//   },
+//   map: {
+//     width: "100%",
+//     height: 200,
+//     marginTop: 20,
+//   },
+// });

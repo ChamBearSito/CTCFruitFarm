@@ -1,12 +1,18 @@
 import React from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const BarraInferior = () => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    navigation.navigate("Home");
+  };
   return (
     <View style={styles.FooterContainer}>
       <View style={styles.FooterView}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handlePress}>
           <View style={styles.iconContainer}>
             <Entypo name="home" size={80} color="white" />
           </View>

@@ -5,20 +5,59 @@ import { NavigationContainer } from "@react-navigation/native";
 const Stack = createStackNavigator();
 
 import HomeScreen from "../screens/HomeScreen";
-import PruebaHome from "../ScreensPruebas/PruebaHome";
-import PruebaInfo from "../ScreensPruebas/PruebaInfo";
-import PruebaCrudUsuario from "../ScreensPruebas/PruebaCrudUsuario";
-import PruebaZona from "../ScreensPruebas/PruebaZona";
 import MapScreen from "../ScreensPruebas/MapScreen";
-import Mapdegoogle from "../ScreensPruebas/Mapdegoogle";
 import MapaFunca from "../ScreensPruebas/Mapafunca";
+import InsumoCrud from "../screens/InsumoCrud";
+import ZoneCrud from "../screens/ZoneCrud";
+import ObservationCrud from "../screens/ObservationCrud";
+import UserCrud from "../screens/UserCrud";
+import PruebaListado from "../ScreensPruebas/PruebaListado";
+import ListTreataments from "../screens/ListTreatments";
 export const RootStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* //! HOME// */}
         <Stack.Screen
           name="Home"
-          component={MapaFunca}
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        {/* //! Insumos */}
+        <Stack.Screen
+          name="AltaInsumos"
+          component={InsumoCrud}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        {/* //! Usuario */}
+        <Stack.Screen
+          name="AltaUsuario"
+          component={UserCrud}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        {/* //! Observaciones */}
+        <Stack.Screen
+          name="AltaObservacion"
+          component={ObservationCrud}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! Zona */}
+        <Stack.Screen
+          name="AltaZona"
+          component={ZoneCrud}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        {/* //! Tratamiento */}
+        <Stack.Screen
+          name="Tratamientos"
+          component={ListTreataments}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        {/* //! Listado */}
+        <Stack.Screen
+          name="Listado"
+          component={ListTreataments}
           options={{ headerShown: false }}
         ></Stack.Screen>
       </Stack.Navigator>

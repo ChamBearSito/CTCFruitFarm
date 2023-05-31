@@ -17,12 +17,12 @@ const Layout = ({ children }) => {
         style={styles.imageBackground}
         source={require("../../../assets/FondodePantalla.png")}
       />
-      <BarraSuperior />
 
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
         keyboardShouldPersistTaps="handled" // Evita el cierre automático del teclado al tocar la pantalla
       >
+        <BarraSuperior />
         <View style={styles.container}>{children}</View>
         <BarraInferior />
       </ScrollView>
