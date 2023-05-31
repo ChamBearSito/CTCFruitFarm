@@ -13,6 +13,7 @@ import ObservationCrud from "../screens/ObservationCrud";
 import UserCrud from "../screens/UserCrud";
 import PruebaListado from "../ScreensPruebas/PruebaListado";
 import ListTreataments from "../screens/ListTreatments";
+import InformationSreen from "../screens/InformationSreen";
 export const RootStack = () => {
   return (
     <NavigationContainer>
@@ -58,6 +59,13 @@ export const RootStack = () => {
         <Stack.Screen
           name="Listado"
           component={ListTreataments}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! Info */}
+        <Stack.Screen
+          name="Info"
+          component={InformationSreen}
           options={{ headerShown: false }}
         ></Stack.Screen>
       </Stack.Navigator>

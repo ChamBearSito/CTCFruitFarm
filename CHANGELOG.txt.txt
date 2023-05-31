@@ -17,3 +17,4 @@
 -Creacion de pagina Alta Zona.
 -Creacion de Pagina de Listar Usuario, hay que ver que no se puede poner una flatlist dentro de un scrollview
 que en realidad es sacar el scrollview del layout pero despues vemos porque tal vez nos complica con lo otro
+-Modal de Navegacion Agregado
