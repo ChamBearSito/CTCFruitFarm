@@ -1,24 +1,28 @@
 import React from "react";
 import Layout from "../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+
 import { FontAwesome } from "@expo/vector-icons";
 
-const UserInfoPrueba = ({ route }) => {
-  const { usuario } = route.params;
-  console.log(usuario);
+const TratamientoInfo = ({ route }) => {
+  const { Tratamiento } = route.params;
+  console.log(Tratamiento);
   return (
     <Layout>
       <View style={styles.distancia}>
         <View style={styles.container}>
-          <FontAwesome name="user" size={150} color="#1D5E33" />
-          <Text style={styles.titulo}>{usuario.nombre}</Text>
-          <Text style={styles.titulo}>{usuario.apellido}</Text>
-        </View>
-
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Cedula</Text>
-          <Text style={styles.titulo}>{usuario.cedula}</Text>
+          <FontAwesome name="medkit" size={150} color="#1D5E33" />
+          <Text style={styles.titulo}>
+            {Tratamiento.nombre} {Tratamiento.apellido}
+          </Text>
+          <Text style={styles.subtitulo2}>Tratamiento</Text>
+          <Text style={styles.subtitulo}>{Tratamiento.tratamiento}</Text>
+          <Text style={styles.subtitulo2}>Fecha Tratamiento</Text>
+          <Text style={styles.subtitulo}>{Tratamiento.fechaT}</Text>
+          <Text style={styles.subtitulo2}>Observaciones</Text>
+          <Text style={styles.subtitulo}>{Tratamiento.observaciones}</Text>
+          <Text style={styles.subtitulo2}>C.I</Text>
+          <Text style={styles.subtitulo}>{Tratamiento.ci}</Text>
         </View>
 
         <View style={styles.container}>
@@ -36,13 +40,13 @@ const UserInfoPrueba = ({ route }) => {
   );
 };
 
-export default UserInfoPrueba;
+export default TratamientoInfo;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20, // Agrega espacio horizontal en los extremos del formulario
-    marginTop: 40,
+    marginTop: 20,
     justifyContent: "center",
     alignItems: "center", // Ajusta el espacio entre el componente Layout y el formulario
   },
@@ -67,6 +71,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#1D5E33",
+  },
+  subtitulo2: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
   },
   icon: {
     marginRight: 20,

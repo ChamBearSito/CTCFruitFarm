@@ -318,7 +318,7 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Tratamiento</Text>
             </Pressable>
-            <Pressable
+            {/* <Pressable
               style={styles.optionButton}
               onPress={() => handleSubOptionPress("Suboption 1.2")}
             >
@@ -329,8 +329,8 @@ const BarraInferior = () => {
                 color="#1D5E33"
               />
               <Text style={styles.optionText}>Baja Tratamiento</Text>
-            </Pressable>
-            <Pressable
+            </Pressable> */}
+            {/* <Pressable
               style={styles.optionButton}
               onPress={() => handleSubOptionPress("Suboption 1.2")}
             >
@@ -341,7 +341,7 @@ const BarraInferior = () => {
                 color="#1D5E33"
               />
               <Text style={styles.optionText}>Editar Tratamiento</Text>
-            </Pressable>
+            </Pressable> */}
             <Pressable
               style={styles.optionButton}
               onPress={() => {

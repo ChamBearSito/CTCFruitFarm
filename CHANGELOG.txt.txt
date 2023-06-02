@@ -23,3 +23,4 @@ que en realidad es sacar el scrollview del layout pero despues vemos porque tal 
 -Se agrego pagina de Listar Tratamientos,Usuarios
 -Se agrego pagina de Informacion de Usuarios, y al hacer click en la lista de Usuarios te lleva a la userinfo
 Del Correspondiente
+-Se crearon mas Carpetas en Screens para tener una mejor Organizacion

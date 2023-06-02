@@ -1,9 +1,9 @@
 import React, { useReducer, useContext } from "react";
-import Layout from "../components/Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { UserProvider } from "../provider/userProvider";
-import UserContext from "../provider/userProvider";
+import { UserProvider } from "../../provider/userProvider";
+import UserContext from "../../provider/userProvider";
 
 const UserCrud = () => {
   // const { dispatch } = useContext(UserContext);

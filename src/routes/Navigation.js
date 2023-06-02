@@ -10,14 +10,16 @@ import MapaFunca from "../ScreensPruebas/Mapafunca";
 import InsumoCrud from "../screens/InsumoCrud";
 import ZoneCrud from "../screens/ZoneCrud";
 import ObservationCrud from "../screens/ObservationCrud";
-import UserCrud from "../screens/UserCrud";
+import UserCrud from "../screens/Usuarios/UserCrud";
 import PruebaListado from "../ScreensPruebas/PruebaListado";
-import ListTreataments from "../screens/ListTreatments";
+import ListTreataments from "../screens/Tratamientos/ListTreatments";
 import InformationSreen from "../screens/InformationSreen";
 
 import ListadoUsuarios from "../screens/Usuarios/ListadoUsuarios";
 
 import UserInfo from "../screens/Usuarios/UserInfo";
+
+import TratamientoInfo from "../screens/Tratamientos/TramientoInfo";
 export const RootStack = () => {
   return (
     <NavigationContainer>
@@ -85,6 +87,13 @@ export const RootStack = () => {
         <Stack.Screen
           name="InfoUser"
           component={UserInfo}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! Tratamiento Info */}
+        <Stack.Screen
+          name="InfoTratamiento"
+          component={TratamientoInfo}
           options={{ headerShown: false }}
         ></Stack.Screen>
       </Stack.Navigator>
