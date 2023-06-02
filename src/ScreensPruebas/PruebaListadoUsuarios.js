@@ -15,9 +15,9 @@ import { Ionicons } from "@expo/vector-icons";
 import BarraInferior from "../components/BarraInferior";
 import BarraSuperior from "../components/BarraSuperior";
 
-const ListTreataments = () => {
+const PruebaListadoUsuarios = () => {
   // Array de tratamientos de ejemplo
-  const tratamientos = [
+  const Usuarios = [
     { id: 1, nombre: "MICHELO", numero: "#0001" },
     { id: 2, nombre: "JUANITO", numero: "#0002" },
     { id: 3, nombre: "PEPITO", numero: "#0003" },
@@ -27,7 +27,7 @@ const ListTreataments = () => {
   ];
 
   // Función para renderizar cada item de la lista
-  const renderTratamientoItem = ({ item }) => (
+  const renderUsuariosItem = ({ item }) => (
     <TouchableOpacity>
       <View style={styles.itemContainer}>
         <AntDesign name="user" size={60} color="#1D5E33" />
@@ -47,32 +47,27 @@ const ListTreataments = () => {
       <BarraSuperior />
 
       <View style={styles.container}>
-        <Text style={styles.titulo}>Tratamientos</Text>
+        <Text style={styles.titulo}>Usuarios</Text>
       </View>
       <View style={styles.line} />
 
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={tratamientos}
-          renderItem={renderTratamientoItem}
+          data={Usuarios}
+          renderItem={renderUsuariosItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
         />
         <View style={styles.line} />
       </View>
 
-      <TouchableOpacity style={styles.verMapaButton}>
-        <Ionicons name="earth" size={80} color="#1D5E33" />
-        <Text style={styles.titulo}>Ver en Mapa</Text>
-      </TouchableOpacity>
-
       <BarraInferior />
     </SafeAreaView>
   );
 };
 
-export default ListTreataments;
+export default PruebaListadoUsuarios;
 
 const styles = StyleSheet.create({
   container: {
@@ -111,10 +106,7 @@ const styles = StyleSheet.create({
   FlatList: {
     flex: 1,
   },
-  verMapaButton: {
-    alignItems: "center",
-    marginTop: 5,
-  },
+
   imageBackground: {
     flex: 1,
     width: "100%",

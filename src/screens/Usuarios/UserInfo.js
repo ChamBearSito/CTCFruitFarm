@@ -1,10 +1,10 @@
 import React from "react";
-import Layout from "../components/Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+
 import { FontAwesome } from "@expo/vector-icons";
 
-const UserInfoPrueba = ({ route }) => {
+const UserInfo = ({ route }) => {
   const { usuario } = route.params;
   console.log(usuario);
   return (
@@ -36,7 +36,7 @@ const UserInfoPrueba = ({ route }) => {
   );
 };
 
-export default UserInfoPrueba;
+export default UserInfo;
 
 const styles = StyleSheet.create({
   container: {

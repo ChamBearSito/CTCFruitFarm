@@ -70,7 +70,7 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Usuarios</Text>
             </Pressable>
-            <Pressable
+            {/* <Pressable
               style={styles.optionButton}
               onPress={() => handleSubOptionPress("Suboption 1.2")}
             >
@@ -81,8 +81,8 @@ const BarraInferior = () => {
                 color="#1D5E33"
               />
               <Text style={styles.optionText}>Baja Usuarios</Text>
-            </Pressable>
-            <Pressable
+            </Pressable> */}
+            {/* <Pressable
               style={styles.optionButton}
               onPress={() => handleSubOptionPress("Suboption 1.2")}
             >
@@ -93,11 +93,11 @@ const BarraInferior = () => {
                 color="#1D5E33"
               />
               <Text style={styles.optionText}>Editar Usuarios</Text>
-            </Pressable>
+            </Pressable> */}
             <Pressable
               style={styles.optionButton}
               onPress={() => {
-                navigation.navigate("Listado");
+                navigation.navigate("ListadoUsuarios");
                 hideModal();
               }}
             >

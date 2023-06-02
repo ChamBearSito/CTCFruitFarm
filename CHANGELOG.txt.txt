@@ -19,3 +19,7 @@
 que en realidad es sacar el scrollview del layout pero despues vemos porque tal vez nos complica con lo otro
 -Modal de Navegacion Agregado
 -Se mejoro Modal de NAvegacion con sus respectivas Opciones.
+02/06/2023:
+-Se agrego pagina de Listar Tratamientos,Usuarios
+-Se agrego pagina de Informacion de Usuarios, y al hacer click en la lista de Usuarios te lleva a la userinfo
+Del Correspondiente
