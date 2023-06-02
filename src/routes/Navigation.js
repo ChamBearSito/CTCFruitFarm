@@ -11,7 +11,7 @@ import InsumoCrud from "../screens/InsumoCrud";
 import ZoneCrud from "../screens/ZoneCrud";
 import ObservationCrud from "../screens/ObservationCrud";
 import UserCrud from "../screens/Usuarios/UserCrud";
-import PruebaListado from "../ScreensPruebas/PruebaListado";
+
 import ListTreataments from "../screens/Tratamientos/ListTreatments";
 import InformationSreen from "../screens/InformationSreen";
 
@@ -20,10 +20,19 @@ import ListadoUsuarios from "../screens/Usuarios/ListadoUsuarios";
 import UserInfo from "../screens/Usuarios/UserInfo";
 
 import TratamientoInfo from "../screens/Tratamientos/TramientoInfo";
+import PruebaLados from "../ScreensPruebas/PruebaLados";
+
 export const RootStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* //! Prueba// */}
+        <Stack.Screen
+          name="PruebaLados"
+          component={PruebaLados}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
         {/* //! HOME// */}
         <Stack.Screen
           name="Home"

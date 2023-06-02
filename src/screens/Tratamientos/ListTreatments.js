@@ -113,7 +113,7 @@ const ListTreataments = () => {
     <SafeAreaView style={styles.safeAreaView}>
       <Image
         style={styles.imageBackground}
-        source={require("/../../assets/FondodePantalla.png")}
+        source={require("../../../assets/FondodePantalla.png")}
       />
       <BarraSuperior />
 

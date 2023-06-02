@@ -24,3 +24,4 @@ que en realidad es sacar el scrollview del layout pero despues vemos porque tal 
 -Se agrego pagina de Informacion de Usuarios, y al hacer click en la lista de Usuarios te lleva a la userinfo
 Del Correspondiente
 -Se crearon mas Carpetas en Screens para tener una mejor Organizacion
+-Se creo Prueba de Lados que basicamente es para los dezplasar a la derecha o izquierda para que aparezcan los cosos
