@@ -2,22 +2,16 @@ import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import ModalDropdown from "react-native-modal-dropdown";
+
 import MapView, { Marker } from "react-native-maps";
+import ModalDropdown from "../../components/Dropdown";
+import Dropdown from "../../components/Dropdown";
 
 const ZoneCrud = () => {
-  const [place, setPlace] = useState("");
-  const [Departamento, setDepartamento] = useState("");
+  const [place, setPlace] = useState(undefined);
+  const [Departamento, setDepartamento] = useState(undefined);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
-  const handlePlaceChange = (value) => {
-    setPlace(value);
-  };
-
-  const handleDepartamentoChange = (value) => {
-    setDepartamento(value);
-  };
 
   const handleLocationSelect = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -31,27 +25,54 @@ const ZoneCrud = () => {
     console.log("Latitud:", latitude);
     console.log("Longitud:", longitude);
   };
+  // const departamentoOptions = [
+  //   "Artigas",
+  //   "Canelones",
+  //   "Cerro Largo",
+  //   "Colonia",
+  //   "Durazno",
+  //   "Flores",
+  //   "Florida",
+  //   "Lavalleja",
+  //   "Maldonado",
+  //   "Montevideo",
+  //   "Paysandú",
+  //   "Río Negro",
+  //   "Rivera",
+  //   "Rocha",
+  //   "Salto",
+  //   "San José",
+  //   "Soriano",
+  //   "Tacuarembó",
+  //   "Treinta y Tres",
+  // ];
 
   const departamentoOptions = [
-    "Artigas",
-    "Canelones",
-    "Cerro Largo",
-    "Colonia",
-    "Durazno",
-    "Flores",
-    "Florida",
-    "Lavalleja",
-    "Maldonado",
-    "Montevideo",
-    "Paysandú",
-    "Río Negro",
-    "Rivera",
-    "Rocha",
-    "Salto",
-    "San José",
-    "Soriano",
-    "Tacuarembó",
-    "Treinta y Tres",
+    { label: "Artigas", value: "Artigas" },
+    { label: "Canelones", value: "Canelones" },
+    { label: "Cerro Largo", value: "Cerro Largo" },
+    { label: "Colonia", value: "Colonia" },
+    { label: "Durazno", value: "Durazno" },
+    { label: "Flores", value: "Flores" },
+    { label: "Florida", value: "Florida" },
+    { label: "Lavalleja", value: "Lavalleja" },
+    { label: "Maldonado", value: "Maldonado" },
+    { label: "Montevideo", value: "Montevideo" },
+    { label: "Paysandú", value: "Paysandú" },
+    { label: "Río Negro", value: "Río Negro" },
+    { label: "Rivera", value: "Rivera" },
+    { label: "Rocha", value: "Rocha" },
+    { label: "Salto", value: "Salto" },
+    { label: "San José", value: "San José" },
+    { label: "Soriano", value: "Soriano" },
+    { label: "Tacuarembó", value: "Tacuarembó" },
+    { label: "Treinta y Tres", value: "Treinta y Tres" },
+  ];
+
+  const Lugares = [
+    { label: "Estancia", value: "Estancia" },
+    { label: "Quinta", value: "Quinta" },
+    { label: "Plantación ", value: "Plantación" },
   ];
 
   return (
@@ -63,21 +84,22 @@ const ZoneCrud = () => {
 
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Lugar</Text>
-          <ModalDropdown
-            options={["Estancia", "Quinta", "Plantación"]}
-            defaultValue="Selecciona un lugar"
-            onSelect={handlePlaceChange}
-            textStyle={{ fontSize: 30 }}
-          />
+          <Dropdown label="Lugar" data={Lugares} onSelect={setPlace} />
         </View>
 
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Departamento</Text>
-          <ModalDropdown
+          {/* <ModalDropdown
             options={departamentoOptions}
             defaultValue="Selecciona un Depto"
             onSelect={handleDepartamentoChange}
             textStyle={{ fontSize: 30 }}
+          /> */}
+
+          <Dropdown
+            label="Departamento"
+            data={departamentoOptions}
+            onSelect={setDepartamento}
           />
         </View>
 
@@ -184,5 +206,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     marginTop: 20,
+    borderWidth: 5,
+    borderColor: "black",
   },
 });

@@ -26,3 +26,5 @@ Del Correspondiente
 -Se crearon mas Carpetas en Screens para tener una mejor Organizacion
 -Se creo Prueba de Lados que basicamente es para los dezplasar a la derecha o izquierda para que aparezcan los cosos
 -Se crearon las listas de observaciones,tratamientos,zonas,insumos y usarios mas los screensInfo de los mismos
+03/06/2023:
+-Se creo componente para los select que es mas elegante y se implemento el mismo en zonas y en observaciones

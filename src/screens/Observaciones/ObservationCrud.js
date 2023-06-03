@@ -5,10 +5,11 @@ import { TextInput } from "react-native-gesture-handler";
 import ModalDropdown from "react-native-modal-dropdown";
 import MapView, { Marker } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
+import Dropdown from "../../components/Dropdown";
 
 const ObservationCrud = () => {
-  const [place, setPlace] = useState("");
-  const [Departamento, setDepartamento] = useState("");
+  const [Titulo, setTitulo] = useState(undefined);
+
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -24,14 +25,6 @@ const ObservationCrud = () => {
         "Se requiere acceso a la biblioteca de medios para seleccionar una foto."
       );
     }
-  };
-
-  const handlePlaceChange = (value) => {
-    setPlace(value);
-  };
-
-  const handleDepartamentoChange = (value) => {
-    setDepartamento(value);
   };
 
   const handleLocationSelect = (event) => {
@@ -59,6 +52,11 @@ const ObservationCrud = () => {
     console.log("Latitud:", latitude);
     console.log("Longitud:", longitude);
   };
+  const titulooption = [
+    { label: "Planta en mal estado", value: "Planta en mal estado" },
+    { label: "Plaga detectada", value: "Plaga detectada" },
+    { label: "Falta de riego ", value: "Falta de riego" },
+  ];
 
   return (
     <Layout>
@@ -69,7 +67,7 @@ const ObservationCrud = () => {
 
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Titulo</Text>
-          <ModalDropdown
+          {/* <ModalDropdown
             options={[
               "Plaga detectada",
               "Planta en mal estado",
@@ -78,7 +76,9 @@ const ObservationCrud = () => {
             defaultValue="Seleccione Titulo"
             onSelect={handlePlaceChange}
             textStyle={{ fontSize: 30 }}
-          />
+          /> */}
+
+          <Dropdown label="Titulo" data={titulooption} onSelect={setTitulo} />
         </View>
 
         <View style={styles.container}>
