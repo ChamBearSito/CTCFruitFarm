@@ -19,77 +19,35 @@ import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ListTreataments = () => {
+const ListaObservaciones = () => {
   const navigation = useNavigation();
-  const handleTratamentPress = (Tratamiento) => {
-    navigation.navigate("InfoTratamiento", { Tratamiento });
+  const handleObsPress = (Obs) => {
+    navigation.navigate("ObsInfo", { Obs });
   };
 
-  const [tratamientos, settratamientos] = useState(
+  const [Obs, setObs] = useState(
     // Array de tratamientos de ejemplo
     [
       {
         id: 1,
-        nombre: "Luis",
-        apellido: "Miguel",
-        tratamiento: "T-46545",
-        fechaT: "24/03/2023",
-        observaciones: "Zi",
-        ci: 635351,
+        titulo: "Plaga Detectada",
+        img: "https://source.unsplash.com/featured/?nature",
+        latitud: 12.2123,
+        longitud: 67.1213,
       },
       {
         id: 2,
-        nombre: "Sergio",
-        apellido: "Rico",
-        tratamiento: "T-34345",
-        fechaT: "24/09/2021",
-        observaciones: "No",
-        ci: 54878,
+        titulo: "Falta de Riego",
+        img: "https://source.unsplash.com/featured/?nature",
+        latitud: 35.2123,
+        longitud: 67.1213,
       },
       {
         id: 3,
-        nombre: "Ana",
-        apellido: "García",
-        tratamiento: "T-12345",
-        fechaT: "12/06/2023",
-        observaciones: "Sí",
-        ci: 784536,
-      },
-      {
-        id: 4,
-        nombre: "Carlos",
-        apellido: "Pérez",
-        tratamiento: "T-67890",
-        fechaT: "05/02/2023",
-        observaciones: "No",
-        ci: 963214,
-      },
-      {
-        id: 5,
-        nombre: "María",
-        apellido: "López",
-        tratamiento: "T-24680",
-        fechaT: "30/11/2022",
-        observaciones: "Sí",
-        ci: 745812,
-      },
-      {
-        id: 6,
-        nombre: "Pedro",
-        apellido: "Gómez",
-        tratamiento: "T-13579",
-        fechaT: "18/08/2023",
-        observaciones: "No",
-        ci: 874563,
-      },
-      {
-        id: 7,
-        nombre: "Laura",
-        apellido: "Hernández",
-        tratamiento: "T-97531",
-        fechaT: "22/04/2022",
-        observaciones: "Sí",
-        ci: 632548,
+        titulo: "Planta en mal Estado",
+        img: "https://source.unsplash.com/featured/?nature",
+        latitud: 45.2123,
+        longitud: 67.1213,
       },
     ]
   );
@@ -108,16 +66,16 @@ const ListTreataments = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.standaloneRowFront}>
-        <TouchableOpacity onPress={() => handleTratamentPress(item)}>
+        <TouchableOpacity onPress={() => handleObsPress(item)}>
           <View style={styles.itemContainer}>
             <FontAwesome
               style={{ marginLeft: 10 }}
-              name="medkit"
+              name="search"
               size={60}
               color="#1D5E33"
             />
             <Text style={styles.itemSubtitle}>
-              {item.tratamiento} {item.nombre} {item.apellido}
+              {item.id} {item.titulo} {item.latitud}
             </Text>
           </View>
         </TouchableOpacity>
@@ -148,14 +106,14 @@ const ListTreataments = () => {
       <BarraSuperior />
 
       <View style={styles.container}>
-        <Text style={styles.titulo}>Tratamientos</Text>
+        <Text style={styles.titulo}>Observaciones</Text>
       </View>
       <View style={styles.line} />
 
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={tratamientos}
+          data={Obs}
           renderItem={renderTratamientoItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
@@ -163,17 +121,12 @@ const ListTreataments = () => {
         <View style={styles.line} />
       </View>
 
-      <TouchableOpacity style={styles.verMapaButton}>
-        <Ionicons name="earth" size={80} color="#1D5E33" />
-        <Text style={styles.titulo}>Ver en Mapa</Text>
-      </TouchableOpacity>
-
       <BarraInferior />
     </SafeAreaView>
   );
 };
 
-export default ListTreataments;
+export default ListaObservaciones;
 
 const styles = StyleSheet.create({
   container: {

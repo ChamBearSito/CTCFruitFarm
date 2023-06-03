@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Layout from "../components/Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import ModalDropdown from "react-native-modal-dropdown";

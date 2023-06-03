@@ -8,7 +8,7 @@ import HomeScreen from "../screens/HomeScreen";
 import MapScreen from "../ScreensPruebas/MapScreen";
 import MapaFunca from "../ScreensPruebas/Mapafunca";
 import InsumoCrud from "../screens/InsumoCrud";
-import ZoneCrud from "../screens/ZoneCrud";
+import ZoneCrud from "../screens/Zonas/ZoneCrud";
 import ObservationCrud from "../screens/ObservationCrud";
 import UserCrud from "../screens/Usuarios/UserCrud";
 
@@ -21,17 +21,21 @@ import UserInfo from "../screens/Usuarios/UserInfo";
 
 import TratamientoInfo from "../screens/Tratamientos/TramientoInfo";
 import PruebaLados from "../ScreensPruebas/PruebaLados";
+import ListaZonas from "../screens/Zonas/ListaZonas";
+import InfoZona from "../screens/Zonas/InfoZona";
+import InfoObservacion from "../screens/Observaciones/InfoObservacion";
+import ListaObservaciones from "../screens/Observaciones/ListaObservaciones";
 
 export const RootStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {/* //! Prueba// */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="PruebaLados"
           component={PruebaLados}
           options={{ headerShown: false }}
-        ></Stack.Screen>
+        ></Stack.Screen> */}
 
         {/* //! HOME// */}
         <Stack.Screen
@@ -92,10 +96,37 @@ export const RootStack = () => {
           options={{ headerShown: false }}
         ></Stack.Screen>
 
+        {/* //! Listado Zonas */}
+        <Stack.Screen
+          name="ListadoZonas"
+          component={ListaZonas}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! Listado OBS */}
+        <Stack.Screen
+          name="ListadoObs"
+          component={ListaObservaciones}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
         {/* //! User Info */}
         <Stack.Screen
           name="InfoUser"
           component={UserInfo}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! Zona Info */}
+        <Stack.Screen
+          name="InfoZona"
+          component={InfoZona}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        {/* //! Observacion Info */}
+        <Stack.Screen
+          name="ObsInfo"
+          component={InfoObservacion}
           options={{ headerShown: false }}
         ></Stack.Screen>
 

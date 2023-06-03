@@ -132,34 +132,11 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Zona</Text>
             </Pressable>
-            <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="minus"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Baja Zona</Text>
-            </Pressable>
-            <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="edit"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Editar Zona</Text>
-            </Pressable>
+
             <Pressable
               style={styles.optionButton}
               onPress={() => {
-                navigation.navigate("Listado");
+                navigation.navigate("ListadoZonas");
                 hideModal();
               }}
             >
@@ -194,34 +171,11 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Observación</Text>
             </Pressable>
-            <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="minus"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Baja Observación</Text>
-            </Pressable>
-            <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="edit"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Editar Observación</Text>
-            </Pressable>
+
             <Pressable
               style={styles.optionButton}
               onPress={() => {
-                navigation.navigate("Listado");
+                navigation.navigate("ListadoObs");
                 hideModal();
               }}
             >
@@ -318,30 +272,7 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Tratamiento</Text>
             </Pressable>
-            {/* <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="minus"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Baja Tratamiento</Text>
-            </Pressable> */}
-            {/* <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="edit"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Editar Tratamiento</Text>
-            </Pressable> */}
+
             <Pressable
               style={styles.optionButton}
               onPress={() => {
