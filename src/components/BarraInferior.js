@@ -237,7 +237,7 @@ const BarraInferior = () => {
             <Pressable
               style={styles.optionButton}
               onPress={() => {
-                navigation.navigate("AltaZona");
+                navigation.navigate("TratamientoCurd");
                 hideModal();
               }}
             >

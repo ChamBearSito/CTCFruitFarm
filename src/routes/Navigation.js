@@ -27,6 +27,7 @@ import InfoObservacion from "../screens/Observaciones/InfoObservacion";
 import ListaObservaciones from "../screens/Observaciones/ListaObservaciones";
 import ListaInsumos from "../screens/Insumos/ListaInsumos";
 import InsumoInfo from "../screens/Insumos/InfoInsumos";
+import TratamientoCrud from "../screens/Tratamientos/TreatmentCrud";
 
 export const RootStack = () => {
   return (
@@ -81,8 +82,8 @@ export const RootStack = () => {
 
         {/* //! Tratamiento */}
         <Stack.Screen
-          name="Tratamientos"
-          component={ListTreataments}
+          name="TratamientoCurd"
+          component={TratamientoCrud}
           options={{ headerShown: false }}
         ></Stack.Screen>
 

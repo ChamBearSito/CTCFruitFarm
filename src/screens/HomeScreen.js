@@ -13,7 +13,7 @@ const HomeSreen = () => {
         <RouteButton
           nombre="medkit"
           packageName="FontAwesome "
-          screenName="Tratamientos"
+          screenName="TratamientoCurd"
           size={90}
         />
       </View>
