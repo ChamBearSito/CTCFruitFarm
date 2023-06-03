@@ -7,9 +7,9 @@ const Stack = createStackNavigator();
 import HomeScreen from "../screens/HomeScreen";
 import MapScreen from "../ScreensPruebas/MapScreen";
 import MapaFunca from "../ScreensPruebas/Mapafunca";
-import InsumoCrud from "../screens/InsumoCrud";
+import InsumoCrud from "../screens/Insumos/InsumoCrud";
 import ZoneCrud from "../screens/Zonas/ZoneCrud";
-import ObservationCrud from "../screens/ObservationCrud";
+import ObservationCrud from "../screens/Observaciones/ObservationCrud";
 import UserCrud from "../screens/Usuarios/UserCrud";
 
 import ListTreataments from "../screens/Tratamientos/ListTreatments";
@@ -25,36 +25,46 @@ import ListaZonas from "../screens/Zonas/ListaZonas";
 import InfoZona from "../screens/Zonas/InfoZona";
 import InfoObservacion from "../screens/Observaciones/InfoObservacion";
 import ListaObservaciones from "../screens/Observaciones/ListaObservaciones";
+import ListaInsumos from "../screens/Insumos/ListaInsumos";
+import InsumoInfo from "../screens/Insumos/InfoInsumos";
 
 export const RootStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* //! Prueba// */}
-        {/* <Stack.Screen
-          name="PruebaLados"
-          component={PruebaLados}
-          options={{ headerShown: false }}
-        ></Stack.Screen> */}
-
+        {/* //! ----------------------------------  HOME  -------------------------------------------------------- */}
         {/* //! HOME// */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{ headerShown: false }}
         ></Stack.Screen>
+
+        {/* //! ----------------------------------  SCREEN DE INFORMACION ---------------------------------------- */}
+
+        {/* //! Info */}
+        <Stack.Screen
+          name="Info"
+          component={InformationSreen}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! ----------------------------------  ALTAS SCREENS ------------------------------------------------- */}
+
         {/* //! Insumos */}
         <Stack.Screen
           name="AltaInsumos"
           component={InsumoCrud}
           options={{ headerShown: false }}
         ></Stack.Screen>
+
         {/* //! Usuario */}
         <Stack.Screen
           name="AltaUsuario"
           component={UserCrud}
           options={{ headerShown: false }}
         ></Stack.Screen>
+
         {/* //! Observaciones */}
         <Stack.Screen
           name="AltaObservacion"
@@ -68,6 +78,7 @@ export const RootStack = () => {
           component={ZoneCrud}
           options={{ headerShown: false }}
         ></Stack.Screen>
+
         {/* //! Tratamiento */}
         <Stack.Screen
           name="Tratamientos"
@@ -75,12 +86,7 @@ export const RootStack = () => {
           options={{ headerShown: false }}
         ></Stack.Screen>
 
-        {/* //! Info */}
-        <Stack.Screen
-          name="Info"
-          component={InformationSreen}
-          options={{ headerShown: false }}
-        ></Stack.Screen>
+        {/* //! ----------------------------------  LISTADO SCREENS------------------------------------------------ */}
 
         {/* //! Listado Tratamientos */}
         <Stack.Screen
@@ -110,6 +116,15 @@ export const RootStack = () => {
           options={{ headerShown: false }}
         ></Stack.Screen>
 
+        {/* //! Listado Insumos */}
+        <Stack.Screen
+          name="ListadoInsumos"
+          component={ListaInsumos}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! ----------------------------------  INFO SCREENS-------------------------------------------------- */}
+
         {/* //! User Info */}
         <Stack.Screen
           name="InfoUser"
@@ -134,6 +149,13 @@ export const RootStack = () => {
         <Stack.Screen
           name="InfoTratamiento"
           component={TratamientoInfo}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! Insumo  Info */}
+        <Stack.Screen
+          name="InfoInsumo"
+          component={InsumoInfo}
           options={{ headerShown: false }}
         ></Stack.Screen>
       </Stack.Navigator>

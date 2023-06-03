@@ -19,41 +19,35 @@ import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ListaObservaciones = () => {
+const ListaInsumos = () => {
   const navigation = useNavigation();
-  const handleObsPress = (Obs) => {
-    navigation.navigate("ObsInfo", { Obs });
+  const handleObsPress = (insumos) => {
+    navigation.navigate("InfoInsumo", { insumos });
   };
 
-  const [Obs, setObs] = useState(
+  const [Insumos, setInsumos] = useState(
     // Array de tratamientos de ejemplo
     [
       {
         id: 1,
-        titulo: "Plaga Detectada",
-        img: "https://source.unsplash.com/featured/?nature",
-        latitud: 12.2123,
-        longitud: 67.1213,
+        nombre: "Monsanto",
+        cantidad: 656,
       },
       {
         id: 2,
-        titulo: "Falta de Riego",
-        img: "https://source.unsplash.com/featured/?nature",
-        latitud: 35.2123,
-        longitud: 67.1213,
+        nombre: "Espermizida",
+        cantidad: 245,
       },
       {
         id: 3,
-        titulo: "Planta en mal Estado",
-        img: "https://source.unsplash.com/featured/?nature",
-        latitud: 45.2123,
-        longitud: 67.1213,
+        nombre: "polen",
+        cantidad: 245,
       },
     ]
   );
 
   // Función para renderizar cada item de la lista
-  const renderTratamientoItem = ({ item }) => (
+  const renderInsumoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
         <TouchableOpacity style={styles.botonesr}>
@@ -70,12 +64,12 @@ const ListaObservaciones = () => {
           <View style={styles.itemContainer}>
             <FontAwesome
               style={{ marginLeft: 10 }}
-              name="search"
+              name="briefcase"
               size={60}
               color="#1D5E33"
             />
             <Text style={styles.itemSubtitle}>
-              {item.id} {item.titulo} {item.latitud}
+              {item.id} {item.nombre} {item.cantidad}
             </Text>
           </View>
         </TouchableOpacity>
@@ -106,15 +100,15 @@ const ListaObservaciones = () => {
       <BarraSuperior />
 
       <View style={styles.container}>
-        <Text style={styles.titulo}>Observaciones</Text>
+        <Text style={styles.titulo}>Insumos</Text>
       </View>
       <View style={styles.line} />
 
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={Obs}
-          renderItem={renderTratamientoItem}
+          data={Insumos}
+          renderItem={renderInsumoItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
         />
@@ -125,7 +119,7 @@ const ListaObservaciones = () => {
   );
 };
 
-export default ListaObservaciones;
+export default ListaInsumos;
 
 const styles = StyleSheet.create({
   container: {

@@ -4,25 +4,17 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
 
-const TratamientoInfo = ({ route }) => {
-  const { Tratamiento } = route.params;
-  console.log(Tratamiento);
+const InsumoInfo = ({ route }) => {
+  const { insumos } = route.params;
+  console.log(insumos);
   return (
     <Layout>
       <View style={styles.distancia}>
         <View style={styles.container}>
-          <FontAwesome name="medkit" size={150} color="#1D5E33" />
-          <Text style={styles.titulo}>
-            {Tratamiento.nombre} {Tratamiento.apellido}
-          </Text>
-          <Text style={styles.subtitulo2}>Tratamiento</Text>
-          <Text style={styles.subtitulo}>{Tratamiento.tratamiento}</Text>
-          <Text style={styles.subtitulo2}>Fecha Tratamiento</Text>
-          <Text style={styles.subtitulo}>{Tratamiento.fechaT}</Text>
-          <Text style={styles.subtitulo2}>Observaciones</Text>
-          <Text style={styles.subtitulo}>{Tratamiento.observaciones}</Text>
-          <Text style={styles.subtitulo2}>C.I</Text>
-          <Text style={styles.subtitulo}>{Tratamiento.ci}</Text>
+          <FontAwesome name="briefcase" size={150} color="#1D5E33" />
+          <Text style={styles.titulo}>ID: {insumos.id}</Text>
+          <Text style={styles.titulo}>{insumos.nombre}</Text>
+          <Text style={styles.titulo}>Litros: {insumos.cantidad}</Text>
         </View>
 
         <View style={styles.container}>
@@ -40,13 +32,13 @@ const TratamientoInfo = ({ route }) => {
   );
 };
 
-export default TratamientoInfo;
+export default InsumoInfo;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20, // Agrega espacio horizontal en los extremos del formulario
-    marginTop: 20,
+    marginTop: 40,
     justifyContent: "center",
     alignItems: "center", // Ajusta el espacio entre el componente Layout y el formulario
   },
@@ -72,11 +64,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1D5E33",
   },
-  subtitulo2: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-  },
   icon: {
     marginRight: 20,
   },
@@ -97,7 +84,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 5,
     alignSelf: "center",
-    marginVertical: 10,
+    marginTop: 20,
     flexDirection: "row",
   },
   buttonText: {
@@ -106,7 +93,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginHorizontal: 20,
     paddingHorizontal: 5,
-    marginVertical: 10,
   },
   minicontainer: {
     flexDirection: "row",

@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../components/Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -16,7 +16,7 @@ const InsumoCrud = () => {
           <TextInput
             style={styles.input}
             keyboardType="default"
-            placeholder="Ingrese su Nombre"
+            placeholder="Ingrese Nombre"
             placeholderTextColor="#888"
           />
         </View>

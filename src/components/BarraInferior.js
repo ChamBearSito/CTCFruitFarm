@@ -210,34 +210,11 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Insumo</Text>
             </Pressable>
-            <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="minus"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Baja Insumo</Text>
-            </Pressable>
-            <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="edit"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Editar Insumo</Text>
-            </Pressable>
+
             <Pressable
               style={styles.optionButton}
               onPress={() => {
-                navigation.navigate("Listado");
+                navigation.navigate("ListadoInsumos");
                 hideModal();
               }}
             >

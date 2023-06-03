@@ -25,4 +25,4 @@ que en realidad es sacar el scrollview del layout pero despues vemos porque tal 
 Del Correspondiente
 -Se crearon mas Carpetas en Screens para tener una mejor Organizacion
 -Se creo Prueba de Lados que basicamente es para los dezplasar a la derecha o izquierda para que aparezcan los cosos
--Se crearon las listas de observaciones,tratamientos,zonas y usarios mas los screensInfo de los mismos
+-Se crearon las listas de observaciones,tratamientos,zonas,insumos y usarios mas los screensInfo de los mismos
