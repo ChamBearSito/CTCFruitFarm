@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext,useEffect } from "react";
 
 import {
   View,
@@ -18,6 +18,7 @@ import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
+import UserContext from "../../provider/userProvider";
 
 const ListadoUsuarios = () => {
   const navigation = useNavigation();
@@ -26,61 +27,26 @@ const ListadoUsuarios = () => {
     navigation.navigate("InfoUser", { usuario });
   };
 
-  // Array de tratamientos de ejemplo
-  const [Usuarios, setUsuarios] = useState([
-    {
-      id: 1,
-      nombre: "JUANITO",
-      apellido: "Suarez",
-      cedula: 455454,
-      numero: "#0001",
-    },
-    {
-      id: 2,
-      nombre: "JUANITO",
-      apellido: "JIJIJA",
-      cedula: 4564664,
-      numero: "#0002",
-    },
-    {
-      id: 3,
-      nombre: "Marceliño",
-      apellido: "Albariño",
-      cedula: 584864,
-      numero: "#0003",
-    },
-    {
-      id: 4,
-      nombre: "MARCELA",
-      apellido: "Cavani",
-      cedula: 8476354,
-      numero: "#0004",
-    },
-    {
-      id: 5,
-      nombre: "OSVALDO",
-      apellido: "Chambonardo",
-      cedula: 4564664,
-      numero: "#0005",
-    },
-    {
-      id: 6,
-      nombre: "YESSICA",
-      apellido: "Mimosha",
-      cedula: 456797,
-      numero: "#0006",
-    },
-  ]);
+  // Array de usuarios del contexto
+  const {state, dispatch} = useContext(UserContext);
 
   // Función para renderizar cada item de la lista
   const renderUsuariosItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
-        <TouchableOpacity style={styles.botonesr}>
+        <TouchableOpacity 
+        style={styles.botonesr}
+        onPress={()=>{
+          dispatch({type:'deleteUser', payload:item})
+        }}>
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botonesa}>
+        <TouchableOpacity 
+        style={styles.botonesa}
+        onPress={()=>{
+          navigation.navigate("AltaUsuario",item)
+        }} >
           <Text style={{ color: "white" }}>Editar</Text>
           <FontAwesome5 name="edit" size={20} color="black" />
         </TouchableOpacity>
@@ -90,7 +56,7 @@ const ListadoUsuarios = () => {
           <View style={styles.itemContainer}>
             <AntDesign name="user" size={60} color="#1D5E33" />
             <Text style={styles.itemSubtitle}>
-              {item.numero} {item.nombre}
+              {item.id} {item.nombre}
             </Text>
           </View>
         </TouchableOpacity>
@@ -114,7 +80,7 @@ const ListadoUsuarios = () => {
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={Usuarios}
+          data={state}
           renderItem={renderUsuariosItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}

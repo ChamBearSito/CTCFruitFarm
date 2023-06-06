@@ -30,3 +30,5 @@ Del Correspondiente
 -Se creo componente para los select que es mas elegante y se implemento el mismo en zonas y en observaciones
 -Se creo Pagina de Alta de Tratamientos , tiene algunos detalles para arreglar como la seleccion de un doc en 
 orden de trabajo
+06/06/2023:
+-Se hizo el Crud usuario a nivel local (Editar, Borrar y Agregar)
