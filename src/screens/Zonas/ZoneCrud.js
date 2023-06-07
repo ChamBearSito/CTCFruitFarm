@@ -6,10 +6,13 @@ import { TextInput } from "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
 import ModalDropdown from "../../components/Dropdown";
 import Dropdown from "../../components/Dropdown";
+import { getDistance } from "geolib";
 
 const ZoneCrud = () => {
   const [place, setPlace] = useState(undefined);
-  const [Departamento, setDepartamento] = useState(undefined);
+  const [departamento, setDepartamento] = useState(
+    "Selecciona en el Mapa una Ubicación"
+  );
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
 
@@ -17,11 +20,13 @@ const ZoneCrud = () => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setLatitude(latitude);
     setLongitude(longitude);
+    const departamentoEncontrado = getDepartamento(latitude, longitude);
+    setDepartamento(departamentoEncontrado);
   };
 
   const handleSubmit = () => {
     console.log("Lugar seleccionado:", place);
-    console.log("Departamento seleccionado:", Departamento);
+    console.log("Departamento seleccionado:", departamento);
     console.log("Latitud:", latitude);
     console.log("Longitud:", longitude);
   };
@@ -74,7 +79,52 @@ const ZoneCrud = () => {
     { label: "Quinta", value: "Quinta" },
     { label: "Plantación ", value: "Plantación" },
   ];
+  const apiKey = "TU_API_KEY";
 
+  const getDepartamento = (latitude, longitude) => {
+    // Coordenadas de los departamentos de Uruguay
+    const departamentos = {
+      Artigas: { latitude: -30.4016, longitude: -56.4722 },
+      Canelones: { latitude: -34.7167, longitude: -56.2167 },
+      Cerro_Largo: { latitude: -32.8097, longitude: -53.5197 },
+      Colonia: { latitude: -34.4607, longitude: -57.8409 },
+      Durazno: { latitude: -33.4132, longitude: -56.5006 },
+      Flores: { latitude: -33.5284, longitude: -56.8984 },
+      Florida: { latitude: -34.0997, longitude: -56.2142 },
+      Lavalleja: { latitude: -34.3228, longitude: -55.2375 },
+      Maldonado: { latitude: -34.8825, longitude: -54.9597 },
+      Montevideo: { latitude: -34.9033, longitude: -56.1882 },
+      Paysandú: { latitude: -32.3214, longitude: -58.0756 },
+      Río_Negro: { latitude: -32.7314, longitude: -57.6083 },
+      Rivera: { latitude: -30.9036, longitude: -55.5508 },
+      Rocha: { latitude: -34.4836, longitude: -54.3417 },
+      Salto: { latitude: -31.3833, longitude: -57.9667 },
+      San_José: { latitude: -34.3375, longitude: -56.7139 },
+      Soriano: { latitude: -33.125, longitude: -58.3042 },
+      Tacuarembó: { latitude: -31.718, longitude: -55.985 },
+      Treinta_y_Tres_: { latitude: -33.225, longitude: -54.3833 },
+    };
+
+    let departamentoEncontrado = "";
+    let distanciaMinima = Infinity;
+
+    if (latitude && longitude) {
+      // Buscar el departamento correspondiente a las coordenadas
+      for (const [key, value] of Object.entries(departamentos)) {
+        const distance = getDistance(
+          { latitude: value.latitude, longitude: value.longitude },
+          { latitude, longitude }
+        );
+        // Si la distancia es menor a 100 kilómetros, considerarlo como el departamento correcto
+        if (distance < distanciaMinima) {
+          distanciaMinima = distance;
+          departamentoEncontrado = key;
+        }
+      }
+    }
+    console.log("Departamento:", departamentoEncontrado);
+    return departamentoEncontrado;
+  };
   return (
     <Layout>
       <View style={styles.distancia}>
@@ -96,11 +146,13 @@ const ZoneCrud = () => {
             textStyle={{ fontSize: 30 }}
           /> */}
 
-          <Dropdown
+          {/* <Dropdown
             label="Departamento"
             data={departamentoOptions}
             onSelect={setDepartamento}
-          />
+          /> */}
+
+          <Text>{departamento}</Text>
         </View>
 
         <View style={styles.container}>

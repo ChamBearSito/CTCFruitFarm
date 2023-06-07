@@ -35,3 +35,7 @@ orden de trabajo
 07/06/2023:
 -Se hizo el Crud Insumo a nivel local (Editar, Borrar y Agregar)
 -Se creo el ModalMensaje que se muestra cuando se realiza algun crud, se agrego el mismo a usuarios e insumos.
+-Se modifico en zona, se saco el departamento para que se muestre el departamento seleccionado por el mapa,
+hay que ver si podemos con alguna api porque lo hice a distancias con la capital, y nueva helvecia pertenece a
+ san jose y eso no es azi jejej.
+ -Tambien en el zona info se agrego mapa con marker de donde esta ubicado

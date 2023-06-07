@@ -3,10 +3,12 @@ import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
+import MapView, { Marker } from "react-native-maps";
 
 const InfoZona = ({ route }) => {
   const { zona } = route.params;
   console.log(zona);
+
   return (
     <Layout>
       <View style={styles.distancia}>
@@ -19,10 +21,30 @@ const InfoZona = ({ route }) => {
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Trabajadores</Text>
           <Text style={styles.titulo}>{zona.trabajadores}</Text>
-          <Text style={styles.subtitulo}>Coordenadas</Text>
-          <Text style={styles.titulo}>
-            {zona.latitud} {zona.longitud}
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Ubicacion</Text>
+          <Text>
+            {zona.latitude} {zona.longitude}
           </Text>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: zona.latitude,
+              longitude: zona.longitude,
+              latitudeDelta: 1,
+              longitudeDelta: 0.07,
+            }}
+          >
+            {zona.latitude && zona.longitude && (
+              <Marker
+                coordinate={{
+                  latitude: zona.latitude,
+                  longitude: zona.longitude,
+                }}
+              />
+            )}
+          </MapView>
         </View>
 
         <View style={styles.container}>
@@ -105,5 +127,12 @@ const styles = StyleSheet.create({
   },
   minicontainer: {
     flexDirection: "row",
+  },
+  map: {
+    width: "100%",
+    height: 200,
+    marginTop: 20,
+    borderWidth: 5,
+    borderColor: "black",
   },
 });
