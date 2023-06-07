@@ -1,82 +1,113 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import UserContext from "../../provider/userProvider";
 import { useRoute } from "@react-navigation/native";
+import ModalMensaje from "../../components/ModalMensaje";
 
 const UserCrud = () => {
   const { dispatch } = useContext(UserContext);
 
   //El route es por si recibe un usuario significa que es para editar no
   // para hacer alta
-  const route=useRoute();
+  const route = useRoute();
 
-  let theUser={
+  let theUser = {
     id: "",
     nombre: "",
     apellido: "",
     cedula: "",
-  }
+  };
 
-  route.params?theUser=route.params:[];
+  route.params ? (theUser = route.params) : [];
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   return (
-      <Layout>
-        <View style={styles.distancia}>
-          <View style={styles.container}>
-            <Text style={styles.titulo}>{theUser.id?"Editar":"Alta"} Usuario</Text>
-          </View>
-
-          <View style={styles.container}>
-            <Text style={styles.subtitulo}>Nombre</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="default"
-              defaultValue={theUser.nombre}
-              onChangeText={(text)=>{theUser.nombre=text}}
-              placeholder="Ingrese su Nombre"
-              placeholderTextColor="#888"
-            />
-          </View>
-
-          <View style={styles.container}>
-            <Text style={styles.subtitulo}>Apellido</Text>
-            <TextInput
-              keyboardType="default"
-              style={styles.input}
-              defaultValue={theUser.apellido}
-              onChangeText={(text)=>{theUser.apellido=text}}
-              placeholder="Ingrese su Apellido"
-              placeholderTextColor="#888"
-            />
-          </View>
-
-          <View style={styles.container}>
-            <Text style={styles.subtitulo}>Cédula</Text>
-            <TextInput
-              keyboardType="numeric"
-              style={styles.input}
-              defaultValue={theUser.cedula.toString()}
-              onChangeText={(text)=>{theUser.cedula=text}}
-              placeholder="Ingrese su Cédula"
-              placeholderTextColor="#888"
-            />
-          </View>
-          <View style={styles.container}>
-            <TouchableOpacity 
-            style={styles.buttonContainer} 
-            onPress={()=>{
-              let action="";
-              //esto compara si tiene id, significa que hay un user para editar
-              {theUser.id?action='updateUser':action='createUser'}
-              dispatch({type:action, payload:theUser})
-            }}>
-              <Text style={styles.buttonText}>{theUser.id?"Editar":"Crear"} Usuario</Text>
-            </TouchableOpacity>
-          </View>
+    <Layout>
+      <View style={styles.distancia}>
+        <View style={styles.container}>
+          <Text style={styles.titulo}>
+            {theUser.id ? "Editar" : "Alta"} Usuario
+          </Text>
         </View>
-      </Layout>
+
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Nombre</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="default"
+            defaultValue={theUser.nombre}
+            onChangeText={(text) => {
+              theUser.nombre = text;
+            }}
+            placeholder="Ingrese su Nombre"
+            placeholderTextColor="#888"
+          />
+        </View>
+
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Apellido</Text>
+          <TextInput
+            keyboardType="default"
+            style={styles.input}
+            defaultValue={theUser.apellido}
+            onChangeText={(text) => {
+              theUser.apellido = text;
+            }}
+            placeholder="Ingrese su Apellido"
+            placeholderTextColor="#888"
+          />
+        </View>
+
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Cédula</Text>
+          <TextInput
+            keyboardType="numeric"
+            style={styles.input}
+            defaultValue={theUser.cedula.toString()}
+            onChangeText={(text) => {
+              theUser.cedula = text;
+            }}
+            placeholder="Ingrese su Cédula"
+            placeholderTextColor="#888"
+          />
+        </View>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              let action = "";
+              let mensaje = "";
+              //esto compara si tiene id, significa que hay un user para editar
+              {
+                theUser.id ? (action = "updateUser") : (action = "createUser");
+              }
+              dispatch({ type: action, payload: theUser });
+              theUser.id
+                ? (mensaje = "Usuario editado")
+                : (mensaje = "Usuario Creado");
+
+              setModalMensaje(mensaje);
+              setShowModal(true);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {theUser.id ? "Editar" : "Crear"} Usuario
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {showModal && (
+        <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
+      )}
+    </Layout>
   );
 };
 

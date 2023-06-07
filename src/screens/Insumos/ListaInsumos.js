@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -18,6 +18,8 @@ import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import InsumoContext from "../../provider/insumoProvider";
+import ModalMensaje from "../../components/ModalMensaje";
 
 const ListaInsumos = () => {
   const navigation = useNavigation();
@@ -25,36 +27,30 @@ const ListaInsumos = () => {
     navigation.navigate("InfoInsumo", { insumos });
   };
 
-  const [Insumos, setInsumos] = useState(
-    // Array de tratamientos de ejemplo
-    [
-      {
-        id: 1,
-        nombre: "Monsanto",
-        cantidad: 656,
-      },
-      {
-        id: 2,
-        nombre: "Espermizida",
-        cantidad: 245,
-      },
-      {
-        id: 3,
-        nombre: "polen",
-        cantidad: 245,
-      },
-    ]
-  );
+  // Array de usuarios del contexto
+  const { state, dispatch } = useContext(InsumoContext);
 
   // Función para renderizar cada item de la lista
   const renderInsumoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
-        <TouchableOpacity style={styles.botonesr}>
+        <TouchableOpacity
+          style={styles.botonesr}
+          onPress={() => {
+            dispatch({ type: "deleteInsumo", payload: item });
+            setModalMensaje("Insumo Eliminado");
+            setShowModal(true);
+          }}
+        >
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botonesa}>
+        <TouchableOpacity
+          style={styles.botonesa}
+          onPress={() => {
+            navigation.navigate("AltaInsumos", item);
+          }}
+        >
           <Text style={{ color: "white" }}>Editar</Text>
           <FontAwesome5 name="edit" size={20} color="black" />
         </TouchableOpacity>
@@ -91,6 +87,12 @@ const ListaInsumos = () => {
     // </TouchableOpacity>
   );
 
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       {/* <Image
@@ -107,12 +109,20 @@ const ListaInsumos = () => {
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={Insumos}
+          data={state}
           renderItem={renderInsumoItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
         />
       </View>
+
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={false}
+        />
+      )}
 
       <BarraInferior />
     </SafeAreaView>

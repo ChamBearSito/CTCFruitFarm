@@ -32,3 +32,6 @@ Del Correspondiente
 orden de trabajo
 06/06/2023:
 -Se hizo el Crud usuario a nivel local (Editar, Borrar y Agregar)
+07/06/2023:
+-Se hizo el Crud Insumo a nivel local (Editar, Borrar y Agregar)
+-Se creo el ModalMensaje que se muestra cuando se realiza algun crud, se agrego el mismo a usuarios e insumos.

@@ -1,4 +1,4 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import {
   View,
@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
 import UserContext from "../../provider/userProvider";
+import ModalMensaje from "../../components/ModalMensaje";
 
 const ListadoUsuarios = () => {
   const navigation = useNavigation();
@@ -28,25 +29,29 @@ const ListadoUsuarios = () => {
   };
 
   // Array de usuarios del contexto
-  const {state, dispatch} = useContext(UserContext);
+  const { state, dispatch } = useContext(UserContext);
 
   // Función para renderizar cada item de la lista
   const renderUsuariosItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
-        <TouchableOpacity 
-        style={styles.botonesr}
-        onPress={()=>{
-          dispatch({type:'deleteUser', payload:item})
-        }}>
+        <TouchableOpacity
+          style={styles.botonesr}
+          onPress={() => {
+            dispatch({ type: "deleteUser", payload: item });
+            setModalMensaje("Usuario Eliminado");
+            setShowModal(true);
+          }}
+        >
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity 
-        style={styles.botonesa}
-        onPress={()=>{
-          navigation.navigate("AltaUsuario",item)
-        }} >
+        <TouchableOpacity
+          style={styles.botonesa}
+          onPress={() => {
+            navigation.navigate("AltaUsuario", item);
+          }}
+        >
           <Text style={{ color: "white" }}>Editar</Text>
           <FontAwesome5 name="edit" size={20} color="black" />
         </TouchableOpacity>
@@ -63,6 +68,12 @@ const ListadoUsuarios = () => {
       </View>
     </SwipeRow>
   );
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -87,6 +98,13 @@ const ListadoUsuarios = () => {
         />
         <View style={styles.line} />
       </View>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={false}
+        />
+      )}
 
       <BarraInferior />
     </SafeAreaView>
