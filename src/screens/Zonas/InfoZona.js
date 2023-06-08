@@ -25,7 +25,7 @@ const InfoZona = ({ route }) => {
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Ubicacion</Text>
           <Text>
-            {zona.latitude} {zona.longitude}
+            Lat: {zona.latitude} Lon: {zona.longitude}
           </Text>
           <MapView
             style={styles.map}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -18,6 +18,8 @@ import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import ModalMensaje from "../../components/ModalMensaje";
+import ZonaContext from "../../provider/zonaProvider";
 
 const ListaZonas = () => {
   const navigation = useNavigation();
@@ -25,69 +27,34 @@ const ListaZonas = () => {
     navigation.navigate("InfoZona", { zona });
   };
 
-  const [Zonas, setZonas] = useState(
-    // Array de tratamientos de ejemplo
-    [
-      {
-        id: 1,
-        lugar: "Estanicia",
-        depto: "Colonia",
-        trabajadores: 44,
-        latitude: 35.2123,
-        longitude: 67.1213,
-      },
-      {
-        id: 2,
-        lugar: "Estancia",
-        depto: "Colonia",
-        trabajadores: 23,
-        latitude: 35.2123,
-        longitude: 67.1213,
-      },
-      {
-        id: 3,
-        lugar: "Quinta",
-        depto: "Mendoza",
-        trabajadores: 435,
-        latitude: -32.8895,
-        longitude: -68.8458,
-      },
-      {
-        id: 4,
-        lugar: "Plantación",
-        depto: "San Pedro",
-        trabajadores: 34,
-        latitude: -24.6236,
-        longitude: -57.2295,
-      },
-      {
-        id: 5,
-        lugar: "Estancia",
-        depto: "Córdoba",
-        trabajadores: 21,
-        latitude: -31.4135,
-        longitude: -64.1811,
-      },
-      {
-        id: 6,
-        lugar: "Quinta",
-        depto: "Buenos Aires",
-        trabajadores: 221,
-        latitude: -34.5886,
-        longitude: -58.4266,
-      },
-    ]
-  );
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
-  // Función para renderizar cada item de la lista
+  const { state, dispatch } = useContext(ZonaContext);
+
   const renderTratamientoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
-        <TouchableOpacity style={styles.botonesr}>
+        <TouchableOpacity
+          style={styles.botonesr}
+          onPress={() => {
+            dispatch({ type: "deleteZona", payload: item });
+            setModalMensaje("Zona Eliminado");
+            setShowModal(true);
+          }}
+        >
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botonesa}>
+        <TouchableOpacity
+          style={styles.botonesa}
+          onPress={() => {
+            navigation.navigate("AltaZona", item);
+          }}
+        >
           <Text style={{ color: "white" }}>Editar</Text>
           <FontAwesome5 name="edit" size={20} color="black" />
         </TouchableOpacity>
@@ -95,12 +62,14 @@ const ListaZonas = () => {
       <View style={styles.standaloneRowFront}>
         <TouchableOpacity onPress={() => handleZonaPress(item)}>
           <View style={styles.itemContainer}>
-            <FontAwesome
-              style={{ marginLeft: 10 }}
-              name="map-o"
-              size={60}
-              color="#1D5E33"
-            />
+            <Text>
+              <FontAwesome
+                style={{ marginLeft: 10 }}
+                name="map-o"
+                size={60}
+                color="#1D5E33"
+              />
+            </Text>
             <Text style={styles.itemSubtitle}>
               {item.id} {item.lugar} {item.depto}
             </Text>
@@ -108,28 +77,10 @@ const ListaZonas = () => {
         </TouchableOpacity>
       </View>
     </SwipeRow>
-
-    // <TouchableOpacity onPress={() => handleTratamentPress(item)}>
-    //   <View style={styles.itemContainer}>
-    //     <FontAwesome
-    //       style={{ marginLeft: 10 }}
-    //       name="medkit"
-    //       size={60}
-    //       color="#1D5E33"
-    //     />
-    //     <Text style={styles.itemSubtitle}>
-    //       {item.tratamiento} {item.nombre} {item.apellido}
-    //     </Text>
-    //   </View>
-    // </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      {/* <Image
-        style={styles.imageBackground}
-        source={require("../../../assets/FondodePantalla.png")}
-      /> */}
       <BarraSuperior />
 
       <View style={styles.container}>
@@ -140,14 +91,20 @@ const ListaZonas = () => {
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={Zonas}
+          data={state}
           renderItem={renderTratamientoItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
         />
         <View style={styles.line} />
       </View>
-
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={false}
+        />
+      )}
       <BarraInferior />
     </SafeAreaView>
   );

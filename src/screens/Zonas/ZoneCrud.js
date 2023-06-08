@@ -1,20 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 import MapView, { Marker } from "react-native-maps";
-import ModalDropdown from "../../components/Dropdown";
+
 import Dropdown from "../../components/Dropdown";
 import { getDistance } from "geolib";
+import ModalMensaje from "../../components/ModalMensaje";
+
+import { useRoute } from "@react-navigation/native";
+import ZonaContext from "../../provider/zonaProvider";
 
 const ZoneCrud = () => {
+  const { dispatch } = useContext(ZonaContext);
+
   const [place, setPlace] = useState(undefined);
+  const [trabajadores, settrabajadores] = useState("");
   const [departamento, setDepartamento] = useState(
     "Selecciona en el Mapa una Ubicación"
   );
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [latitude, setLatitude] = useState(-34.312977);
+  const [longitude, setLongitude] = useState(-57.230646);
+
+  //El route es por si recibe un usuario significa que es para editar no
+  // para hacer alta
+  const route = useRoute();
+
+  let theZona = {
+    id: "",
+    lugar: place,
+    trabajadores: trabajadores,
+    depto: departamento,
+    latitude: latitude,
+    longitude: longitude,
+  };
+
+  route.params ? (theZona = route.params) : [];
+  console.log(theZona);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   const handleLocationSelect = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -52,34 +82,33 @@ const ZoneCrud = () => {
   //   "Treinta y Tres",
   // ];
 
-  const departamentoOptions = [
-    { label: "Artigas", value: "Artigas" },
-    { label: "Canelones", value: "Canelones" },
-    { label: "Cerro Largo", value: "Cerro Largo" },
-    { label: "Colonia", value: "Colonia" },
-    { label: "Durazno", value: "Durazno" },
-    { label: "Flores", value: "Flores" },
-    { label: "Florida", value: "Florida" },
-    { label: "Lavalleja", value: "Lavalleja" },
-    { label: "Maldonado", value: "Maldonado" },
-    { label: "Montevideo", value: "Montevideo" },
-    { label: "Paysandú", value: "Paysandú" },
-    { label: "Río Negro", value: "Río Negro" },
-    { label: "Rivera", value: "Rivera" },
-    { label: "Rocha", value: "Rocha" },
-    { label: "Salto", value: "Salto" },
-    { label: "San José", value: "San José" },
-    { label: "Soriano", value: "Soriano" },
-    { label: "Tacuarembó", value: "Tacuarembó" },
-    { label: "Treinta y Tres", value: "Treinta y Tres" },
-  ];
+  // const departamentoOptions = [
+  //   { label: "Artigas", value: "Artigas" },
+  //   { label: "Canelones", value: "Canelones" },
+  //   { label: "Cerro Largo", value: "Cerro Largo" },
+  //   { label: "Colonia", value: "Colonia" },
+  //   { label: "Durazno", value: "Durazno" },
+  //   { label: "Flores", value: "Flores" },
+  //   { label: "Florida", value: "Florida" },
+  //   { label: "Lavalleja", value: "Lavalleja" },
+  //   { label: "Maldonado", value: "Maldonado" },
+  //   { label: "Montevideo", value: "Montevideo" },
+  //   { label: "Paysandú", value: "Paysandú" },
+  //   { label: "Río Negro", value: "Río Negro" },
+  //   { label: "Rivera", value: "Rivera" },
+  //   { label: "Rocha", value: "Rocha" },
+  //   { label: "Salto", value: "Salto" },
+  //   { label: "San José", value: "San José" },
+  //   { label: "Soriano", value: "Soriano" },
+  //   { label: "Tacuarembó", value: "Tacuarembó" },
+  //   { label: "Treinta y Tres", value: "Treinta y Tres" },
+  // ];
 
   const Lugares = [
     { label: "Estancia", value: "Estancia" },
     { label: "Quinta", value: "Quinta" },
     { label: "Plantación ", value: "Plantación" },
   ];
-  const apiKey = "TU_API_KEY";
 
   const getDepartamento = (latitude, longitude) => {
     // Coordenadas de los departamentos de Uruguay
@@ -125,11 +154,14 @@ const ZoneCrud = () => {
     console.log("Departamento:", departamentoEncontrado);
     return departamentoEncontrado;
   };
+
   return (
     <Layout>
       <View style={styles.distancia}>
         <View style={styles.container}>
-          <Text style={styles.titulo}>Alta Zona</Text>
+          <Text style={styles.titulo}>
+            {theZona.id ? "Editar" : "Alta"} Zona
+          </Text>
         </View>
 
         <View style={styles.container}>
@@ -162,11 +194,16 @@ const ZoneCrud = () => {
             style={styles.input}
             placeholder="Ingrese cantidad de Trabajadores"
             placeholderTextColor="#888"
+            defaultValue={theZona.trabajadores.toString()}
+            onChangeText={(text) => {
+              settrabajadores(text);
+            }}
           />
         </View>
 
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Ubicacion</Text>
+
           <MapView
             style={styles.map}
             initialRegion={{
@@ -177,25 +214,42 @@ const ZoneCrud = () => {
             }}
             onPress={handleLocationSelect}
           >
-            {latitude && longitude && (
-              <Marker
-                coordinate={{ latitude, longitude }}
-                draggable
-                onDragEnd={handleLocationSelect}
-              />
-            )}
+            <Marker
+              coordinate={{ latitude, longitude }}
+              draggable
+              onDragEnd={handleLocationSelect}
+            />
           </MapView>
         </View>
 
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={handleSubmit}
+            onPress={() => {
+              let action = "";
+              let mensaje = "";
+
+              {
+                theZona.id ? (action = "updateZona") : (action = "createZona");
+              }
+              dispatch({ type: action, payload: theZona });
+              theZona.id
+                ? (mensaje = "Zona editado")
+                : (mensaje = "Zona Creado");
+
+              setModalMensaje(mensaje);
+              setShowModal(true);
+            }}
           >
-            <Text style={styles.buttonText}>Crear Zona</Text>
+            <Text style={styles.buttonText}>
+              {theZona.id ? "Editar" : "Crear"} Zona
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
+      {showModal && (
+        <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
+      )}
     </Layout>
   );
 };
