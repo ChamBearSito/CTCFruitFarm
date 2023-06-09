@@ -37,7 +37,7 @@ const actions = {
     console.log("### id ###", id);
     //database.editInsumo(InsumoUpdated);
     return [
-      ...state.map((Obd) => (Obd.id === ObsUpdated.id ? ObsUpdated : Obd)),
+      ...state.map((Obs) => (Obs.id === ObsUpdated.id ? ObsUpdated : Obs)),
     ];
   },
   deleteObs(state, action) {

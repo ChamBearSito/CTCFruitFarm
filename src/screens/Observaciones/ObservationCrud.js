@@ -17,7 +17,6 @@ const ObservationCrud = () => {
   const { dispatch } = useContext(ObsContext);
   const [Titulo, setTitulo] = useState(undefined);
   const [zona, setZona] = useState(undefined);
-
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
@@ -62,37 +61,41 @@ const ObservationCrud = () => {
   };
   route.params ? (theObs = route.params) : [];
 
-  const handleSubmit = () => {
-    console.log("Nombre:", Titulo);
-    console.log("Zona", zona);
-    console.log("Imagen", selectedImage);
-  };
+  useEffect(() => {
+    if (theObs.id) {
+      setSelectedImage(theObs.img);
+    }
+  }, []);
+
+  // console.log("EN ESTE MOMENTO ", theObs);
+
   const titulooption = [
     { label: "Planta en mal estado", value: "Planta en mal estado" },
     { label: "Plaga detectada", value: "Plaga detectada" },
     { label: "Falta de riego ", value: "Falta de riego" },
   ];
 
-  const { state } = useContext(ZonaContext);
-  console.log("jijija", state);
+  const { state, getZonaById } = useContext(ZonaContext);
+  const laZona = getZonaById(state, theObs.zona);
+
   const zonasOptions = state.map((item) => ({
     label: `${item.id} ${item.lugar} ${item.depto}`,
     value: item.id,
   }));
-  console.log(zonasOptions);
 
   return (
     <Layout>
-      <View style={styles.distancia}>
-        <View style={styles.container}>
-          <Text style={styles.titulo}>
-            {theObs.id ? "Editar" : "Alta"} Observacion
-          </Text>
-        </View>
+      {state.length > 0 ? (
+        <View style={styles.distancia}>
+          <View style={styles.container}>
+            <Text style={styles.titulo}>
+              {theObs.id ? "Editar" : "Alta"} Observacion
+            </Text>
+          </View>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Titulo</Text>
-          {/* <ModalDropdown
+          <View style={styles.container}>
+            <Text style={styles.subtitulo}>Titulo</Text>
+            {/* <ModalDropdown
             options={[
               "Plaga detectada",
               "Planta en mal estado",
@@ -103,56 +106,73 @@ const ObservationCrud = () => {
             textStyle={{ fontSize: 30 }}
           /> */}
 
-          <Dropdown
-            label="Titulo"
-            data={titulooption}
-            onSelect={(selected) => setTitulo(selected.value)}
-          />
-        </View>
+            <Dropdown
+              label={theObs.id ? theObs.titulo : "Titulo"}
+              data={titulooption}
+              onSelect={(selected) => setTitulo(selected.value)}
+            />
+          </View>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Zona</Text>
-          <Dropdown
-            label="Zona"
-            data={zonasOptions}
-            onSelect={(selected) => setZona(selected.value)}
-          />
-        </View>
-
-        <View style={styles.container}>
-          <Text style={styles.subtitulo}>Imagen</Text>
-          <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
-            {selectedImage ? (
-              <Image source={{ uri: selectedImage }} style={styles.image} />
-            ) : (
-              <Text style={styles.placeholderText}>Seleccionar foto</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => {
-              let action = "";
-              let mensaje = "";
-
-              {
-                theObs.id ? (action = "updateObs") : (action = "createObs");
+          <View style={styles.container}>
+            <Text style={styles.subtitulo}>Zona</Text>
+            <Dropdown
+              label={
+                theObs.id
+                  ? `${laZona.id} ${laZona.lugar} ${laZona.depto}`
+                  : "Zona"
               }
-              dispatch({ type: action, payload: theObs });
-              theObs.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
+              data={zonasOptions}
+              onSelect={(selected) => setZona(selected.value)}
+            />
+          </View>
 
-              setModalMensaje(mensaje);
-              setShowModal(true);
-            }}
-          >
-            <Text style={styles.buttonText}>
-              {theObs.id ? "Editar" : "Crear"} Observacion
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.container}>
+            <Text style={styles.subtitulo}>Imagen</Text>
+            <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
+              {selectedImage ? (
+                <Image source={{ uri: selectedImage }} style={styles.image} />
+              ) : (
+                <Text style={styles.placeholderText}>Seleccionar foto</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                let action = "";
+                let mensaje = "";
+
+                {
+                  theObs.id ? (action = "updateObs") : (action = "createObs");
+                }
+                dispatch({ type: action, payload: theObs });
+                theObs.id
+                  ? (mensaje = "Obs Editada")
+                  : (mensaje = "Obs Creada");
+
+                setModalMensaje(mensaje);
+                setShowModal(true);
+              }}
+            >
+              <Text style={styles.buttonText}>
+                {theObs.id ? "Editar" : "Crear"} Observacion
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.distancia}>
+          <Text
+            style={[styles.titulo, { marginTop: 100, paddingHorizontal: 2 }]}
+          >
+            No Puedes Hacer un Alta de Observaciones sin Zonas previamente
+            Creadas
+          </Text>
+        </View>
+      )}
+
       {showModal && (
         <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
       )}

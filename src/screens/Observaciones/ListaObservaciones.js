@@ -33,6 +33,7 @@ const ListaObservaciones = () => {
   };
 
   const { state, dispatch } = useContext(ObsContext);
+  console.log("Estado de Observaciones en la lista", state);
 
   // Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
@@ -49,7 +50,12 @@ const ListaObservaciones = () => {
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botonesa}>
+        <TouchableOpacity
+          style={styles.botonesa}
+          onPress={() => {
+            navigation.navigate("AltaObservacion", item);
+          }}
+        >
           <Text style={{ color: "white" }}>Editar</Text>
           <FontAwesome5 name="edit" size={20} color="black" />
         </TouchableOpacity>
@@ -98,16 +104,24 @@ const ListaObservaciones = () => {
         <Text style={styles.titulo}>Observaciones</Text>
       </View>
       <View style={styles.line} />
+      {state.length > 0 ? (
+        <View style={styles.scrollViewContent}>
+          <FlatList
+            style={styles.FlatList}
+            data={state}
+            renderItem={renderTratamientoItem}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <View style={styles.line} />}
+          />
+        </View>
+      ) : (
+        <View style={styles.scrollViewContent}>
+          <Text style={[styles.titulo, { marginLeft: 20, marginTop: 100 }]}>
+            Aun no hay Observaciones
+          </Text>
+        </View>
+      )}
 
-      <View style={styles.scrollViewContent}>
-        <FlatList
-          style={styles.FlatList}
-          data={state}
-          renderItem={renderTratamientoItem}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <View style={styles.line} />}
-        />
-      </View>
       {showModal && (
         <ModalMensaje
           mensaje={modalMensaje}
@@ -115,7 +129,6 @@ const ListaObservaciones = () => {
           navega={false}
         />
       )}
-
       <BarraInferior />
     </SafeAreaView>
   );
