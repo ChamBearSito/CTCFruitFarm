@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -6,13 +6,26 @@ import ModalDropdown from "react-native-modal-dropdown";
 import MapView, { Marker } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import Dropdown from "../../components/Dropdown";
+import ModalMensaje from "../../components/ModalMensaje";
+
+import { useRoute } from "@react-navigation/native";
+
+import ZonaContext from "../../provider/zonaProvider";
+import ObsContext from "../../provider/observacionProvider";
 
 const ObservationCrud = () => {
+  const { dispatch } = useContext(ObsContext);
   const [Titulo, setTitulo] = useState(undefined);
+  const [zona, setZona] = useState(undefined);
 
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   useEffect(() => {
     getPermission();
@@ -27,12 +40,6 @@ const ObservationCrud = () => {
     }
   };
 
-  const handleLocationSelect = (event) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
-    setLatitude(latitude);
-    setLongitude(longitude);
-  };
-
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -41,16 +48,24 @@ const ObservationCrud = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setSelectedImage(result.uri);
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
     }
   };
+  const route = useRoute();
+
+  let theObs = {
+    id: "",
+    titulo: Titulo,
+    zona: zona,
+    img: selectedImage,
+  };
+  route.params ? (theObs = route.params) : [];
 
   const handleSubmit = () => {
-    console.log("Lugar seleccionado:", place);
-    console.log("Departamento seleccionado:", Departamento);
-    console.log("Latitud:", latitude);
-    console.log("Longitud:", longitude);
+    console.log("Nombre:", Titulo);
+    console.log("Zona", zona);
+    console.log("Imagen", selectedImage);
   };
   const titulooption = [
     { label: "Planta en mal estado", value: "Planta en mal estado" },
@@ -58,11 +73,21 @@ const ObservationCrud = () => {
     { label: "Falta de riego ", value: "Falta de riego" },
   ];
 
+  const { state } = useContext(ZonaContext);
+  console.log("jijija", state);
+  const zonasOptions = state.map((item) => ({
+    label: `${item.id} ${item.lugar} ${item.depto}`,
+    value: item.id,
+  }));
+  console.log(zonasOptions);
+
   return (
     <Layout>
       <View style={styles.distancia}>
         <View style={styles.container}>
-          <Text style={styles.titulo}>Alta Observacion</Text>
+          <Text style={styles.titulo}>
+            {theObs.id ? "Editar" : "Alta"} Observacion
+          </Text>
         </View>
 
         <View style={styles.container}>
@@ -78,7 +103,20 @@ const ObservationCrud = () => {
             textStyle={{ fontSize: 30 }}
           /> */}
 
-          <Dropdown label="Titulo" data={titulooption} onSelect={setTitulo} />
+          <Dropdown
+            label="Titulo"
+            data={titulooption}
+            onSelect={(selected) => setTitulo(selected.value)}
+          />
+        </View>
+
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Zona</Text>
+          <Dropdown
+            label="Zona"
+            data={zonasOptions}
+            onSelect={(selected) => setZona(selected.value)}
+          />
         </View>
 
         <View style={styles.container}>
@@ -93,36 +131,31 @@ const ObservationCrud = () => {
         </View>
 
         <View style={styles.container}>
-          <Text style={styles.subtitulo}>Ubicacion</Text>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: -34.312977,
-              longitude: -57.230646,
-              latitudeDelta: 0.09,
-              longitudeDelta: 0.04,
-            }}
-            onPress={handleLocationSelect}
-          >
-            {latitude && longitude && (
-              <Marker
-                coordinate={{ latitude, longitude }}
-                draggable
-                onDragEnd={handleLocationSelect}
-              />
-            )}
-          </MapView>
-        </View>
-
-        <View style={styles.container}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={handleSubmit}
+            onPress={() => {
+              let action = "";
+              let mensaje = "";
+
+              {
+                theObs.id ? (action = "updateObs") : (action = "createObs");
+              }
+              dispatch({ type: action, payload: theObs });
+              theObs.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
+
+              setModalMensaje(mensaje);
+              setShowModal(true);
+            }}
           >
-            <Text style={styles.buttonText}>Crear Observacion</Text>
+            <Text style={styles.buttonText}>
+              {theObs.id ? "Editar" : "Crear"} Observacion
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
+      {showModal && (
+        <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
+      )}
     </Layout>
   );
 };
@@ -181,11 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
   },
-  map: {
-    width: "100%",
-    height: 200,
-    marginTop: 20,
-  },
+
   imageContainer: {
     borderWidth: 1,
     borderColor: "#1D5E33",

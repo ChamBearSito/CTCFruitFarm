@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
+import ObsContext from "../../provider/observacionProvider";
+import ZonaContext from "../../provider/zonaProvider";
+import MapView, { Marker } from "react-native-maps";
 
 const InfoObservacion = ({ route }) => {
   const { Obs } = route.params;
-  console.log(Obs);
+
+  const { state, getZonaById } = useContext(ZonaContext);
+  const zona = getZonaById(state, Obs.zona);
+  console.log(zona);
+
+  console.log("LA DATA DE OBS", Obs);
   return (
     <Layout>
       <View style={styles.distancia}>
@@ -19,10 +27,33 @@ const InfoObservacion = ({ route }) => {
         </View>
 
         <View style={styles.container}>
-          <Text style={styles.subtitulo}>Coordenadas</Text>
-          <Text style={styles.titulo}>
-            {Obs.latitud} {Obs.longitud}
+          <Text style={styles.titulo}>Zona</Text>
+          <Text style={styles.subtitulo}>
+            {zona.id} {zona.depto}
           </Text>
+          <Text>
+            Lat:{zona.latitude} Lon:{zona.longitude}
+          </Text>
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Ubicacion</Text>
+
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: zona.latitude,
+              longitude: zona.longitude,
+              latitudeDelta: 0.09,
+              longitudeDelta: 0.04,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: zona.latitude,
+                longitude: zona.longitude,
+              }}
+            />
+          </MapView>
         </View>
 
         <View style={styles.container}>
@@ -121,5 +152,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+  },
+  map: {
+    width: "100%",
+    height: 200,
+    marginTop: 20,
+    borderWidth: 5,
+    borderColor: "black",
   },
 });

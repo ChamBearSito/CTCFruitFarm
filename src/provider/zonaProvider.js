@@ -68,6 +68,9 @@ const generateNumericId = () => {
 
   return numericId;
 };
+const getZonaById = (state, zonaId) => {
+  return state.find((zona) => zona.id === zonaId);
+};
 
 //! Creamos contexto para el reducer
 const ZonaContext = createContext();
@@ -81,7 +84,7 @@ export const ZonaProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, Zonas);
   console.log("estado Zonas:", state);
   return (
-    <ZonaContext.Provider value={{ state, dispatch }}>
+    <ZonaContext.Provider value={{ state, dispatch, getZonaById }}>
       {props.children}
     </ZonaContext.Provider>
   );

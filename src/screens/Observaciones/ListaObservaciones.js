@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -18,45 +18,34 @@ import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import ObsContext from "../../provider/observacionProvider";
+import ModalMensaje from "../../components/ModalMensaje";
 
 const ListaObservaciones = () => {
   const navigation = useNavigation();
   const handleObsPress = (Obs) => {
     navigation.navigate("ObsInfo", { Obs });
   };
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
-  const [Obs, setObs] = useState(
-    // Array de tratamientos de ejemplo
-    [
-      {
-        id: 1,
-        titulo: "Plaga Detectada",
-        img: "https://source.unsplash.com/featured/?nature",
-        latitud: 12.2123,
-        longitud: 67.1213,
-      },
-      {
-        id: 2,
-        titulo: "Falta de Riego",
-        img: "https://source.unsplash.com/featured/?nature",
-        latitud: 35.2123,
-        longitud: 67.1213,
-      },
-      {
-        id: 3,
-        titulo: "Planta en mal Estado",
-        img: "https://source.unsplash.com/featured/?nature",
-        latitud: 45.2123,
-        longitud: 67.1213,
-      },
-    ]
-  );
+  const { state, dispatch } = useContext(ObsContext);
 
   // Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
-        <TouchableOpacity style={styles.botonesr}>
+        <TouchableOpacity
+          style={styles.botonesr}
+          onPress={() => {
+            dispatch({ type: "deleteObs", payload: item });
+            setModalMensaje("Obs Eliminada");
+            setShowModal(true);
+          }}
+        >
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
@@ -113,12 +102,19 @@ const ListaObservaciones = () => {
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={Obs}
+          data={state}
           renderItem={renderTratamientoItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
         />
       </View>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={false}
+        />
+      )}
 
       <BarraInferior />
     </SafeAreaView>

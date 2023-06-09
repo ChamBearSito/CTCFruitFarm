@@ -6,7 +6,7 @@ import { TextInput } from "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
 
 import Dropdown from "../../components/Dropdown";
-import { getDistance } from "geolib";
+
 import ModalMensaje from "../../components/ModalMensaje";
 
 import { useRoute } from "@react-navigation/native";
