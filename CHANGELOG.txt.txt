@@ -39,3 +39,5 @@ orden de trabajo
 hay que ver si podemos con alguna api porque lo hice a distancias con la capital, y nueva helvecia pertenece a
  san jose y eso no es azi jejej.
  -Tambien en el zona info se agrego mapa con marker de donde esta ubicado
+09/06/2023:
+-se realizo crud zona, y quedo epico el mapa xdxdxdxd.
