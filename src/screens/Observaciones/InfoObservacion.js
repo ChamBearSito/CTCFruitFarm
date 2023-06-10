@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const InfoObservacion = ({ route }) => {
   const { Obs } = route.params;
+
   const navigation = useNavigation();
   const { dispatch } = useContext(ObsContext);
   const { state, getZonaById } = useContext(ZonaContext);

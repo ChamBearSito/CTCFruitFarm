@@ -1,24 +1,24 @@
 import React, { useState, createContext, useReducer } from "react";
 
 let Observaciones = [
-  {
-    id: 1,
-    titulo: "Plaga Detectada",
-    img: "https://source.unsplash.com/featured/?nature",
-    zonaId: 1,
-  },
-  {
-    id: 2,
-    titulo: "Falta de Riego",
-    img: "https://source.unsplash.com/featured/?nature",
-    zonaId: 2,
-  },
-  {
-    id: 3,
-    titulo: "Planta en mal Estado",
-    img: "https://source.unsplash.com/featured/?nature",
-    zonaId: 3,
-  },
+  // {
+  //   id: 1,
+  //   titulo: "Plaga Detectada",
+  //   img: "https://source.unsplash.com/featured/?nature",
+  //   zonaId: 2,
+  // },
+  // {
+  //   id: 2,
+  //   titulo: "Falta de Riego",
+  //   img: "https://source.unsplash.com/featured/?nature",
+  //   zonaId: 2,
+  // },
+  // {
+  //   id: 3,
+  //   titulo: "Planta en mal Estado",
+  //   img: "https://source.unsplash.com/featured/?nature",
+  //   zonaId: 2,
+  // },
 ];
 
 //! Definimos las Acciones para el Reducer
@@ -66,7 +66,7 @@ const generateNumericId = () => {
 //! Creamos contexto para el reducer
 const ObsContext = createContext();
 const getObsById = (state, obsId) => {
-  return state.find((obs) => obs.zonaId === obsId);
+  return state.filter((obs) => obs.zonaId === obsId);
 };
 
 export const ObsProvider = (props) => {

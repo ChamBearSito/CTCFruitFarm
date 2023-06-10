@@ -69,16 +69,40 @@ const InfoZona = ({ route }) => {
             )}
           </MapView>
         </View>
+        <View style={styles.container}>
+          <Text style={styles.titulo}>Observaciones</Text>
+        </View>
 
-        {/* {observaciones.length > -1 ? (
+        {observaciones.length > 0 ? (
           <ScrollView>
-            {observaciones.map((obs) => (
-              <View key={obs.id} style={styles.itemContainer}>
-                <Text style={styles.itemText}>{obs}</Text>
+            <View>
+              <View
+                style={{
+                  marginHorizontal: 70,
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: "#1D5E33",
+                }}
+              >
+                {observaciones.map((Obs) => (
+                  <View key={Obs.id} style={styles.itemContainer}>
+                    <TouchableOpacity
+                      style={styles.observaciones1}
+                      onPress={() => navigation.navigate("ObsInfo", { Obs })}
+                    >
+                      <Text style={styles.subtitulo}>{Obs.titulo}</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
               </View>
-            ))}
+            </View>
           </ScrollView>
-        ) : null} */}
+        ) : (
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.subtitulo}>No hay Observaciones</Text>
+          </View>
+        )}
 
         <View>
           <TouchableOpacity
@@ -214,11 +238,7 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: "black",
   },
-  itemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 5,
-  },
+
   itemSubtitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -281,9 +301,12 @@ const styles = StyleSheet.create({
   itemContainer: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#1D5E33",
   },
   itemText: {
     fontSize: 16,
+  },
+  observaciones1: {
+    alignSelf: "center",
   },
 });
