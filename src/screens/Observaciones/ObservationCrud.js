@@ -21,6 +21,7 @@ const ObservationCrud = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
+  const [laZona, setlaZona] = useState("");
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -53,20 +54,25 @@ const ObservationCrud = () => {
     }
   };
   const route = useRoute();
+  const { zona } = route.params;
 
   let laOb = {
     id: "",
     titulo: "",
-    zona: "",
+    zonaId: zona.id,
     img: "",
   };
   const [theOb] = useState(route.params ? route.params : laOb);
-
+  console.log("LA ZONA: ", zona);
+  theOb.zonaId = zona.id;
   useEffect(() => {
     if (theOb.id) {
       setSelectedImage(theOb.img);
     }
   }, []);
+  useEffect(() => {
+    console.log("theOb", theOb);
+  }, [theOb]);
 
   const titulooption = [
     { label: "Planta en mal estado", value: "Planta en mal estado" },
@@ -74,27 +80,29 @@ const ObservationCrud = () => {
     { label: "Falta de riego ", value: "Falta de riego" },
   ];
 
-  const { state, getZonaById } = useContext(ZonaContext);
-  const laZona = getZonaById(state, theOb.zona);
+  // const laZona = getZonaById(state, theOb.zona);
 
-  const zonasOptions = state.map((item) => ({
-    label: `${item.id} ${item.lugar} ${item.depto}`,
-    value: item.id,
-  }));
+  // const zonasOptions = state.map((item) => ({
+  //   label: `${item.id} ${item.lugar} ${item.depto}`,
+  //   value: item.id,
+  // }));
 
   return (
     <Layout>
-      {state.length > 0 ? (
-        <View style={styles.distancia}>
-          <View style={styles.container}>
-            <Text style={styles.titulo}>
-              {theOb.id ? "Editar" : "Alta"} Observacion
-            </Text>
-          </View>
+      <View style={styles.distancia}>
+        <View style={styles.container}>
+          <Text style={styles.titulo}>
+            {theOb.id ? "Editar" : "Alta"} Observacion
+          </Text>
+        </View>
 
-          <View style={styles.container}>
-            <Text style={styles.subtitulo}>Titulo</Text>
-            {/* <ModalDropdown
+        <View style={styles.container}>
+          <Text style={styles.titulo}>Zona</Text>
+          <Text style={styles.subtitulo}>
+            Id:{laOb.zonaId} {zona.lugar} {zona.depto}
+          </Text>
+          <Text style={[styles.subtitulo, { marginTop: 20 }]}>Titulo</Text>
+          {/* <ModalDropdown
             options={[
               "Plaga detectada",
               "Planta en mal estado",
@@ -105,14 +113,14 @@ const ObservationCrud = () => {
             textStyle={{ fontSize: 30 }}
           /> */}
 
-            <Dropdown
-              label={theOb.id ? theOb.titulo : "Titulo"}
-              data={titulooption}
-              onSelect={(selected) => (theOb.titulo = selected.value)}
-            />
-          </View>
+          <Dropdown
+            label={theOb.id ? theOb.titulo : "Titulo"}
+            data={titulooption}
+            onSelect={(selected) => (theOb.titulo = selected.value)}
+          />
+        </View>
 
-          <View style={styles.container}>
+        {/* <View style={styles.container}>
             <Text style={styles.subtitulo}>Zona</Text>
             <Dropdown
               label={
@@ -123,52 +131,42 @@ const ObservationCrud = () => {
               data={zonasOptions}
               onSelect={(selected) => (theOb.zona = selected.value)}
             />
-          </View>
+          </View> */}
 
-          <View style={styles.container}>
-            <Text style={styles.subtitulo}>Imagen</Text>
-            <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
-              {selectedImage ? (
-                <Image source={{ uri: selectedImage }} style={styles.image} />
-              ) : (
-                <Text style={styles.placeholderText}>Seleccionar foto</Text>
-              )}
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.container}>
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={() => {
-                let action = "";
-                let mensaje = "";
-
-                {
-                  theOb.id ? (action = "updateObs") : (action = "createObs");
-                }
-                dispatch({ type: action, payload: theOb });
-                theOb.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
-
-                setModalMensaje(mensaje);
-                setShowModal(true);
-              }}
-            >
-              <Text style={styles.buttonText}>
-                {theOb.id ? "Editar" : "Crear"} Observacion
-              </Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.container}>
+          <Text style={styles.subtitulo}>Imagen</Text>
+          <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
+            {selectedImage ? (
+              <Image source={{ uri: selectedImage }} style={styles.image} />
+            ) : (
+              <Text style={styles.placeholderText}>Seleccionar foto</Text>
+            )}
+          </TouchableOpacity>
         </View>
-      ) : (
-        <View style={styles.distancia}>
-          <Text
-            style={[styles.titulo, { marginTop: 100, paddingHorizontal: 2 }]}
+
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              let action = "";
+              let mensaje = "";
+
+              {
+                theOb.id ? (action = "updateObs") : (action = "createObs");
+              }
+              dispatch({ type: action, payload: theOb });
+              theOb.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
+
+              setModalMensaje(mensaje);
+              setShowModal(true);
+            }}
           >
-            No Puedes Hacer un Alta de Observaciones sin Zonas previamente
-            Creadas
-          </Text>
+            <Text style={styles.buttonText}>
+              {theOb.id ? "Editar" : "Crear"} Observacion
+            </Text>
+          </TouchableOpacity>
         </View>
-      )}
+      </View>
 
       {showModal && (
         <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />

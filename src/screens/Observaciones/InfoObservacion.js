@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
@@ -7,14 +7,20 @@ import ObsContext from "../../provider/observacionProvider";
 import ZonaContext from "../../provider/zonaProvider";
 import MapView, { Marker } from "react-native-maps";
 
+import ModalMensaje from "../../components/ModalMensaje";
+import { useNavigation } from "@react-navigation/native";
+
 const InfoObservacion = ({ route }) => {
   const { Obs } = route.params;
-
+  const navigation = useNavigation();
+  const { dispatch } = useContext(ObsContext);
   const { state, getZonaById } = useContext(ZonaContext);
-  const zona = getZonaById(state, Obs.zona);
-  console.log(zona);
-
-  console.log("LA DATA DE OBS", Obs);
+  const zona = getZonaById(state, Obs.zonaId);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
   return (
     <Layout>
       <View style={styles.distancia}>
@@ -29,13 +35,13 @@ const InfoObservacion = ({ route }) => {
         <View style={styles.container}>
           <Text style={styles.titulo}>Zona</Text>
           <Text style={styles.subtitulo}>
-            {zona.id} {zona.depto}
+            {Obs.zonaId} {zona.depto}
           </Text>
-          <Text>
+          <Text style={styles.subtitulo}>
             Lat:{zona.latitude} Lon:{zona.longitude}
           </Text>
         </View>
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <Text style={styles.subtitulo}>Ubicacion</Text>
 
           <MapView
@@ -54,19 +60,38 @@ const InfoObservacion = ({ route }) => {
               }}
             />
           </MapView>
-        </View>
+        </View> */}
 
         <View style={styles.container}>
           <View style={styles.minicontainer}>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                dispatch({ type: "deleteObs", payload: Obs });
+                setModalMensaje("Observación Eliminada");
+                setShowModal(true);
+              }}
+            >
               <Text style={styles.buttonText}>Eliminar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                navigation.navigate("AltaObservacion", Obs);
+              }}
+            >
               <Text style={styles.buttonText}>Editar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={true}
+        />
+      )}
     </Layout>
   );
 };

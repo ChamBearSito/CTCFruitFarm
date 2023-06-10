@@ -35,7 +35,7 @@ const HomeSreen = () => {
         <RouteButton
           nombre="search1"
           packageName="AntDesign"
-          screenName="AltaObservacion"
+          screenName="ListadoObs"
           size={90}
         />
         <RouteButton

@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
+import ModalMensaje from "../../components/ModalMensaje";
+import { useNavigation } from "@react-navigation/native";
+import UserContext from "../../provider/userProvider";
 
 const UserInfo = ({ route }) => {
   const { usuario } = route.params;
+  const navigation = useNavigation();
+  const { dispatch } = useContext(UserContext);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
   console.log(usuario);
   return (
     <Layout>
@@ -23,15 +33,34 @@ const UserInfo = ({ route }) => {
 
         <View style={styles.container}>
           <View style={styles.minicontainer}>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                dispatch({ type: "deleteUser", payload: usuario });
+                setModalMensaje("Usuario Eliminado");
+                setShowModal(true);
+              }}
+            >
               <Text style={styles.buttonText}>Eliminar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                navigation.navigate("AltaUsuario", usuario);
+              }}
+            >
               <Text style={styles.buttonText}>Editar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={true}
+        />
+      )}
     </Layout>
   );
 };

@@ -5,19 +5,19 @@ let Observaciones = [
     id: 1,
     titulo: "Plaga Detectada",
     img: "https://source.unsplash.com/featured/?nature",
-    zona: 1,
+    zonaId: 1,
   },
   {
     id: 2,
     titulo: "Falta de Riego",
     img: "https://source.unsplash.com/featured/?nature",
-    zona: 2,
+    zonaId: 2,
   },
   {
     id: 3,
     titulo: "Planta en mal Estado",
     img: "https://source.unsplash.com/featured/?nature",
-    zona: 3,
+    zonaId: 3,
   },
 ];
 
@@ -65,6 +65,9 @@ const generateNumericId = () => {
 
 //! Creamos contexto para el reducer
 const ObsContext = createContext();
+const getObsById = (state, obsId) => {
+  return state.find((obs) => obs.zonaId === obsId);
+};
 
 export const ObsProvider = (props) => {
   const reducer = (state, action) => {
@@ -75,7 +78,7 @@ export const ObsProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, Observaciones);
   console.log("theState of Obs:", state);
   return (
-    <ObsContext.Provider value={{ state, dispatch }}>
+    <ObsContext.Provider value={{ state, dispatch, getObsById }}>
       {props.children}
     </ObsContext.Provider>
   );

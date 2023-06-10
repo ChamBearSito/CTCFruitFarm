@@ -1,15 +1,27 @@
 import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+import { SwipeRow } from "react-native-swipe-list-view";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import ModalMensaje from "../../components/ModalMensaje";
 import ZonaContext from "../../provider/zonaProvider";
 import { useNavigation } from "@react-navigation/native";
+import ObsContext from "../../provider/observacionProvider";
+import { ScrollView } from "react-native-gesture-handler";
 
 const InfoZona = ({ route }) => {
   const navigation = useNavigation();
+  const { state, getObsById } = useContext(ObsContext);
   const { dispatch } = useContext(ZonaContext);
   const { zona } = route.params;
   const [showModal, setShowModal] = useState(false);
@@ -17,6 +29,8 @@ const InfoZona = ({ route }) => {
   const handleModalClose = () => {
     setShowModal(false);
   };
+  const observaciones = getObsById(state, zona.id);
+  console.log("TieneObservaciones?", observaciones);
 
   return (
     <Layout>
@@ -56,6 +70,25 @@ const InfoZona = ({ route }) => {
           </MapView>
         </View>
 
+        {/* {observaciones.length > -1 ? (
+          <ScrollView>
+            {observaciones.map((obs) => (
+              <View key={obs.id} style={styles.itemContainer}>
+                <Text style={styles.itemText}>{obs}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        ) : null} */}
+
+        <View>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => navigation.navigate("AltaObservacion", { zona })}
+          >
+            <Text style={styles.buttonText}>Agregar Observación</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.container}>
           <View style={styles.minicontainer}>
             <TouchableOpacity
@@ -91,6 +124,20 @@ const InfoZona = ({ route }) => {
   );
 };
 
+// {observaciones.length === 0 ? (
+//   <Text>No hay observaciones</Text>
+// ) : (
+//   <FlatList
+//     data={observaciones}
+//     renderItem={({ item }) => (
+//       <View key={item.id} style={styles.itemContainer}>
+//         <Text style={styles.itemText}>{item}</Text>
+//       </View>
+//     )}
+//     keyExtractor={(item) => item.id.toString()}
+//   />
+// )}
+
 export default InfoZona;
 
 const styles = StyleSheet.create({
@@ -104,7 +151,10 @@ const styles = StyleSheet.create({
   distancia: {
     marginTop: 110,
   },
-
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: "#cedda9",
+  },
   viewInfo: {
     alignSelf: "center",
     justifyContent: "center",
@@ -163,5 +213,77 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 5,
     borderColor: "black",
+  },
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  itemSubtitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1D5E33",
+    marginLeft: 10,
+  },
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: "#cedda9",
+  },
+  scrollViewContent: {
+    flex: 1,
+  },
+  FlatList: {
+    flex: 1,
+  },
+  verMapaButton: {
+    alignItems: "center",
+    marginTop: 5,
+  },
+  imageBackground: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
+  standaloneRowBack: {
+    alignItems: "center",
+
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: 100,
+  },
+  backTextWhite: {
+    color: "#FFF",
+  },
+  standaloneRowFront: {
+    alignItems: "center",
+    backgroundColor: "#cedda9",
+    justifyContent: "center",
+  },
+  botonesr: {
+    borderRadius: 10,
+    marginRight: 3,
+    backgroundColor: "red",
+    padding: 8,
+    flexDirection: "row",
+  },
+  botonesa: {
+    borderRadius: 10,
+    marginLeft: 3,
+    backgroundColor: "orange",
+    padding: 8,
+    flexDirection: "row",
+  },
+  itemContainer: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  itemText: {
+    fontSize: 16,
   },
 });

@@ -106,15 +106,23 @@ const ListaInsumos = () => {
       </View>
       <View style={styles.line} />
 
-      <View style={styles.scrollViewContent}>
-        <FlatList
-          style={styles.FlatList}
-          data={state}
-          renderItem={renderInsumoItem}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <View style={styles.line} />}
-        />
-      </View>
+      {state.length > 0 ? (
+        <View style={styles.scrollViewContent}>
+          <FlatList
+            style={styles.FlatList}
+            data={state}
+            renderItem={renderInsumoItem}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <View style={styles.line} />}
+          />
+        </View>
+      ) : (
+        <View style={styles.scrollViewContent}>
+          <Text style={[styles.titulo, { marginLeft: 60, marginTop: 40 }]}>
+            No hay Información
+          </Text>
+        </View>
+      )}
 
       {showModal && (
         <ModalMensaje
