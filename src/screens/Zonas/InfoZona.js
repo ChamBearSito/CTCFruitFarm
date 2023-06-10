@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
+import ModalMensaje from "../../components/ModalMensaje";
+import ZonaContext from "../../provider/zonaProvider";
+import { useNavigation } from "@react-navigation/native";
 
 const InfoZona = ({ route }) => {
+  const navigation = useNavigation();
+  const { dispatch } = useContext(ZonaContext);
   const { zona } = route.params;
-  console.log(zona);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   return (
     <Layout>
@@ -49,15 +58,35 @@ const InfoZona = ({ route }) => {
 
         <View style={styles.container}>
           <View style={styles.minicontainer}>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                dispatch({ type: "deleteZona", payload: zona });
+                setModalMensaje("Zona Eliminada");
+                setShowModal(true);
+                navigation.navigate("Home");
+              }}
+            >
               <Text style={styles.buttonText}>Eliminar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                navigation.navigate("AltaZona", zona);
+              }}
+            >
               <Text style={styles.buttonText}>Editar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={false}
+        />
+      )}
     </Layout>
   );
 };

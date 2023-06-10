@@ -15,8 +15,8 @@ import ObsContext from "../../provider/observacionProvider";
 
 const ObservationCrud = () => {
   const { dispatch } = useContext(ObsContext);
-  const [Titulo, setTitulo] = useState(undefined);
-  const [zona, setZona] = useState(undefined);
+  // const [Titulo, setTitulo] = useState(undefined);
+  // const [zona, setZona] = useState(undefined);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
@@ -49,25 +49,24 @@ const ObservationCrud = () => {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
+      theOb.img = result.assets[0].uri;
     }
   };
   const route = useRoute();
 
-  let theObs = {
+  let laOb = {
     id: "",
-    titulo: Titulo,
-    zona: zona,
-    img: selectedImage,
+    titulo: "",
+    zona: "",
+    img: "",
   };
-  route.params ? (theObs = route.params) : [];
+  const [theOb] = useState(route.params ? route.params : laOb);
 
   useEffect(() => {
-    if (theObs.id) {
-      setSelectedImage(theObs.img);
+    if (theOb.id) {
+      setSelectedImage(theOb.img);
     }
   }, []);
-
-  // console.log("EN ESTE MOMENTO ", theObs);
 
   const titulooption = [
     { label: "Planta en mal estado", value: "Planta en mal estado" },
@@ -76,7 +75,7 @@ const ObservationCrud = () => {
   ];
 
   const { state, getZonaById } = useContext(ZonaContext);
-  const laZona = getZonaById(state, theObs.zona);
+  const laZona = getZonaById(state, theOb.zona);
 
   const zonasOptions = state.map((item) => ({
     label: `${item.id} ${item.lugar} ${item.depto}`,
@@ -89,7 +88,7 @@ const ObservationCrud = () => {
         <View style={styles.distancia}>
           <View style={styles.container}>
             <Text style={styles.titulo}>
-              {theObs.id ? "Editar" : "Alta"} Observacion
+              {theOb.id ? "Editar" : "Alta"} Observacion
             </Text>
           </View>
 
@@ -107,9 +106,9 @@ const ObservationCrud = () => {
           /> */}
 
             <Dropdown
-              label={theObs.id ? theObs.titulo : "Titulo"}
+              label={theOb.id ? theOb.titulo : "Titulo"}
               data={titulooption}
-              onSelect={(selected) => setTitulo(selected.value)}
+              onSelect={(selected) => (theOb.titulo = selected.value)}
             />
           </View>
 
@@ -117,12 +116,12 @@ const ObservationCrud = () => {
             <Text style={styles.subtitulo}>Zona</Text>
             <Dropdown
               label={
-                theObs.id
+                theOb.id
                   ? `${laZona.id} ${laZona.lugar} ${laZona.depto}`
                   : "Zona"
               }
               data={zonasOptions}
-              onSelect={(selected) => setZona(selected.value)}
+              onSelect={(selected) => (theOb.zona = selected.value)}
             />
           </View>
 
@@ -145,19 +144,17 @@ const ObservationCrud = () => {
                 let mensaje = "";
 
                 {
-                  theObs.id ? (action = "updateObs") : (action = "createObs");
+                  theOb.id ? (action = "updateObs") : (action = "createObs");
                 }
-                dispatch({ type: action, payload: theObs });
-                theObs.id
-                  ? (mensaje = "Obs Editada")
-                  : (mensaje = "Obs Creada");
+                dispatch({ type: action, payload: theOb });
+                theOb.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
 
                 setModalMensaje(mensaje);
                 setShowModal(true);
               }}
             >
               <Text style={styles.buttonText}>
-                {theObs.id ? "Editar" : "Crear"} Observacion
+                {theOb.id ? "Editar" : "Crear"} Observacion
               </Text>
             </TouchableOpacity>
           </View>

@@ -14,32 +14,25 @@ import ZonaContext from "../../provider/zonaProvider";
 import axios from "axios";
 
 const ZoneCrud = () => {
-  const { dispatch } = useContext(ZonaContext);
-  const [location, setLocation] = useState("Selecciona una Ubicación");
-  const [place, setPlace] = useState(undefined);
-  const [trabajadores, settrabajadores] = useState("");
-
-  const [latitude, setLatitude] = useState(-34.312977);
-  const [longitude, setLongitude] = useState(-57.230646);
-
   //El route es por si recibe un usuario significa que es para editar no
   // para hacer alta
   const route = useRoute();
-
-  let theZona = {
+  const { dispatch } = useContext(ZonaContext);
+  const [location, setLocation] = useState("Seleccione una ubicacion");
+  // const [place, setPlace] = useState(undefined);
+  // const [trabajadores, settrabajadores] = useState("");
+  let laZona = {
     id: "",
-    lugar: place,
-    trabajadores: trabajadores,
-    depto: location,
-    latitude: latitude,
-    longitude: longitude,
+    lugar: "",
+    trabajadores: "",
+    depto: "",
+    latitude: "",
+    longitude: "",
   };
 
-  route.params ? (theZona = route.params) : [];
-  // console.log(theZona);
-  useEffect(() => {
-    console.log(location);
-  }, [location]);
+  const [theZona] = useState(route.params ? route.params : laZona);
+  const [latitude, setLatitude] = useState(-34.312977);
+  const [longitude, setLongitude] = useState(-57.230646);
 
   const reverseGeocode = async (latitude, longitude) => {
     try {
@@ -48,7 +41,10 @@ const ZoneCrud = () => {
       );
 
       const { country, state } = await response.data.address;
+      theZona.latitude = latitude;
+      theZona.longitude = longitude;
       setLocation(`${state}, ${country}`);
+      theZona.depto = `${state}, ${country}`;
     } catch (error) {
       console.warn(error);
     }
@@ -66,13 +62,6 @@ const ZoneCrud = () => {
     setLatitude(latitude);
     setLongitude(longitude);
     reverseGeocode(latitude, longitude);
-  };
-
-  const handleSubmit = () => {
-    console.log("Lugar seleccionado:", place);
-    console.log("Departamento seleccionado:", departamento);
-    console.log("Latitud:", latitude);
-    console.log("Longitud:", longitude);
   };
 
   const Lugares = [
@@ -95,7 +84,7 @@ const ZoneCrud = () => {
           <Dropdown
             label={theZona.id ? theZona.lugar : "Lugar"}
             data={Lugares}
-            onSelect={(selected) => setPlace(selected.value)}
+            onSelect={(selected) => (theZona.lugar = selected.value)}
           />
         </View>
 
@@ -112,9 +101,11 @@ const ZoneCrud = () => {
             style={styles.input}
             placeholder="Ingrese cantidad de Trabajadores"
             placeholderTextColor="#888"
-            defaultValue={theZona.trabajadores.toString()}
+            defaultValue={
+              theZona.trabajadores ? theZona.trabajadores.toString() : ""
+            }
             onChangeText={(text) => {
-              settrabajadores(text);
+              theZona.trabajadores = text;
             }}
           />
         </View>
@@ -159,7 +150,6 @@ const ZoneCrud = () => {
             onPress={() => {
               let action = "";
               let mensaje = "";
-
               {
                 theZona.id ? (action = "updateZona") : (action = "createZona");
               }

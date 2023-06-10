@@ -40,7 +40,7 @@ const actions = {
     const ZonaUpdated = action.payload;
     // update del Insumo en la db
     const id = ZonaUpdated.id;
-    console.log("### id ###", id);
+    console.log("----id----", id);
     //database.editInsumo(InsumoUpdated);
     return [
       ...state.map((Zona) => (Zona.id === ZonaUpdated.id ? ZonaUpdated : Zona)),
@@ -82,7 +82,6 @@ export const ZonaProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Zonas);
-  console.log("estado Zonas:", state);
   return (
     <ZonaContext.Provider value={{ state, dispatch, getZonaById }}>
       {props.children}

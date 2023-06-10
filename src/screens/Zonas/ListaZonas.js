@@ -23,6 +23,7 @@ import ZonaContext from "../../provider/zonaProvider";
 
 const ListaZonas = () => {
   const navigation = useNavigation();
+
   const handleZonaPress = (zona) => {
     navigation.navigate("InfoZona", { zona });
   };
@@ -87,17 +88,25 @@ const ListaZonas = () => {
         <Text style={styles.titulo}>Zonas</Text>
       </View>
       <View style={styles.line} />
+      {state.length > 0 ? (
+        <View style={styles.scrollViewContent}>
+          <FlatList
+            style={styles.FlatList}
+            data={state}
+            renderItem={renderTratamientoItem}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <View style={styles.line} />}
+          />
+          <View style={styles.line} />
+        </View>
+      ) : (
+        <View style={styles.scrollViewContent}>
+          <Text style={[styles.titulo, { marginLeft: 60, marginTop: 40 }]}>
+            No hay Información
+          </Text>
+        </View>
+      )}
 
-      <View style={styles.scrollViewContent}>
-        <FlatList
-          style={styles.FlatList}
-          data={state}
-          renderItem={renderTratamientoItem}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <View style={styles.line} />}
-        />
-        <View style={styles.line} />
-      </View>
       {showModal && (
         <ModalMensaje
           mensaje={modalMensaje}
