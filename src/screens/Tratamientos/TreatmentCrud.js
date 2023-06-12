@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import {
   View,
@@ -13,6 +13,9 @@ import { TextInput } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import Dropdown from "../../components/Dropdown";
+import * as DocumentPicker from "expo-document-picker";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
 
 const TratamientoCrud = () => {
   const [selectedDate, setSelectedDate] = useState();
@@ -20,6 +23,64 @@ const TratamientoCrud = () => {
 
   const [selectedDate1, setSelectedDate1] = useState();
   const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const requestMediaLibraryPermission = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status !== "granted") {
+      alert("Permiso denegado para acceder a la biblioteca de medios.");
+    }
+  };
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      try {
+        await requestMediaLibraryPermission();
+      } catch (error) {
+        console.log("Error al solicitar permisos:", error);
+        // Manejar el error de permisos aquí
+      }
+    };
+
+    requestPermission();
+  }, []);
+
+  const pickDocument = async () => {
+    const result = await DocumentPicker.getDocumentAsync({});
+
+    if (result.type === "success") {
+      setSelectedFile(result);
+    }
+  };
+
+  // const requestFilePermission = async () => {
+  //   const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+
+  //   if (status !== "granted") {
+  //     alert("Permiso denegado para acceder a los archivos.");
+  //   }
+  // };
+  // useEffect(() => {
+  //   const requestPermission = async () => {
+  //     try {
+  //       await requestFilePermission();
+  //     } catch (error) {
+  //       console.log("Error al solicitar permisos:", error);
+  //       // Manejar el error de permisos aquí
+  //     }
+  //   };
+
+  //   requestPermission();
+  // }, []);
+
+  // const pickDocument = async () => {
+  //   const result = await DocumentPicker.getDocumentAsync({});
+
+  //   if (result.type === "success") {
+  //     setSelectedFile(result);
+  //   }
+  // };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -126,6 +187,18 @@ const TratamientoCrud = () => {
           </View>
         </View>
 
+        {/* //! Insumos / */}
+        <View style={{ marginTop: 10 }}>
+          <View style={styles.elseparador}>
+            <Text style={styles.subtitulo}>Insumos</Text>
+            <Dropdown
+              label="Insumos"
+              data={optionsInsumos}
+              onSelect={setInsumos}
+            />
+          </View>
+        </View>
+
         {/* //! Fecha Inicio y FechaFin / */}
         <View style={styles.container}>
           <View style={styles.elseparador}>
@@ -179,37 +252,23 @@ const TratamientoCrud = () => {
               placeholderTextColor="#888"
             />
           </View>
+        </View>
+        <View style={styles.container}>
+          {/* //! Orden de Trabajo / */}
+
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Orden de Trabajo</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ingrese Orden"
-              placeholderTextColor="#888"
-            />
-          </View>
-        </View>
 
-        {/* //! Insumos y Observaciones / */}
-        <View style={{ marginTop: 10 }}>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Insumos</Text>
-            <Dropdown
-              label="Insumos"
-              data={optionsInsumos}
-              onSelect={setInsumos}
+            <Button
+              color="#1D5E33"
+              title="Seleccionar Archivo"
+              onPress={pickDocument}
             />
-          </View>
-        </View>
-        <View style={{ marginTop: 10 }}>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Observaciones</Text>
-            {/* <Modal> */}
-            <Dropdown
-              label="Observaciones"
-              data={optionsObs}
-              onSelect={setObs}
-            />
-            {/* </Modal> */}
+            {selectedFile && (
+              <Text style={styles.selectedFileText}>
+                Archivo seleccionado: {selectedFile.name}
+              </Text>
+            )}
           </View>
         </View>
 
