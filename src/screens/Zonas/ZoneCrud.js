@@ -120,14 +120,14 @@ const ZoneCrud = () => {
                 ? {
                     latitude: theZona.latitude,
                     longitude: theZona.longitude,
-                    latitudeDelta: 0.09,
-                    longitudeDelta: 0.04,
+                    latitudeDelta: 5.0,
+                    longitudeDelta: 5.0,
                   }
                 : {
-                    latitude: -34.312977,
-                    longitude: -57.230646,
-                    latitudeDelta: 0.09,
-                    longitudeDelta: 0.04,
+                    latitude: -32.522779,
+                    longitude: -55.765835,
+                    latitudeDelta: 5.0,
+                    longitudeDelta: 5.0,
                   }
             }
             onPress={handleLocationSelect}

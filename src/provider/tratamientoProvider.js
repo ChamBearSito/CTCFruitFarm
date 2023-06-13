@@ -3,13 +3,13 @@ let Tratamientos = [
   // {
   //   id: 1,
   //   nombre: "JUANITO",
-  //   zona: 1,
+  //   zona: 3,
   //   usuario: 1,
-  //   insumo: 1,
-  //   fechainicial: "06/14/2023",
-  //   fechafin: "06/16/2023",
+  //   insumo: 2,
+  //   fechainicial: "2023-06-24T19:50:48.623Z",
+  //   fechafin: "2023-06-24T19:50:48.623Z",
   //   tiempo: 4,
-  //   orden: "jijija",
+  //   orden: "undefined",
   // },
 ];
 

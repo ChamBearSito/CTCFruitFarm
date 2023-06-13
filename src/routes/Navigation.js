@@ -27,6 +27,7 @@ import ListaObservaciones from "../screens/Observaciones/ListaObservaciones";
 import ListaInsumos from "../screens/Insumos/ListaInsumos";
 import InsumoInfo from "../screens/Insumos/InfoInsumos";
 import TratamientoCrud from "../screens/Tratamientos/TreatmentCrud";
+import VerMapa from "../screens/Mapa/VerMapa";
 
 export const RootStack = () => {
   return (
@@ -156,6 +157,15 @@ export const RootStack = () => {
         <Stack.Screen
           name="InfoInsumo"
           component={InsumoInfo}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        {/* //! ---------------------------------- MAPA-------------------------------------------------- */}
+
+        {/* //! MAPA*/}
+        <Stack.Screen
+          name="Mapa"
+          component={VerMapa}
           options={{ headerShown: false }}
         ></Stack.Screen>
       </Stack.Navigator>
