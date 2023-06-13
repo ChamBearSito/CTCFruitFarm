@@ -4,6 +4,7 @@ import { UserProvider } from "./src/provider/userProvider";
 import { InsumoProvider } from "./src/provider/insumoProvider";
 import { ZonaProvider } from "./src/provider/zonaProvider";
 import { ObsProvider } from "./src/provider/observacionProvider";
+import { TratamientoProvider } from "./src/provider/tratamientoProvider";
 export default function App() {
   return (
     <>
@@ -11,8 +12,10 @@ export default function App() {
         <InsumoProvider>
           <ZonaProvider>
             <ObsProvider>
-              <StatusBar style="auto" />
-              <RootStack />
+              <TratamientoProvider>
+                <StatusBar style="auto" />
+                <RootStack />
+              </TratamientoProvider>
             </ObsProvider>
           </ZonaProvider>
         </InsumoProvider>

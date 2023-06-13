@@ -58,6 +58,9 @@ const generateNumericId = () => {
 
   return numericId;
 };
+// const getInsumoById = (state, zonaId) => {
+//   return state.find((zona) => zona.id === zonaId);
+// };
 
 //! Creamos contexto para el reducer
 const InsumoContext = createContext();

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
+import TratamientoLayout from "../../components/Layout/TratamientoLayout";
 import {
   View,
   Text,
@@ -13,11 +14,24 @@ import { TextInput } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import Dropdown from "../../components/Dropdown";
+import ModalMensaje from "../../components/ModalMensaje";
 import * as DocumentPicker from "expo-document-picker";
-import * as Permissions from "expo-permissions";
+
 import * as ImagePicker from "expo-image-picker";
+import { useRoute } from "@react-navigation/native";
+import TratContext from "../../provider/tratamientoProvider";
+import ZonaContext from "../../provider/zonaProvider";
+import UserContext from "../../provider/userProvider";
+import InsumoContext from "../../provider/insumoProvider";
+import MultipleSelect from "react-native-multiple-select";
 
 const TratamientoCrud = () => {
+  const route = useRoute();
+  const { dispatch } = useContext(TratContext);
+  const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
+  const { state: EstadoUsuarios } = useContext(UserContext);
+  const { state: EstadoInsumos } = useContext(InsumoContext);
+
   const [selectedDate, setSelectedDate] = useState();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -54,34 +68,6 @@ const TratamientoCrud = () => {
     }
   };
 
-  // const requestFilePermission = async () => {
-  //   const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-
-  //   if (status !== "granted") {
-  //     alert("Permiso denegado para acceder a los archivos.");
-  //   }
-  // };
-  // useEffect(() => {
-  //   const requestPermission = async () => {
-  //     try {
-  //       await requestFilePermission();
-  //     } catch (error) {
-  //       console.log("Error al solicitar permisos:", error);
-  //       // Manejar el error de permisos aquí
-  //     }
-  //   };
-
-  //   requestPermission();
-  // }, []);
-
-  // const pickDocument = async () => {
-  //   const result = await DocumentPicker.getDocumentAsync({});
-
-  //   if (result.type === "success") {
-  //     setSelectedFile(result);
-  //   }
-  // };
-
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -112,44 +98,81 @@ const TratamientoCrud = () => {
 
   const [zona, setzona] = useState(undefined);
 
-  const [Insumos, setInsumos] = useState(undefined);
+  const [Insumos, setInsumos] = useState([]);
 
   const [Obs, setObs] = useState(undefined);
-  const optionsUsuarios = [
-    { label: "Miguel Dominguez", value: "Miguel Dominguez" },
-    { label: "Osvaldo Machado", value: "Osvaldo Machado" },
-    { label: "Elisa Smith", value: "Elisa Smith" },
-  ];
 
-  const optionsZona = [
-    { label: "Colonia Valdense", value: "Colonia Valdense" },
-    { label: "Nueva Helvecia", value: "Nueva Helvecia" },
-    { label: "Juan Lacaze", value: "Juan Lacaze" },
-  ];
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
 
-  const optionsInsumos = [
-    { label: "Fertilizante 300lt", value: "Fertilizante 300lt" },
-    { label: "Monsatnto 23lt", value: "Monsatnto 23lt" },
-    { label: "Aceite NAtural 34lt", value: "Aceite NAtural 34lt" },
-  ];
+  useEffect(() => {
+    console.log("EL INSUMO PIBE QUE GUARDA??: ", Insumos);
+  }, [Insumos]);
 
-  const optionsObs = [
-    { label: "Obs #1: Plaga Detectada", value: "Obs #1: Plaga Detectada" },
-    { label: "Obs #2: Falta de Riego", value: "Obs #2: Falta de Riego" },
-    {
-      label: "Obs #3: Planta en Mal Estado",
-      value: "Obs #3: Planta en Mal Estado",
-    },
-  ];
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+  const optionsUsuarios = EstadoUsuarios.map((item) => ({
+    label: `${item.id} ${item.nombre} ${item.apellido} ${item.cedula}`,
+    value: item.id,
+  }));
+
+  const optionsZona = EstadoZona.map((item) => ({
+    label: `${item.id} ${item.lugar} ${item.depto}`,
+    value: item.id,
+  }));
+
+  const optionsInsumos = EstadoInsumos.map((item) => ({
+    label: `${item.id} ${item.nombre} ${item.cantidad}`,
+    value: item.id,
+  }));
+
+  let elTratamiento = {
+    id: "",
+    nombre: "",
+    zona: "",
+    usuario: "",
+    insumo: [],
+    fechainicial: "",
+    fechafin: "",
+    tiempo: "",
+    orden: "",
+  };
+  const [theTratamiento] = useState(
+    route.params ? route.params : elTratamiento
+  );
+
+  const laZona = getZonaById(EstadoZona, theTratamiento.zona);
+
+  // Estado para controlar la visibilidad del modal
+  const [showInsumosModal, setShowInsumosModal] = useState(false);
+
+  // Función para abrir el modal
+  const openInsumosModal = () => {
+    setShowInsumosModal(true);
+  };
+
+  // Función para cerrar el modal
+  const closeInsumosModal = () => {
+    setShowInsumosModal(false);
+  };
+
+  // Función para manejar los insumos seleccionados
+  const handleInsumosSelection = (selectedItems) => {
+    // Actualiza el estado con los insumos seleccionados
+    setInsumos(selectedItems);
+  };
   return (
-    <Layout>
+    <TratamientoLayout>
       <View style={styles.distancia}>
         <View style={styles.container}>
-          <Text style={styles.titulo}>Alta Tratamiento</Text>
+          <Text style={styles.titulo}>
+            {elTratamiento.id ? "Editar" : "Alta"} Tratamiento
+          </Text>
         </View>
         <View style={styles.container}>
           {/* //! IDentificador y Nombre / */}
-          <View style={styles.elseparador}>
+          {/* <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Identificación</Text>
             <TextInput
               style={styles.input}
@@ -157,7 +180,7 @@ const TratamientoCrud = () => {
               placeholder="Ingrese Identificacion"
               placeholderTextColor="#888"
             />
-          </View>
+          </View> */}
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Nombre</Text>
             <TextInput
@@ -165,6 +188,12 @@ const TratamientoCrud = () => {
               keyboardType="default"
               placeholder="Ingrese Nombre"
               placeholderTextColor="#888"
+              defaultValue={
+                theTratamiento.nombre ? theTratamiento.nombre.toString() : ""
+              }
+              onChangeText={(text) => {
+                theTratamiento.nombre = text;
+              }}
             />
           </View>
         </View>
@@ -173,7 +202,15 @@ const TratamientoCrud = () => {
         <View style={{ marginTop: 10 }}>
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Zona</Text>
-            <Dropdown label="Zona" data={optionsZona} onSelect={setzona} />
+            <Dropdown
+              label={
+                theTratamiento.id
+                  ? `${laZona.id} ${laZona.lugar} ${laZona.depto}`
+                  : "Zona"
+              }
+              data={optionsZona}
+              onSelect={(selected) => (theTratamiento.zona = selected.value)}
+            />
           </View>
         </View>
         <View style={{ marginTop: 10 }}>
@@ -191,11 +228,47 @@ const TratamientoCrud = () => {
         <View style={{ marginTop: 10 }}>
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Insumos</Text>
-            <Dropdown
+            {/* <Dropdown
               label="Insumos"
               data={optionsInsumos}
               onSelect={setInsumos}
+            /> */}
+            <Button
+              color="#1D5E33"
+              title={"Seleccionar Insumos"}
+              onPress={openInsumosModal}
             />
+            <Modal
+              visible={showInsumosModal}
+              onRequestClose={closeInsumosModal}
+              transparent={true}
+            >
+              <View style={styles.modalContainer}>
+                <MultipleSelect
+                  items={optionsInsumos}
+                  uniqueKey="value"
+                  onSelectedItemsChange={setInsumos}
+                  selectedItems={Insumos}
+                  selectText="Seleccionar Insumos"
+                  searchInputPlaceholderText="Buscar insumos..."
+                  tagRemoveIconColor="#1D5E33"
+                  tagBorderColor="#1D5E33"
+                  tagTextColor="#1D5E33"
+                  selectedItemTextColor="#1D5E33"
+                  selectedItemIconColor="#1D5E33"
+                  itemTextColor="#000"
+                  displayKey="label"
+                  searchInputStyle={{ color: "#1D5E33" }}
+                  submitButtonColor="#1D5E33"
+                  submitButtonText="Seleccionar"
+                />
+                <Button
+                  color="#1D5E33"
+                  title="Confirmar"
+                  onPress={closeInsumosModal}
+                />
+              </View>
+            </Modal>
           </View>
         </View>
 
@@ -273,12 +346,35 @@ const TratamientoCrud = () => {
         </View>
 
         <View style={styles.container}>
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Crear Tratamiento</Text>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              let action = "";
+              let mensaje = "";
+              {
+                elTratamiento.id
+                  ? (action = "updateTratamiento")
+                  : (action = "createTratamiento");
+              }
+              dispatch({ type: action, payload: elTratamiento });
+              elTratamiento.id
+                ? (mensaje = "Tratamiento Editado")
+                : (mensaje = "Tratamiento Creado");
+
+              setModalMensaje(mensaje);
+              setShowModal(true);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {elTratamiento.id ? "Editar" : "Crear"} Tratamiento
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
-    </Layout>
+      {showModal && (
+        <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
+      )}
+    </TratamientoLayout>
   );
 };
 
@@ -346,5 +442,14 @@ const styles = StyleSheet.create({
   },
   elseparador: {
     marginHorizontal: 5,
+  },
+  modalContainer: {
+    padding: 20,
+    marginTop: 210,
+    backgroundColor: "white",
+    borderRadius: 20,
+    marginHorizontal: 10,
+    borderWidth: 3,
+    borderColor: "#1D5E33",
   },
 });
