@@ -18,9 +18,11 @@ import ZonaContext from "../../provider/zonaProvider";
 import { useNavigation } from "@react-navigation/native";
 import ObsContext from "../../provider/observacionProvider";
 import { ScrollView } from "react-native-gesture-handler";
+import { useRoute } from "@react-navigation/native";
 
-const InfoZona = ({ route }) => {
+const InfoZona = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const { state, getObsById } = useContext(ObsContext);
   const { dispatch } = useContext(ZonaContext);
   const { zona } = route.params;

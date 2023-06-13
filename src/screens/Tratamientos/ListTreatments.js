@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -18,91 +18,111 @@ import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import ModalMensaje from "../../components/ModalMensaje";
+import TratContext from "../../provider/tratamientoProvider";
 
 const ListTreataments = () => {
   const navigation = useNavigation();
+  const { state, dispatch } = useContext(TratContext);
   const handleTratamentPress = (Tratamiento) => {
     navigation.navigate("InfoTratamiento", { Tratamiento });
   };
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
-  const [tratamientos, settratamientos] = useState(
-    // Array de tratamientos de ejemplo
-    [
-      {
-        id: 1,
-        nombre: "Luis",
-        apellido: "Miguel",
-        tratamiento: "T-46545",
-        fechaT: "24/03/2023",
-        observaciones: "Zi",
-        ci: 635351,
-      },
-      {
-        id: 2,
-        nombre: "Sergio",
-        apellido: "Rico",
-        tratamiento: "T-34345",
-        fechaT: "24/09/2021",
-        observaciones: "No",
-        ci: 54878,
-      },
-      {
-        id: 3,
-        nombre: "Ana",
-        apellido: "García",
-        tratamiento: "T-12345",
-        fechaT: "12/06/2023",
-        observaciones: "Sí",
-        ci: 784536,
-      },
-      {
-        id: 4,
-        nombre: "Carlos",
-        apellido: "Pérez",
-        tratamiento: "T-67890",
-        fechaT: "05/02/2023",
-        observaciones: "No",
-        ci: 963214,
-      },
-      {
-        id: 5,
-        nombre: "María",
-        apellido: "López",
-        tratamiento: "T-24680",
-        fechaT: "30/11/2022",
-        observaciones: "Sí",
-        ci: 745812,
-      },
-      {
-        id: 6,
-        nombre: "Pedro",
-        apellido: "Gómez",
-        tratamiento: "T-13579",
-        fechaT: "18/08/2023",
-        observaciones: "No",
-        ci: 874563,
-      },
-      {
-        id: 7,
-        nombre: "Laura",
-        apellido: "Hernández",
-        tratamiento: "T-97531",
-        fechaT: "22/04/2022",
-        observaciones: "Sí",
-        ci: 632548,
-      },
-    ]
-  );
+  // const [tratamientos, settratamientos] = useState(
+  //   // Array de tratamientos de ejemplo
+  //   [
+  //     {
+  //       id: 1,
+  //       nombre: "Luis",
+  //       apellido: "Miguel",
+  //       tratamiento: "T-46545",
+  //       fechaT: "24/03/2023",
+  //       observaciones: "Zi",
+  //       ci: 635351,
+  //     },
+  //     {
+  //       id: 2,
+  //       nombre: "Sergio",
+  //       apellido: "Rico",
+  //       tratamiento: "T-34345",
+  //       fechaT: "24/09/2021",
+  //       observaciones: "No",
+  //       ci: 54878,
+  //     },
+  //     {
+  //       id: 3,
+  //       nombre: "Ana",
+  //       apellido: "García",
+  //       tratamiento: "T-12345",
+  //       fechaT: "12/06/2023",
+  //       observaciones: "Sí",
+  //       ci: 784536,
+  //     },
+  //     {
+  //       id: 4,
+  //       nombre: "Carlos",
+  //       apellido: "Pérez",
+  //       tratamiento: "T-67890",
+  //       fechaT: "05/02/2023",
+  //       observaciones: "No",
+  //       ci: 963214,
+  //     },
+  //     {
+  //       id: 5,
+  //       nombre: "María",
+  //       apellido: "López",
+  //       tratamiento: "T-24680",
+  //       fechaT: "30/11/2022",
+  //       observaciones: "Sí",
+  //       ci: 745812,
+  //     },
+  //     {
+  //       id: 6,
+  //       nombre: "Pedro",
+  //       apellido: "Gómez",
+  //       tratamiento: "T-13579",
+  //       fechaT: "18/08/2023",
+  //       observaciones: "No",
+  //       ci: 874563,
+  //     },
+  //     {
+  //       id: 7,
+  //       nombre: "Laura",
+  //       apellido: "Hernández",
+  //       tratamiento: "T-97531",
+  //       fechaT: "22/04/2022",
+  //       observaciones: "Sí",
+  //       ci: 632548,
+  //     },
+  //   ]
+  // );
 
   // Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
-        <TouchableOpacity style={styles.botonesr}>
+        <TouchableOpacity
+          style={styles.botonesr}
+          onPress={() => {
+            dispatch({ type: "deleteTratamientos", payload: item });
+            setModalMensaje("Tratamiento Eliminado");
+            setShowModal(true);
+          }}
+        >
           <Text style={{ color: "white" }}>Borrar</Text>
           <FontAwesome5 name="trash" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botonesa}>
+        <TouchableOpacity
+          style={styles.botonesa}
+          onPress={() => {
+            navigation.navigate("TratamientoCurd", item);
+          }}
+        >
           <Text style={{ color: "white" }}>Editar</Text>
           <FontAwesome5 name="edit" size={20} color="black" />
         </TouchableOpacity>
@@ -155,7 +175,7 @@ const ListTreataments = () => {
       <View style={styles.scrollViewContent}>
         <FlatList
           style={styles.FlatList}
-          data={tratamientos}
+          data={state}
           renderItem={renderTratamientoItem}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.line} />}
@@ -167,6 +187,13 @@ const ListTreataments = () => {
         <Ionicons name="earth" size={80} color="#1D5E33" />
         <Text style={styles.titulo}>Ver en Mapa</Text>
       </TouchableOpacity>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={false}
+        />
+      )}
 
       <BarraInferior />
     </SafeAreaView>

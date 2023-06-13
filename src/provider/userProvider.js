@@ -1,4 +1,4 @@
-import React, { useState,createContext, useReducer } from "react";
+import React, { useState, createContext, useReducer } from "react";
 
 // const getUsers = async () => {
 //   const users = await database.getUsers();
@@ -61,9 +61,7 @@ const actions = {
     user.id = generateNumericId();
     // guardar el usuario en la db
     //database.insertUser(user);
-    return [
-      ...state, user
-    ];
+    return [...state, user];
   },
   updateUser(state, action) {
     const userUpdated = action.payload;
@@ -72,18 +70,14 @@ const actions = {
     console.log("### id ###", id);
     //database.editUser(userUpdated);
     return [
-      ...state.map((user) =>
-        user.id === userUpdated.id ? userUpdated : user
-      ),
+      ...state.map((user) => (user.id === userUpdated.id ? userUpdated : user)),
     ];
   },
   deleteUser(state, action) {
     const userDelete = action.payload;
     // Borrar el usuario de la db
     //database.deleteUser(userDelete.id);
-    return [
-      ...state.filter((user) => user.id !== userDelete.id),
-    ];
+    return [...state.filter((user) => user.id !== userDelete.id)];
   },
 };
 
@@ -101,6 +95,9 @@ const generateNumericId = () => {
 
   return numericId;
 };
+const getUserById = (state, UserId) => {
+  return state.find((usuario) => usuario.id === UserId);
+};
 
 const UserContext = createContext();
 
@@ -109,11 +106,11 @@ export const UserProvider = (props) => {
     const fn = actions[action.type];
     return fn ? fn(state, action) : state;
   };
-  
+
   const [state, dispatch] = useReducer(reducer, Users);
-  console.log('theState:',state)
+  console.log("theState:", state);
   return (
-    <UserContext.Provider value={{ state, dispatch }}>
+    <UserContext.Provider value={{ state, dispatch, getUserById }}>
       {props.children}
     </UserContext.Provider>
   );

@@ -37,7 +37,7 @@ const TratamientoCrud = () => {
 
   const [selectedDate1, setSelectedDate1] = useState();
   const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState("");
 
   const requestMediaLibraryPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -77,7 +77,7 @@ const TratamientoCrud = () => {
   };
 
   const handleConfirm = (date) => {
-    setSelectedDate(date);
+    setSelectedDate(date.toISOString());
     hideDatePicker();
   };
 
@@ -90,13 +90,15 @@ const TratamientoCrud = () => {
   };
 
   const handleConfirm1 = (date) => {
-    setSelectedDate1(date);
+    setSelectedDate1(date.toISOString());
     hideDatePicker1();
   };
 
   const [usuario, setusuario] = useState(undefined);
+  const [nombre, setnombre] = useState(undefined);
 
   const [zona, setzona] = useState(undefined);
+  const [tiempo, settiempo] = useState(undefined);
 
   const [Insumos, setInsumos] = useState([]);
 
@@ -104,10 +106,6 @@ const TratamientoCrud = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
-
-  useEffect(() => {
-    console.log("EL INSUMO PIBE QUE GUARDA??: ", Insumos);
-  }, [Insumos]);
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -138,6 +136,16 @@ const TratamientoCrud = () => {
     tiempo: "",
     orden: "",
   };
+
+  elTratamiento.insumo = Insumos;
+  elTratamiento.usuario = usuario;
+  elTratamiento.nombre = nombre;
+  elTratamiento.zona = zona;
+  elTratamiento.fechainicial = selectedDate1;
+  elTratamiento.fechafin = selectedDate;
+  elTratamiento.tiempo = tiempo;
+  elTratamiento.orden = selectedFile.uri;
+
   const [theTratamiento] = useState(
     route.params ? route.params : elTratamiento
   );
@@ -162,6 +170,10 @@ const TratamientoCrud = () => {
     // Actualiza el estado con los insumos seleccionados
     setInsumos(selectedItems);
   };
+
+  useEffect(() => {
+    console.log("QUE VA CAMBIANDO", theTratamiento);
+  }, [theTratamiento]);
   return (
     <TratamientoLayout>
       <View style={styles.distancia}>
@@ -191,9 +203,10 @@ const TratamientoCrud = () => {
               defaultValue={
                 theTratamiento.nombre ? theTratamiento.nombre.toString() : ""
               }
-              onChangeText={(text) => {
-                theTratamiento.nombre = text;
-              }}
+              // onChangeText={(text) => {
+              //   theTratamiento.nombre = text;
+              // }}
+              onChangeText={(text) => setnombre(text)}
             />
           </View>
         </View>
@@ -209,7 +222,7 @@ const TratamientoCrud = () => {
                   : "Zona"
               }
               data={optionsZona}
-              onSelect={(selected) => (theTratamiento.zona = selected.value)}
+              onSelect={(selected) => setzona(selected.value)}
             />
           </View>
         </View>
@@ -219,7 +232,7 @@ const TratamientoCrud = () => {
             <Dropdown
               label="Usuario"
               data={optionsUsuarios}
-              onSelect={setusuario}
+              onSelect={(selected) => setusuario(selected.value)}
             />
           </View>
         </View>
@@ -323,6 +336,12 @@ const TratamientoCrud = () => {
               keyboardType="numeric"
               placeholder="Ingrese Tiempo"
               placeholderTextColor="#888"
+              defaultValue={
+                theTratamiento.tiempo ? theTratamiento.tiempo.toString() : ""
+              }
+              onChangeText={(text) => {
+                settiempo(text);
+              }}
             />
           </View>
         </View>
