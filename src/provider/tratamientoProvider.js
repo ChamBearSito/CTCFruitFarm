@@ -1,16 +1,16 @@
 import React, { useState, createContext, useReducer } from "react";
 let Tratamientos = [
-  {
-    id: 1,
-    nombre: "JUANITO",
-    zona: 1,
-    usuario: 1,
-    insumo: 1,
-    fechainicial: "06/14/2023",
-    fechafin: "06/16/2023",
-    tiempo: 4,
-    orden: "jijija",
-  },
+  // {
+  //   id: 1,
+  //   nombre: "JUANITO",
+  //   zona: 1,
+  //   usuario: 1,
+  //   insumo: 1,
+  //   fechainicial: "06/14/2023",
+  //   fechafin: "06/16/2023",
+  //   tiempo: 4,
+  //   orden: "jijija",
+  // },
 ];
 
 const actions = {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import {
   View,
@@ -14,10 +14,15 @@ import UserContext from "../../provider/userProvider";
 import ObsContext from "../../provider/observacionProvider";
 import ZonaContext from "../../provider/zonaProvider";
 import { useNavigation } from "@react-navigation/native";
+import InsumoContext from "../../provider/insumoProvider";
+import TratContext from "../../provider/tratamientoProvider";
+import ModalMensaje from "../../components/ModalMensaje";
 
 const TratamientoInfo = ({ route }) => {
-  const navigation = useNavigation();
   const { Tratamiento } = route.params;
+  const navigation = useNavigation();
+  const { dispatch } = useContext(TratContext);
+
   console.log("QUE TRAE TRATAMIENTO: ", Tratamiento);
   const fechaInicial = new Date(Tratamiento.fechainicial);
   const dia = fechaInicial.getDate();
@@ -28,9 +33,18 @@ const TratamientoInfo = ({ route }) => {
   const { state: EstadoUsuarios, getUserById } = useContext(UserContext);
   const { state: EstadoObs, getObsById } = useContext(ObsContext);
   const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
+  const { state: EstadoInsumo, getInsumoById } = useContext(InsumoContext);
   const elusuario = getUserById(EstadoUsuarios, Tratamiento.usuario);
   const lasObservaciones = getObsById(EstadoObs, Tratamiento.zona);
   const lazona = getZonaById(EstadoZona, Tratamiento.zona);
+  const elInsumo = getInsumoById(EstadoInsumo, Tratamiento.insumo);
+  console.log("EL INSUMO XD: ", elInsumo);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   return (
     <Layout>
@@ -38,7 +52,8 @@ const TratamientoInfo = ({ route }) => {
         <View style={styles.container}>
           <FontAwesome name="medkit" size={150} color="#1D5E33" />
           <Text style={styles.titulo}>
-            {elusuario.nombre} {elusuario.apellido}
+            {elusuario.nombre}
+            {elusuario.apellido}
           </Text>
           <Text style={styles.subtitulo2}>Tratamiento</Text>
           <Text style={styles.subtitulo}>T-{Tratamiento.id}</Text>
@@ -82,20 +97,72 @@ const TratamientoInfo = ({ route }) => {
           )}
           <Text style={styles.subtitulo}>{Tratamiento.observaciones}</Text>
           <Text style={styles.subtitulo2}>Insumos Utilizados</Text>
-          <Text style={styles.subtitulo}>{Tratamiento.ci}</Text>
+          <Text style={styles.subtitulo}>
+            {elInsumo.length > 0 ? (
+              <ScrollView>
+                <View>
+                  <View
+                    style={{
+                      marginHorizontal: 70,
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      borderColor: "#1D5E33",
+                    }}
+                  >
+                    {elInsumo.map((insumos) => (
+                      <View key={insumos.id} style={styles.itemContainer}>
+                        <TouchableOpacity
+                          style={styles.observaciones1}
+                          onPress={() => {
+                            navigation.navigate("InfoInsumo", { insumos });
+                          }}
+                        >
+                          <Text style={styles.subtitulo}>{insumos.nombre}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </ScrollView>
+            ) : (
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.subtitulo}>No hay Insumos</Text>
+              </View>
+            )}
+          </Text>
         </View>
 
         <View style={styles.container}>
           <View style={styles.minicontainer}>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                dispatch({ type: "deleteTratamientos", payload: Tratamiento });
+                setModalMensaje("Tratamiento Eliminado");
+                setShowModal(true);
+              }}
+            >
               <Text style={styles.buttonText}>Eliminar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                navigation.navigate("TratamientoCurd", Tratamiento);
+              }}
+            >
               <Text style={styles.buttonText}>Editar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
+      {showModal && (
+        <ModalMensaje
+          mensaje={modalMensaje}
+          closeModal={handleModalClose}
+          navega={true}
+        />
+      )}
     </Layout>
   );
 };

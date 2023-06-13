@@ -43,3 +43,6 @@ hay que ver si podemos con alguna api porque lo hice a distancias con la capital
 -se realizo crud zona, y quedo epico el mapa xdxdxdxd.
 -Se mejoro todo lo que no andaba que eran los editar de algunos cruds y se definio cambiar la estructura
  del observaciones y pasarlo al zona Info asi ya en la misma zona guardamos sus observaciones
+
+ 13/06/2023:
+ -Se realizo en estos dias la crud de tratamientos pero falta chequear el editar.

@@ -62,6 +62,9 @@ const generateNumericId = () => {
 //   return state.find((zona) => zona.id === zonaId);
 // };
 
+const getInsumoById = (state, insumoIds) => {
+  return state.filter((insumo) => insumoIds.includes(insumo.id));
+};
 //! Creamos contexto para el reducer
 const InsumoContext = createContext();
 
@@ -74,7 +77,7 @@ export const InsumoProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, Insumos);
   console.log("theState of insumos:", state);
   return (
-    <InsumoContext.Provider value={{ state, dispatch }}>
+    <InsumoContext.Provider value={{ state, dispatch, getInsumoById }}>
       {props.children}
     </InsumoContext.Provider>
   );

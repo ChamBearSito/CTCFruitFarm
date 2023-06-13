@@ -172,21 +172,31 @@ const ListTreataments = () => {
       </View>
       <View style={styles.line} />
 
-      <View style={styles.scrollViewContent}>
-        <FlatList
-          style={styles.FlatList}
-          data={state}
-          renderItem={renderTratamientoItem}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <View style={styles.line} />}
-        />
-        <View style={styles.line} />
-      </View>
+      {state.length > 0 ? (
+        <View style={styles.scrollViewContent}>
+          <FlatList
+            style={styles.FlatList}
+            data={state}
+            renderItem={renderTratamientoItem}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <View style={styles.line} />}
+          />
+          <View style={styles.line} />
+        </View>
+      ) : (
+        <View style={styles.scrollViewContent}>
+          <Text style={[styles.titulo, { marginLeft: 20, marginTop: 100 }]}>
+            Aun no hay Tratamientos
+          </Text>
+        </View>
+      )}
+      {state.length > 0 ? (
+        <TouchableOpacity style={styles.verMapaButton}>
+          <Ionicons name="earth" size={80} color="#1D5E33" />
+          <Text style={styles.titulo}>Ver en Mapa</Text>
+        </TouchableOpacity>
+      ) : null}
 
-      <TouchableOpacity style={styles.verMapaButton}>
-        <Ionicons name="earth" size={80} color="#1D5E33" />
-        <Text style={styles.titulo}>Ver en Mapa</Text>
-      </TouchableOpacity>
       {showModal && (
         <ModalMensaje
           mensaje={modalMensaje}
