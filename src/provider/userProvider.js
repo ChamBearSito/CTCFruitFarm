@@ -1,74 +1,77 @@
 import React, { useState, createContext, useReducer } from "react";
+import { database } from "../data/database";
 
-// const getUsers = async () => {
-//   const users = await database.getUsers();
-//   return users;
-// };
+const getUsers = async () => {
+  const users = await database.getUsers();
+  return users;
+};
 
 let Users = [
-  {
-    id: 1,
-    nombre: "JUANITO",
-    apellido: "Suarez",
-    cedula: 455454,
-  },
-  {
-    id: 2,
-    nombre: "JUANITO",
-    apellido: "JIJIJA",
-    cedula: 4564664,
-  },
-  {
-    id: 3,
-    nombre: "Marceliño",
-    apellido: "Albariño",
-    cedula: 584864,
-  },
-  {
-    id: 4,
-    nombre: "MARCELA",
-    apellido: "Cavani",
-    cedula: 8476354,
-  },
-  {
-    id: 5,
-    nombre: "OSVALDO",
-    apellido: "Chambonardo",
-    cedula: 4564664,
-  },
-  {
-    id: 6,
-    nombre: "YESSICA",
-    apellido: "Mimosha",
-    cedula: 456797,
-  },
+  // {
+  //   id: 1,
+  //   nombre: "JUANITO",
+  //   apellido: "Suarez",
+  //   cedula: 455454,
+  // },
+  // {
+  //   id: 2,
+  //   nombre: "JUANITO",
+  //   apellido: "JIJIJA",
+  //   cedula: 4564664,
+  // },
+  // {
+  //   id: 3,
+  //   nombre: "Marceliño",
+  //   apellido: "Albariño",
+  //   cedula: 584864,
+  // },
+  // {
+  //   id: 4,
+  //   nombre: "MARCELA",
+  //   apellido: "Cavani",
+  //   cedula: 8476354,
+  // },
+  // {
+  //   id: 5,
+  //   nombre: "OSVALDO",
+  //   apellido: "Chambonardo",
+  //   cedula: 4564664,
+  // },
+  // {
+  //   id: 6,
+  //   nombre: "YESSICA",
+  //   apellido: "Mimosha",
+  //   cedula: 456797,
+  // },
 ];
 
-// getUsers().then((users) => {
-//   users.map((user) => {
-//     Users.push({
-//       id: user.id,
-//       nombre: user.name,
-//       apellido: user.lastname,
-//       cedula: user.ci,
-//     });
-//   });
-// });
+getUsers().then((users) => {
+  users.map((user) => {
+    Users.push({
+      id: user.id,
+      nombre: user.nombre,
+      apellido: user.apellido,
+      cedula: user.cedula,
+    });
+  });
+});
 
 const actions = {
   createUser(state, action) {
     const user = action.payload;
     user.id = generateNumericId();
     // guardar el usuario en la db
-    //database.insertUser(user);
+    database.insertUser(user)
+    .then((insertedId)=>{
+      user.id=insertedId;
+    });
     return [...state, user];
   },
   updateUser(state, action) {
     const userUpdated = action.payload;
     // update del usuario en la db
     const id = userUpdated.id;
-    console.log("### id ###", id);
-    //database.editUser(userUpdated);
+    database.editUser(userUpdated);
     return [
       ...state.map((user) => (user.id === userUpdated.id ? userUpdated : user)),
     ];
@@ -76,7 +79,7 @@ const actions = {
   deleteUser(state, action) {
     const userDelete = action.payload;
     // Borrar el usuario de la db
-    //database.deleteUser(userDelete.id);
+    database.deleteUser(userDelete.id);
     return [...state.filter((user) => user.id !== userDelete.id)];
   },
 };
@@ -108,7 +111,7 @@ export const UserProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Users);
-  console.log("theState:", state);
+  
   return (
     <UserContext.Provider value={{ state, dispatch, getUserById }}>
       {props.children}

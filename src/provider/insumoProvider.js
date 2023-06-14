@@ -75,7 +75,7 @@ export const InsumoProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Insumos);
-  console.log("theState of insumos:", state);
+  
   return (
     <InsumoContext.Provider value={{ state, dispatch, getInsumoById }}>
       {props.children}

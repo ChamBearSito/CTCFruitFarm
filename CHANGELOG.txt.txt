@@ -47,3 +47,7 @@ hay que ver si podemos con alguna api porque lo hice a distancias con la capital
  13/06/2023:
  -Se realizo en estos dias la crud de tratamientos pero falta chequear el editar.
  -Se creo el mapa donde se muestran los tratamientos con su marker que lo direcciona a su tratamientoInfo
+
+14/06/2023:
+-Se arreglo el editar tratamientos
+-Se hizo la bdd para crud de usuarios

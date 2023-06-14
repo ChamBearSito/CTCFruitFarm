@@ -76,7 +76,7 @@ export const ObsProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Observaciones);
-  console.log("theState of Obs:", state);
+  
   return (
     <ObsContext.Provider value={{ state, dispatch, getObsById }}>
       {props.children}

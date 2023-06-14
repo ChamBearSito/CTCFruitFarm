@@ -65,7 +65,6 @@ export const TratamientoProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Tratamientos);
-  console.log("Estado Tratamientos:", state);
   return (
     <TratContext.Provider value={{ state, dispatch }}>
       {props.children}

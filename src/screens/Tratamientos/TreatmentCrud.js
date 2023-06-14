@@ -29,7 +29,7 @@ const TratamientoCrud = () => {
   const route = useRoute();
   const { dispatch } = useContext(TratContext);
   const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
-  const { state: EstadoUsuarios } = useContext(UserContext);
+  const { state: EstadoUsuarios,getUserById } = useContext(UserContext);
   const { state: EstadoInsumos } = useContext(InsumoContext);
 
   const [selectedDate, setSelectedDate] = useState();
@@ -58,13 +58,16 @@ const TratamientoCrud = () => {
     };
 
     requestPermission();
+    if(theTratamiento.id){
+      setInsumos(theTratamiento.insumo)
+    }
   }, []);
 
   const pickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({});
 
     if (result.type === "success") {
-      setSelectedFile(result);
+      theTratamiento.orden=result.uri;
     }
   };
 
@@ -77,7 +80,7 @@ const TratamientoCrud = () => {
   };
 
   const handleConfirm = (date) => {
-    setSelectedDate(date.toISOString());
+    theTratamiento.fechafin=date.toISOString();
     hideDatePicker();
   };
 
@@ -90,7 +93,7 @@ const TratamientoCrud = () => {
   };
 
   const handleConfirm1 = (date) => {
-    setSelectedDate1(date.toISOString());
+    theTratamiento.fechainicial=date.toISOString();
     hideDatePicker1();
   };
 
@@ -137,20 +140,21 @@ const TratamientoCrud = () => {
     orden: "",
   };
 
-  elTratamiento.insumo = Insumos;
-  elTratamiento.usuario = usuario;
-  elTratamiento.nombre = nombre;
-  elTratamiento.zona = zona;
-  elTratamiento.fechainicial = selectedDate1;
-  elTratamiento.fechafin = selectedDate;
-  elTratamiento.tiempo = tiempo;
-  elTratamiento.orden = selectedFile.uri;
+  // elTratamiento.insumo = Insumos;
+  // elTratamiento.usuario = usuario;
+  // elTratamiento.nombre = nombre;
+  // elTratamiento.zona = zona;
+  // elTratamiento.fechainicial = selectedDate1;
+  // elTratamiento.fechafin = selectedDate;
+  // elTratamiento.tiempo = tiempo;
+  // elTratamiento.orden = selectedFile.uri;
 
   const [theTratamiento] = useState(
     route.params ? route.params : elTratamiento
   );
 
   const laZona = getZonaById(EstadoZona, theTratamiento.zona);
+  const elUser=getUserById(EstadoUsuarios, theTratamiento.usuario);
 
   // Estado para controlar la visibilidad del modal
   const [showInsumosModal, setShowInsumosModal] = useState(false);
@@ -179,7 +183,7 @@ const TratamientoCrud = () => {
       <View style={styles.distancia}>
         <View style={styles.container}>
           <Text style={styles.titulo}>
-            {elTratamiento.id ? "Editar" : "Alta"} Tratamiento
+            {theTratamiento.id ? "Editar" : "Alta"} Tratamiento
           </Text>
         </View>
         <View style={styles.container}>
@@ -203,10 +207,10 @@ const TratamientoCrud = () => {
               defaultValue={
                 theTratamiento.nombre ? theTratamiento.nombre.toString() : ""
               }
-              // onChangeText={(text) => {
-              //   theTratamiento.nombre = text;
-              // }}
-              onChangeText={(text) => setnombre(text)}
+              onChangeText={(text) => {
+                theTratamiento.nombre = text;
+              }}
+              // onChangeText={(text) => setnombre(text)}
             />
           </View>
         </View>
@@ -222,7 +226,7 @@ const TratamientoCrud = () => {
                   : "Zona"
               }
               data={optionsZona}
-              onSelect={(selected) => setzona(selected.value)}
+              onSelect={(selected) => theTratamiento.zona=selected.value}
             />
           </View>
         </View>
@@ -230,9 +234,13 @@ const TratamientoCrud = () => {
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Usuarios</Text>
             <Dropdown
-              label="Usuario"
+              label={
+                theTratamiento.id
+                  ? `${elUser.id} ${elUser.nombre} ${elUser.apellido} ${elUser.cedula} `
+                  : "Usuario"
+              }
               data={optionsUsuarios}
-              onSelect={(selected) => setusuario(selected.value)}
+              onSelect={(selected) => theTratamiento.usuario=selected.value}
             />
           </View>
         </View>
@@ -290,8 +298,8 @@ const TratamientoCrud = () => {
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Fecha Inicio</Text>
             <Text>{`Fecha:  ${
-              selectedDate1
-                ? moment(selectedDate1).format("MM/DD/YYYY")
+              theTratamiento.fechainicial
+                ? moment(theTratamiento.fechainicial).format("MM/DD/YYYY")
                 : "Please select date"
             }`}</Text>
             <Button
@@ -309,8 +317,8 @@ const TratamientoCrud = () => {
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Fecha Fin</Text>
             <Text>{`Fecha:  ${
-              selectedDate
-                ? moment(selectedDate).format("MM/DD/YYYY")
+              theTratamiento.fechafin
+                ? moment(theTratamiento.fechafin).format("MM/DD/YYYY")
                 : "Please select date"
             }`}</Text>
             <Button
@@ -340,7 +348,7 @@ const TratamientoCrud = () => {
                 theTratamiento.tiempo ? theTratamiento.tiempo.toString() : ""
               }
               onChangeText={(text) => {
-                settiempo(text);
+                theTratamiento.tiempo=text;
               }}
             />
           </View>
@@ -356,9 +364,9 @@ const TratamientoCrud = () => {
               title="Seleccionar Archivo"
               onPress={pickDocument}
             />
-            {selectedFile && (
+            {theTratamiento.orden && (
               <Text style={styles.selectedFileText}>
-                Archivo seleccionado: {selectedFile.name}
+                Archivo seleccionado: {theTratamiento.orden.name}
               </Text>
             )}
           </View>
@@ -370,13 +378,14 @@ const TratamientoCrud = () => {
             onPress={() => {
               let action = "";
               let mensaje = "";
+              theTratamiento.insumo=Insumos;
               {
-                elTratamiento.id
+                theTratamiento.id
                   ? (action = "updateTratamiento")
                   : (action = "createTratamiento");
               }
-              dispatch({ type: action, payload: elTratamiento });
-              elTratamiento.id
+              dispatch({ type: action, payload: theTratamiento });
+              theTratamiento.id
                 ? (mensaje = "Tratamiento Editado")
                 : (mensaje = "Tratamiento Creado");
 
@@ -385,7 +394,7 @@ const TratamientoCrud = () => {
             }}
           >
             <Text style={styles.buttonText}>
-              {elTratamiento.id ? "Editar" : "Crear"} Tratamiento
+              {theTratamiento.id ? "Editar" : "Crear"} Tratamiento
             </Text>
           </TouchableOpacity>
         </View>

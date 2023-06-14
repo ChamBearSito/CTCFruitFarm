@@ -3,33 +3,32 @@ import { database } from "../data/database";
 
 const useDatabase = () => {
   const [isDBLoadingComplete, setIsDBLoadingComplete] = useState(false);
+  const [dbName, setDbName] = useState("database.db");
+  const [db, setDb] = useState(null);
+
   useEffect(() => {
     const loadData = async () => {
-      try {
-        const users = await database.getUsers();
-        // llamar a la db para que se carguen los datos
-
-        // borra la db
-        // setup db
-        // agrega un usuario
-
-        // si ya tengo usuario
-        // No quiero correr estas lineas
-        if (users.length == 0) {
-          await database.dropDatabaseTable();
-          await database.setupDatabase();
-          await database.setupUsers();
+        try {
+          // llamar a una funcion que me haga la conexion a la db
+          const openDb = database;
+          console.log('### openDb ###', openDb)
+          setDb(openDb)
+          await openDb.setupDatabase();
+          const users = openDb.getUsers();
+          if(users.length == 0) {
+            await openDb.dropDatabaseTable();
+          }
+          
+          setIsDBLoadingComplete(true);
+        } catch (err) {
+          console.log("error on useDatabase Hook", err);
         }
-        setIsDBLoadingComplete(true);
-      } catch (err) {
-        console.log("error on useDatabase Hook", err);
-      }
-    };
+      };
 
     loadData().then(() => console.log("loading data"));
-  }, []);
+  }, [dbName]);
 
-  return isDBLoadingComplete;
+  return {isDBLoadingComplete, db, setDbName};
 };
 
 export default useDatabase;

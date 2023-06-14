@@ -5,7 +5,12 @@ import { InsumoProvider } from "./src/provider/insumoProvider";
 import { ZonaProvider } from "./src/provider/zonaProvider";
 import { ObsProvider } from "./src/provider/observacionProvider";
 import { TratamientoProvider } from "./src/provider/tratamientoProvider";
+
+import useDatabase from './src/hooks/useDatabase';
+
 export default function App() {
+  const {isDBLoadingComplete,db} = useDatabase()
+  console.log('isDBLoadingComplete', isDBLoadingComplete)
   return (
     <>
       <UserProvider>

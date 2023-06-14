@@ -1,17 +1,17 @@
 import * as SQlite from "expo-sqlite";
-const db = SQlite.openDatabase("database.db");
-//import Users from "./users";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import { Platform } from "react-native";
 
+let db = SQlite.openDatabase("database.db");
+
 const createTableSQL =
-  "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50), email VARCHAR(50), avatarUrl VARCHAR(400))";
+  "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), apellido VARCHAR(50), cedula VARCHAR(8))";
 const insertUserSQL =
-  "INSERT INTO users (name, email, avatarUrl) VALUES (?,?,?)";
+  "INSERT INTO users (nombre, apellido, cedula) VALUES (?,?,?)";
 const updateUserSQL =
-  "UPDATE users SET name = (?), email = (?), avatarUrl = (?) WHERE id = (?)";
+  "UPDATE users SET nombre = (?), apellido = (?), cedula = (?) WHERE id = (?)";
 const deletetUserSQL = "DELETE FROM users WHERE id = (?)";
 
 // inicialiar la db
@@ -50,7 +50,7 @@ const setupUsers = async () => {
   });
 };
 
-const dropDatabaseTable = async () => {
+const dropDatabaseTable = async (db) => {
   return new Promise((resolve, reject) => {
     db.transaction((txn) => {
       txn.executeSql(
@@ -60,7 +60,7 @@ const dropDatabaseTable = async () => {
           if (res.rows.length) {
             txn.executeSql("DROP TABLE IF EXISTS users", []);
             txn.executeSql(
-              "CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), email VARCHAR(40), avatarUrl VARCHAR(200))",
+              "CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), apellido VARCHAR(50), cedula VARCHAR(8))",
               [],
               (_, succes) => {
                 resolve(succes);
@@ -101,15 +101,15 @@ const getUsers = async () => {
 };
 
 const insertUser = async (user) => {
-  const { name, email, avatar } = user;
+  const { nombre, apellido, cedula } = user;
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         insertUserSQL,
-        [name, email, avatar],
+        [nombre, apellido, cedula],
         (_, succes) => {
           console.log("succes insert user", succes);
-          resolve(succes);
+          resolve(succes.insertId);
         },
         (_, error) => {
           console.log("error insert user", error);
@@ -121,13 +121,13 @@ const insertUser = async (user) => {
 };
 
 const editUser = (user) => {
-  const { id, name, email, avatar } = user;
+  const { id, nombre, apellido, cedula } = user;
   console.log("### id ###", id);
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         updateUserSQL,
-        [name, email, avatar, id],
+        [nombre, apellido, cedula, id],
         (_, succes) => {
           console.log("succes update user", succes);
           resolve(succes);
@@ -189,45 +189,46 @@ const exportDB = async () => {
   const directory = FileSystem.documentDirectory + "SQLite";
   const folderExist = (await FileSystem.getInfoAsync(directory)).exists;
 
-  if (Platform.OS === "android" && folderExist) {
-    const base64 = await FileSystem.readAsStringAsync(
-      directory + "/database.db",
-      {
-        encoding: FileSystem.EncodingType.Base64,
-      }
-    );
-    const result = await FileSystem.StorageAccessFramework.createFileAsync(
-      directory,
-      "database.db",
-      "application/octet-stream"
-    );
-    if (!result) {
-      console.log("Error en permisos");
-      return;
-    }
-
-    await FileSystem.writeAsStringAsync(result.uri, base64, {
+  if(Platform.OS === 'android' && folderExist) {
+  const base64 = await FileSystem.readAsStringAsync(
+    directory + "/database.db",
+    {
       encoding: FileSystem.EncodingType.Base64,
-    });
-    // compartir el archivo
-    await Sharing.shareAsync(result.uri, {
-      mimeType: "application/octet-stream",
-    });
-  } else {
-    await Sharing.shareAsync(directory + "/database.db");
+    }
+  )
+  const result = await FileSystem.StorageAccessFramework.createFileAsync(directory, "database.db", 'application/octet-stream')
+  if (!result) {
+    console.log('Error en permisos')
+    return;
+  }
+
+  await FileSystem.writeAsStringAsync(
+    result.uri,
+    base64,
+    {
+      encoding: FileSystem.EncodingType.Base64,
+    }
+  )
+  // compartir el archivo
+  await Sharing.shareAsync(result.uri, {
+    mimeType: 'application/octet-stream',
+  })
+  }else {
+    await Sharing.shareAsync(directory + "/database.db")
   }
 };
 
-const openDatabase = async (pathToDatabaseFile) => {
-  // if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-  //   await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
-  // }
-  // await FileSystem.downloadAsync(
-  //   Asset.fromModule(require(pathToDatabaseFile)).uri,
-  //   FileSystem.documentDirectory + 'SQLite/database.db'
-  // );
-  // return SQlite.openDatabase('database.db');
-};
+
+// const openDatabase = async (pathToDatabaseFile = '../../db') => {
+//   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+//     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
+//   }
+//   await FileSystem.downloadAsync(
+//     //Asset.fromModule(require('/Users/sebastianbarcelona/Desktop/CTC/PDM2023/crud_usuarios_v2/src/db')).uri,
+//     FileSystem.documentDirectory + 'SQLite/database.db'
+//   );
+//   return SQlite.openDatabase('database.db');
+// }
 
 export const database = {
   setupDatabase,
@@ -242,4 +243,5 @@ export const database = {
   // importar y exportar
   importDB,
   exportDB,
+  // abrir y cerrar db
 };
