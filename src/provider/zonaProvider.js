@@ -6,8 +6,8 @@ let Zonas = [
     lugar: "Estanicia",
     depto: "Colonia",
     trabajadores: 44,
-    latitude: 35.2123,
-    longitude: 67.1213,
+    latitude: -34.312977,
+    longitude: -57.230646,
   },
   {
     id: 2,

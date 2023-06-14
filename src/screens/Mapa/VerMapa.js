@@ -31,16 +31,13 @@ const VerMapa = () => {
               ? { latitude: zona.latitude, longitude: zona.longitude }
               : null;
             return (
-              <TouchableOpacity key={Tratamiento.id}>
-                {coordenadas && (
-                  <Marker
-                    coordinate={coordenadas}
-                    onPress={() =>
-                      navigation.navigate("InfoTratamiento", Tratamiento)
-                    }
-                  />
-                )}
-              </TouchableOpacity>
+              <Marker
+                key={Tratamiento.id}
+                coordinate={coordenadas}
+                onPress={() =>
+                  navigation.navigate("InfoTratamiento", { Tratamiento })
+                }
+              />
             );
           })}
         </MapView>

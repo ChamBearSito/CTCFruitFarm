@@ -17,8 +17,10 @@ import { useNavigation } from "@react-navigation/native";
 import InsumoContext from "../../provider/insumoProvider";
 import TratContext from "../../provider/tratamientoProvider";
 import ModalMensaje from "../../components/ModalMensaje";
+import { useRoute } from "@react-navigation/native";
 
-const TratamientoInfo = ({ route }) => {
+const TratamientoInfo = () => {
+  const route = useRoute();
   const { Tratamiento } = route.params;
   const navigation = useNavigation();
   const { dispatch } = useContext(TratContext);

@@ -193,7 +193,7 @@ const ListTreataments = () => {
       {state.length > 0 ? (
         <TouchableOpacity
           style={styles.verMapaButton}
-          onPress={() => navigation.navigate("Mapa", state)}
+          onPress={() => navigation.navigate("Mapa")}
         >
           <Ionicons name="earth" size={80} color="#1D5E33" />
           <Text style={styles.titulo}>Ver en Mapa</Text>
