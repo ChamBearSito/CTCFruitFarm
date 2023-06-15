@@ -57,7 +57,7 @@ const InformationSreen = () => {
           size={50}
           color="#1D5E33"
         />
-        <Text style={styles.subtitulo}>Crear Observacion</Text>
+        <Text style={styles.subtitulo}>Listado Observaciones</Text>
       </View>
       <View style={[styles.container, { top: "67%" }]}>
         <AntDesign
@@ -66,7 +66,7 @@ const InformationSreen = () => {
           size={50}
           color="#1D5E33"
         />
-        <Text style={styles.subtitulo}>Listado Pacientes</Text>
+        <Text style={styles.subtitulo}>Listado Tratamientos</Text>
       </View>
     </Layout>
   );

@@ -59,11 +59,10 @@ getUsers().then((users) => {
 const actions = {
   createUser(state, action) {
     const user = action.payload;
-    user.id = generateNumericId();
+    // user.id = generateNumericId();
     // guardar el usuario en la db
-    database.insertUser(user)
-    .then((insertedId)=>{
-      user.id=insertedId;
+    database.insertUser(user).then((insertedId) => {
+      user.id = insertedId;
     });
     return [...state, user];
   },
@@ -111,7 +110,7 @@ export const UserProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Users);
-  
+
   return (
     <UserContext.Provider value={{ state, dispatch, getUserById }}>
       {props.children}

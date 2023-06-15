@@ -47,6 +47,7 @@ const TratamientoInfo = () => {
   const handleModalClose = () => {
     setShowModal(false);
   };
+  console.log("LA URI: ", Tratamiento.orden);
 
   return (
     <Layout>
@@ -133,6 +134,18 @@ const TratamientoInfo = () => {
               </View>
             )}
           </Text>
+        </View>
+
+        <View style={styles.container}>
+          {/* //! Orden de Trabajo / */}
+
+          <View style={styles.elseparador}>
+            <Text style={styles.subtitulo}>Orden de Trabajo</Text>
+
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: Tratamiento.orden }} style={styles.image} />
+            </View>
+          </View>
         </View>
 
         <View style={styles.container}>
@@ -250,5 +263,22 @@ const styles = StyleSheet.create({
   },
   observaciones1: {
     alignSelf: "center",
+  },
+  imageContainer: {
+    borderWidth: 1,
+    borderColor: "#1D5E33",
+    borderRadius: 5,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "space-around",
+    width: "180%",
+    height: 200,
+    marginVertical: 20,
+    marginLeft: "-40%",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
 });

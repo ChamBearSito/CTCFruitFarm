@@ -33,23 +33,6 @@ const setupDatabase = async () => {
   });
 };
 
-const setupUsers = async () => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "INSERT INTO users (name, email, avatarUrl) VALUES (?, ?, ?)",
-        ["sbarcelona", "sbarcelona@gmail.com", "https://avatar.com/avatar.jpg"],
-        (tx, succes) => {
-          resolve(succes);
-        },
-        (tx, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-};
-
 const dropDatabaseTable = async (db) => {
   return new Promise((resolve, reject) => {
     db.transaction((txn) => {
@@ -189,35 +172,34 @@ const exportDB = async () => {
   const directory = FileSystem.documentDirectory + "SQLite";
   const folderExist = (await FileSystem.getInfoAsync(directory)).exists;
 
-  if(Platform.OS === 'android' && folderExist) {
-  const base64 = await FileSystem.readAsStringAsync(
-    directory + "/database.db",
-    {
-      encoding: FileSystem.EncodingType.Base64,
+  if (Platform.OS === "android" && folderExist) {
+    const base64 = await FileSystem.readAsStringAsync(
+      directory + "/database.db",
+      {
+        encoding: FileSystem.EncodingType.Base64,
+      }
+    );
+    const result = await FileSystem.StorageAccessFramework.createFileAsync(
+      directory,
+      "database.db",
+      "application/octet-stream"
+    );
+    if (!result) {
+      console.log("Error en permisos");
+      return;
     }
-  )
-  const result = await FileSystem.StorageAccessFramework.createFileAsync(directory, "database.db", 'application/octet-stream')
-  if (!result) {
-    console.log('Error en permisos')
-    return;
-  }
 
-  await FileSystem.writeAsStringAsync(
-    result.uri,
-    base64,
-    {
+    await FileSystem.writeAsStringAsync(result.uri, base64, {
       encoding: FileSystem.EncodingType.Base64,
-    }
-  )
-  // compartir el archivo
-  await Sharing.shareAsync(result.uri, {
-    mimeType: 'application/octet-stream',
-  })
-  }else {
-    await Sharing.shareAsync(directory + "/database.db")
+    });
+    // compartir el archivo
+    await Sharing.shareAsync(result.uri, {
+      mimeType: "application/octet-stream",
+    });
+  } else {
+    await Sharing.shareAsync(directory + "/database.db");
   }
 };
-
 
 // const openDatabase = async (pathToDatabaseFile = '../../db') => {
 //   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
@@ -232,7 +214,6 @@ const exportDB = async () => {
 
 export const database = {
   setupDatabase,
-  setupUsers,
   deleteUser,
   dropDatabaseTable,
   // crud

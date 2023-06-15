@@ -49,28 +49,31 @@ const Dropdown: FC<Props> = ({ label, data, onSelect }) => {
   };
 
   const renderItem = ({ item }: any): ReactElement<any, any> => (
-    <ScrollView>
-      <TouchableOpacity style={styles.item} onPress={() => onItemPress(item)}>
+    <View>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => {
+          onItemPress(item);
+          setVisible(false);
+        }}
+      >
         <Text>{item.label}</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 
   const renderDropdown = (): ReactElement<any, any> => {
     return (
       <Modal visible={visible} transparent animationType="none">
-        <TouchableOpacity
-          style={styles.overlay}
-          onPress={() => setVisible(false)}
-        >
-          <View style={[styles.dropdown, { top: dropdownTop }]}>
+        <View style={[styles.dropdown, { top: dropdownTop }]}>
+          <View style={{ flex: 1 }}>
             <FlatList
               data={data}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
             />
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
     );
   };
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "#cedda9",
     width: "100%",
+    height: "30%",
     shadowColor: "#000000",
     shadowRadius: 4,
     shadowOffset: { height: 4, width: 0 },

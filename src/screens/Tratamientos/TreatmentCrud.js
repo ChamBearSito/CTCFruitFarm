@@ -29,7 +29,7 @@ const TratamientoCrud = () => {
   const route = useRoute();
   const { dispatch } = useContext(TratContext);
   const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
-  const { state: EstadoUsuarios,getUserById } = useContext(UserContext);
+  const { state: EstadoUsuarios, getUserById } = useContext(UserContext);
   const { state: EstadoInsumos } = useContext(InsumoContext);
 
   const [selectedDate, setSelectedDate] = useState();
@@ -58,8 +58,11 @@ const TratamientoCrud = () => {
     };
 
     requestPermission();
-    if(theTratamiento.id){
-      setInsumos(theTratamiento.insumo)
+    if (theTratamiento.id) {
+      setInsumos(theTratamiento.insumo);
+      if (theTratamiento.orden) {
+        setSelectedFile(theTratamiento.orden);
+      }
     }
   }, []);
 
@@ -67,7 +70,8 @@ const TratamientoCrud = () => {
     const result = await DocumentPicker.getDocumentAsync({});
 
     if (result.type === "success") {
-      theTratamiento.orden=result.uri;
+      setSelectedFile(result.uri);
+      theTratamiento.orden = result.uri;
     }
   };
 
@@ -80,7 +84,7 @@ const TratamientoCrud = () => {
   };
 
   const handleConfirm = (date) => {
-    theTratamiento.fechafin=date.toISOString();
+    theTratamiento.fechafin = date.toISOString();
     hideDatePicker();
   };
 
@@ -93,7 +97,7 @@ const TratamientoCrud = () => {
   };
 
   const handleConfirm1 = (date) => {
-    theTratamiento.fechainicial=date.toISOString();
+    theTratamiento.fechainicial = date.toISOString();
     hideDatePicker1();
   };
 
@@ -154,7 +158,7 @@ const TratamientoCrud = () => {
   );
 
   const laZona = getZonaById(EstadoZona, theTratamiento.zona);
-  const elUser=getUserById(EstadoUsuarios, theTratamiento.usuario);
+  const elUser = getUserById(EstadoUsuarios, theTratamiento.usuario);
 
   // Estado para controlar la visibilidad del modal
   const [showInsumosModal, setShowInsumosModal] = useState(false);
@@ -226,7 +230,7 @@ const TratamientoCrud = () => {
                   : "Zona"
               }
               data={optionsZona}
-              onSelect={(selected) => theTratamiento.zona=selected.value}
+              onSelect={(selected) => (theTratamiento.zona = selected.value)}
             />
           </View>
         </View>
@@ -240,7 +244,7 @@ const TratamientoCrud = () => {
                   : "Usuario"
               }
               data={optionsUsuarios}
-              onSelect={(selected) => theTratamiento.usuario=selected.value}
+              onSelect={(selected) => (theTratamiento.usuario = selected.value)}
             />
           </View>
         </View>
@@ -348,7 +352,7 @@ const TratamientoCrud = () => {
                 theTratamiento.tiempo ? theTratamiento.tiempo.toString() : ""
               }
               onChangeText={(text) => {
-                theTratamiento.tiempo=text;
+                theTratamiento.tiempo = text;
               }}
             />
           </View>
@@ -364,10 +368,12 @@ const TratamientoCrud = () => {
               title="Seleccionar Archivo"
               onPress={pickDocument}
             />
-            {theTratamiento.orden && (
-              <Text style={styles.selectedFileText}>
-                Archivo seleccionado: {theTratamiento.orden.name}
-              </Text>
+            {selectedFile && (
+              <>
+                <View style={styles.imageContainer}>
+                  <Image source={{ uri: selectedFile }} style={styles.image} />
+                </View>
+              </>
             )}
           </View>
         </View>
@@ -378,7 +384,7 @@ const TratamientoCrud = () => {
             onPress={() => {
               let action = "";
               let mensaje = "";
-              theTratamiento.insumo=Insumos;
+              theTratamiento.insumo = Insumos;
               {
                 theTratamiento.id
                   ? (action = "updateTratamiento")
@@ -479,5 +485,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderWidth: 3,
     borderColor: "#1D5E33",
+  },
+  imageContainer: {
+    borderWidth: 1,
+    borderColor: "#1D5E33",
+    borderRadius: 5,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "space-around",
+    width: "180%",
+    height: 200,
+    marginVertical: 20,
+    marginLeft: "-40%",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
 });
