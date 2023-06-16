@@ -1,27 +1,43 @@
 import React, { useState, createContext, useReducer } from "react";
+import { dataInsumo } from "../data/datainsumo";
 
 // const getInsumos = async () => {
 //   const users = await database.getUsers();
 //   return users;
 // };
 
+const getInsumo = async () => {
+  const insumos = await dataInsumo.getInsumo();
+  return insumos;
+};
+
+getInsumo().then((insumos) => {
+  insumos.map((insumo) => {
+    Insumos.push({
+      id: insumo.id,
+      nombre: insumo.nombre,
+      cantidad: insumo.cantidad,
+    });
+  });
+});
+
 //! Creamos juego de prueba
 
 let Insumos = [
-  { id: 1, nombre: "Hipermicida", cantidad: 400 },
-  { id: 2, nombre: "Desinfectante Ultra", cantidad: 200 },
-  { id: 3, nombre: "Gel Antibacterial Plus", cantidad: 150 },
-  { id: 4, nombre: "Limpiador Poderoso", cantidad: 300 },
-  { id: 5, nombre: "Spray Desinfectante", cantidad: 250 },
+  // { id: 1, nombre: "Hipermicida", cantidad: 400 },
+  // { id: 2, nombre: "Desinfectante Ultra", cantidad: 200 },
+  // { id: 3, nombre: "Gel Antibacterial Plus", cantidad: 150 },
+  // { id: 4, nombre: "Limpiador Poderoso", cantidad: 300 },
+  // { id: 5, nombre: "Spray Desinfectante", cantidad: 250 },
 ];
 
 //! Definimos las Acciones para el Reducer
 const actions = {
   createInsumo(state, action) {
     const Insumo = action.payload;
-    Insumo.id = generateNumericId();
+    // Insumo.id = generateNumericId();
     // guardar el usuario en la db
-    //database.insertUser(user);
+    dataInsumo.insertInsumo(Insumo);
     return [...state, Insumo];
   },
   updateInsumo(state, action) {
@@ -29,7 +45,7 @@ const actions = {
     // update del Insumo en la db
     const id = InsumoUpdated.id;
     console.log("### id ###", id);
-    //database.editInsumo(InsumoUpdated);
+    dataInsumo.editInsumo(InsumoUpdated);
     return [
       ...state.map((Insumo) =>
         Insumo.id === InsumoUpdated.id ? InsumoUpdated : Insumo
@@ -39,28 +55,10 @@ const actions = {
   deleteInsumo(state, action) {
     const InsumoDelete = action.payload;
     // Borrar el Insumo de la db
-    //database.deleteInsumo(InsumoDelete.id);
+    dataInsumo.deleteInsumo(InsumoDelete);
     return [...state.filter((Insumo) => Insumo.id !== InsumoDelete.id)];
   },
 };
-
-const generateNumericId = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  // Concatenamos los componentes de la fecha y hora en un solo string numérico
-  const numericId = `${year}${month}${day}${hours}${minutes}${seconds}`;
-
-  return numericId;
-};
-// const getInsumoById = (state, zonaId) => {
-//   return state.find((zona) => zona.id === zonaId);
-// };
 
 const getInsumoById = (state, insumoIds) => {
   return state.filter((insumo) => insumoIds.includes(insumo.id));
@@ -75,7 +73,7 @@ export const InsumoProvider = (props) => {
   };
 
   const [state, dispatch] = useReducer(reducer, Insumos);
-  
+
   return (
     <InsumoContext.Provider value={{ state, dispatch, getInsumoById }}>
       {props.children}

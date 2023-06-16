@@ -4,25 +4,38 @@ import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import { Platform } from "react-native";
 
-let db = SQlite.openDatabase("database.db");
+export const dataFunction = {
+  getConnection: () => {
+    let db = SQlite.openDatabase("database.db");
+    return db;
+  },
+};
 
-const createTableSQL =
-  "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), apellido VARCHAR(50), cedula VARCHAR(8))";
-const insertUserSQL =
-  "INSERT INTO users (nombre, apellido, cedula) VALUES (?,?,?)";
-const updateUserSQL =
-  "UPDATE users SET nombre = (?), apellido = (?), cedula = (?) WHERE id = (?)";
-const deletetUserSQL = "DELETE FROM users WHERE id = (?)";
+const createUserSQL = `
+  CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), apellido VARCHAR(50), cedula VARCHAR(8));`;
+const createInsumoSQL = `
+  CREATE TABLE insumos(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR(50),cantidad INTEGER);`;
 
 // inicialiar la db
-const setupDatabase = async () => {
+const setupDatabase = async (db) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        createTableSQL,
+        createUserSQL,
         [],
         (_, error) => {
           console.log("error on setupDatabase", error);
+          reject(error);
+        },
+        (_, succes) => {
+          resolve(succes);
+        }
+      );
+      tx.executeSql(
+        createInsumoSQL,
+        [],
+        (_, error) => {
+          console.log("error on createInsumoSQL", error);
           reject(error);
         },
         (_, succes) => {
@@ -54,89 +67,6 @@ const dropDatabaseTable = async (db) => {
               }
             );
           }
-        }
-      );
-    });
-  });
-};
-
-// Crud usuario
-const getUsers = async () => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM users",
-        [],
-        (_, { rows: { _array } }) => {
-          resolve(_array);
-        },
-        (_, error) => {
-          console.log("error get users", error);
-          reject(error);
-        },
-        (_, succes) => {
-          console.log("succes get users", succes);
-          resolve(succes);
-        }
-      );
-    });
-  });
-};
-
-const insertUser = async (user) => {
-  const { nombre, apellido, cedula } = user;
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        insertUserSQL,
-        [nombre, apellido, cedula],
-        (_, succes) => {
-          console.log("succes insert user", succes);
-          resolve(succes.insertId);
-        },
-        (_, error) => {
-          console.log("error insert user", error);
-          reject(error);
-        }
-      );
-    });
-  });
-};
-
-const editUser = (user) => {
-  const { id, nombre, apellido, cedula } = user;
-  console.log("### id ###", id);
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        updateUserSQL,
-        [nombre, apellido, cedula, id],
-        (_, succes) => {
-          console.log("succes update user", succes);
-          resolve(succes);
-        },
-        (_, error) => {
-          console.log("error update user", error);
-          reject(error);
-        }
-      );
-    });
-  });
-};
-
-const deleteUser = (id) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        deletetUserSQL,
-        [id],
-        (_, succes) => {
-          console.log("succes update user", succes);
-          resolve(succes);
-        },
-        (_, error) => {
-          console.log("error delete user", error);
-          reject(error);
         }
       );
     });
@@ -201,28 +131,11 @@ const exportDB = async () => {
   }
 };
 
-// const openDatabase = async (pathToDatabaseFile = '../../db') => {
-//   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-//     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
-//   }
-//   await FileSystem.downloadAsync(
-//     //Asset.fromModule(require('/Users/sebastianbarcelona/Desktop/CTC/PDM2023/crud_usuarios_v2/src/db')).uri,
-//     FileSystem.documentDirectory + 'SQLite/database.db'
-//   );
-//   return SQlite.openDatabase('database.db');
-// }
-
 export const database = {
+  //Inicializar DB
   setupDatabase,
-  deleteUser,
   dropDatabaseTable,
-  // crud
-  getUsers,
-  insertUser,
-  editUser,
-  deleteUser,
   // importar y exportar
   importDB,
   exportDB,
-  // abrir y cerrar db
 };

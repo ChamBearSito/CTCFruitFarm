@@ -1,8 +1,8 @@
 import React, { useState, createContext, useReducer } from "react";
-import { database } from "../data/database";
+import { datauser } from "../data/datauser";
 
 const getUsers = async () => {
-  const users = await database.getUsers();
+  const users = await datauser.getUsers();
   return users;
 };
 
@@ -61,7 +61,7 @@ const actions = {
     const user = action.payload;
     // user.id = generateNumericId();
     // guardar el usuario en la db
-    database.insertUser(user).then((insertedId) => {
+    datauser.insertUser(user).then((insertedId) => {
       user.id = insertedId;
     });
     return [...state, user];
@@ -70,7 +70,7 @@ const actions = {
     const userUpdated = action.payload;
     // update del usuario en la db
     const id = userUpdated.id;
-    database.editUser(userUpdated);
+    datauser.editUser(userUpdated);
     return [
       ...state.map((user) => (user.id === userUpdated.id ? userUpdated : user)),
     ];
@@ -78,7 +78,7 @@ const actions = {
   deleteUser(state, action) {
     const userDelete = action.payload;
     // Borrar el usuario de la db
-    database.deleteUser(userDelete.id);
+    datauser.deleteUser(userDelete.id);
     return [...state.filter((user) => user.id !== userDelete.id)];
   },
 };
