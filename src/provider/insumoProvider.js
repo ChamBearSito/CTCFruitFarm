@@ -37,7 +37,9 @@ const actions = {
     const Insumo = action.payload;
     // Insumo.id = generateNumericId();
     // guardar el usuario en la db
-    dataInsumo.insertInsumo(Insumo);
+    dataInsumo.insertInsumo(Insumo).then((insertedId) => {
+      Insumo.id = insertedId;
+    });
     return [...state, Insumo];
   },
   updateInsumo(state, action) {

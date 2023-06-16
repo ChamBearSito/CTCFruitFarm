@@ -79,7 +79,7 @@ const deleteInsumo = (id) => {
         deletetInsumoSQL,
         [id],
         (_, succes) => {
-          console.log("succes update insumo", succes);
+          console.log("succes delete insumo", succes);
           resolve(succes);
         },
         (_, error) => {

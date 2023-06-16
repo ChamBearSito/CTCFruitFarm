@@ -1,47 +1,67 @@
 import React, { useState, createContext, useReducer } from "react";
+import { dataZona } from "../data/datazona";
+
+const getZonas = async () => {
+  const zonas = await dataZona.getZona();
+  return zonas;
+};
+
+getZonas().then((zonas) => {
+  zonas.map((zona) => {
+    Zonas.push({
+      id: zona.id,
+      lugar: zona.lugar,
+      depto: zona.depto,
+      trabajadores: zona.trabajadores,
+      latitude: zona.latitude,
+      longitude: zona.longitude,
+    });
+  });
+});
 
 let Zonas = [
-  {
-    id: 1,
-    lugar: "Estanicia",
-    depto: "Colonia",
-    trabajadores: 44,
-    latitude: -34.312977,
-    longitude: -57.230646,
-  },
-  {
-    id: 2,
-    lugar: "Estancia",
-    depto: "Colonia",
-    trabajadores: 23,
-    latitude: 35.2123,
-    longitude: 67.1213,
-  },
-  {
-    id: 3,
-    lugar: "Quinta",
-    depto: "Mendoza",
-    trabajadores: 435,
-    latitude: -32.8895,
-    longitude: -68.8458,
-  },
+  // {
+  //   id: 1,
+  //   lugar: "Estanicia",
+  //   depto: "Colonia",
+  //   trabajadores: 44,
+  //   latitude: -34.312977,
+  //   longitude: -57.230646,
+  // },
+  // {
+  //   id: 2,
+  //   lugar: "Estancia",
+  //   depto: "Colonia",
+  //   trabajadores: 23,
+  //   latitude: 35.2123,
+  //   longitude: 67.1213,
+  // },
+  // {
+  //   id: 3,
+  //   lugar: "Quinta",
+  //   depto: "Mendoza",
+  //   trabajadores: 435,
+  //   latitude: -32.8895,
+  //   longitude: -68.8458,
+  // },
 ];
 
 //! Definimos las Acciones para el Reducer
 const actions = {
   createZona(state, action) {
-    const Zona = action.payload;
-    Zona.id = generateNumericId();
+    const zona = action.payload;
     // guardar la zpma en la db
-    //database.insertZona(zona);
-    return [...state, Zona];
+    dataZona.insertZona(zona).then((insertedId) => {
+      zona.id = insertedId;
+    });
+    return [...state, zona];
   },
   updateZona(state, action) {
     const ZonaUpdated = action.payload;
     // update del Insumo en la db
     const id = ZonaUpdated.id;
     console.log("----id----", id);
-    //database.editInsumo(InsumoUpdated);
+    dataZona.editZona(ZonaUpdated);
     return [
       ...state.map((Zona) => (Zona.id === ZonaUpdated.id ? ZonaUpdated : Zona)),
     ];
@@ -49,25 +69,11 @@ const actions = {
   deleteZona(state, action) {
     const ZonaDelete = action.payload;
     // Borrar la Zona de la db
-    //database.deleteZona(ZonaDelete.id);
+    dataZona.deleteZona(ZonaDelete.id);
     return [...state.filter((Zona) => Zona.id !== ZonaDelete.id)];
   },
 };
 
-const generateNumericId = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  // Concatenamos los componentes de la fecha y hora en un solo string numérico
-  const numericId = `${year}${month}${day}${hours}${minutes}${seconds}`;
-
-  return numericId;
-};
 const getZonaById = (state, zonaId) => {
   return state.find((zona) => zona.id === zonaId);
 };

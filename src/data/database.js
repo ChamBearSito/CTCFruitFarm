@@ -12,10 +12,25 @@ export const dataFunction = {
 };
 
 const createUserSQL = `
-  CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), apellido VARCHAR(50), cedula VARCHAR(8));`;
+  CREATE TABLE users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    nombre VARCHAR(50), 
+    apellido VARCHAR(50), 
+    cedula VARCHAR(8));`;
 const createInsumoSQL = `
-  CREATE TABLE insumos(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR(50),cantidad INTEGER);`;
-
+  CREATE TABLE insumos(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre VARCHAR(50),
+    cantidad INTEGER);`;
+const createZonaSQL = `
+  CREATE TABLE zonas(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   lugar VARCHAR(12),
+   trabajadores INTEGER,
+   depto VARCHAR(50),
+   latitude VARCHAR(50),
+   longitude VARCHAR(50)
+   );`;
 // inicialiar la db
 const setupDatabase = async (db) => {
   return new Promise((resolve, reject) => {
@@ -24,7 +39,7 @@ const setupDatabase = async (db) => {
         createUserSQL,
         [],
         (_, error) => {
-          console.log("error on setupDatabase", error);
+          console.log("error on createUserSQL", error);
           reject(error);
         },
         (_, succes) => {
@@ -36,6 +51,17 @@ const setupDatabase = async (db) => {
         [],
         (_, error) => {
           console.log("error on createInsumoSQL", error);
+          reject(error);
+        },
+        (_, succes) => {
+          resolve(succes);
+        }
+      );
+      tx.executeSql(
+        createZonaSQL,
+        [],
+        (_, error) => {
+          console.log("error on createZonaSQL", error);
           reject(error);
         },
         (_, succes) => {

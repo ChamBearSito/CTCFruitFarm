@@ -21,6 +21,12 @@ const ZoneCrud = () => {
   const [location, setLocation] = useState("Seleccione una ubicacion");
   // const [place, setPlace] = useState(undefined);
   // const [trabajadores, settrabajadores] = useState("");
+  useEffect(() => {
+    if (theZona.id) {
+      setLocation(theZona.depto);
+    }
+  }, []);
+
   let laZona = {
     id: "",
     lugar: "",
@@ -91,7 +97,7 @@ const ZoneCrud = () => {
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Departamento</Text>
 
-          <Text>{theZona.id ? theZona.depto : location}</Text>
+          <Text>{location}</Text>
         </View>
 
         <View style={styles.container}>
