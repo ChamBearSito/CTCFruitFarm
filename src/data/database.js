@@ -31,6 +31,23 @@ const createZonaSQL = `
    latitude VARCHAR(50),
    longitude VARCHAR(50)
    );`;
+
+const createObsSQL = `
+  CREATE TABLE observaciones(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   titulo VARCHAR(60),
+   zonaId INTEGER REFERENCES zonas(id),
+   img VARCHAR(100)
+   );`;
+
+//  const createTratSQL = `
+// CREATE TABLE tratamientos(
+//  id INTEGER PRIMARY KEY AUTOINCREMENT,
+//  nombre VARCHAR(60),
+//  zona INTEGER REFERENCES zonas(id),
+//  usuario zona INTEGER REFERENCES users(id),
+//  );`;
+
 // inicialiar la db
 const setupDatabase = async (db) => {
   return new Promise((resolve, reject) => {
@@ -62,6 +79,17 @@ const setupDatabase = async (db) => {
         [],
         (_, error) => {
           console.log("error on createZonaSQL", error);
+          reject(error);
+        },
+        (_, succes) => {
+          resolve(succes);
+        }
+      );
+      tx.executeSql(
+        createObsSQL,
+        [],
+        (_, error) => {
+          console.log("error on createObsSQL", error);
           reject(error);
         },
         (_, succes) => {
