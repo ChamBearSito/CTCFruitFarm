@@ -184,227 +184,246 @@ const TratamientoCrud = () => {
   }, [theTratamiento]);
   return (
     <TratamientoLayout>
-      <View style={styles.distancia}>
-        <View style={styles.container}>
-          <Text style={styles.titulo}>
-            {theTratamiento.id ? "Editar" : "Alta"} Tratamiento
-          </Text>
-        </View>
-        <View style={styles.container}>
-          {/* //! IDentificador y Nombre / */}
-          {/* <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Identificación</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="default"
-              placeholder="Ingrese Identificacion"
-              placeholderTextColor="#888"
-            />
-          </View> */}
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Nombre</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="default"
-              placeholder="Ingrese Nombre"
-              placeholderTextColor="#888"
-              defaultValue={
-                theTratamiento.nombre ? theTratamiento.nombre.toString() : ""
-              }
-              onChangeText={(text) => {
-                theTratamiento.nombre = text;
-              }}
-              // onChangeText={(text) => setnombre(text)}
-            />
-          </View>
-        </View>
-
-        {/* //! Zona y Usuario / */}
-        <View style={{ marginTop: 10 }}>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Zona</Text>
-            <Dropdown
-              label={
-                theTratamiento.id
-                  ? `${laZona.id} ${laZona.lugar} ${laZona.depto}`
-                  : "Zona"
-              }
-              data={optionsZona}
-              onSelect={(selected) => (theTratamiento.zona = selected.value)}
-            />
-          </View>
-        </View>
-        <View style={{ marginTop: 10 }}>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Usuarios</Text>
-            <Dropdown
-              label={
-                theTratamiento.id
-                  ? `${elUser.id} ${elUser.nombre} ${elUser.apellido} ${elUser.cedula} `
-                  : "Usuario"
-              }
-              data={optionsUsuarios}
-              onSelect={(selected) => (theTratamiento.usuario = selected.value)}
-            />
-          </View>
-        </View>
-
-        {/* //! Insumos / */}
-        <View style={{ marginTop: 10 }}>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Insumos</Text>
-            {/* <Dropdown
-              label="Insumos"
-              data={optionsInsumos}
-              onSelect={setInsumos}
-            /> */}
-            <Button
-              color="#1D5E33"
-              title={"Seleccionar Insumos"}
-              onPress={openInsumosModal}
-            />
-            <Modal
-              visible={showInsumosModal}
-              onRequestClose={closeInsumosModal}
-              transparent={true}
-            >
-              <View style={styles.modalContainer}>
-                <MultipleSelect
-                  items={optionsInsumos}
-                  uniqueKey="value"
-                  onSelectedItemsChange={setInsumos}
-                  selectedItems={Insumos}
-                  selectText="Seleccionar Insumos"
-                  searchInputPlaceholderText="Buscar insumos..."
-                  tagRemoveIconColor="#1D5E33"
-                  tagBorderColor="#1D5E33"
-                  tagTextColor="#1D5E33"
-                  selectedItemTextColor="#1D5E33"
-                  selectedItemIconColor="#1D5E33"
-                  itemTextColor="#000"
-                  displayKey="label"
-                  searchInputStyle={{ color: "#1D5E33" }}
-                  submitButtonColor="#1D5E33"
-                  submitButtonText="Seleccionar"
-                />
-                <Button
-                  color="#1D5E33"
-                  title="Confirmar"
-                  onPress={closeInsumosModal}
-                />
-              </View>
-            </Modal>
-          </View>
-        </View>
-
-        {/* //! Fecha Inicio y FechaFin / */}
-        <View style={styles.container}>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Fecha Inicio</Text>
-            <Text>{`Fecha:  ${
-              theTratamiento.fechainicial
-                ? moment(theTratamiento.fechainicial).format("MM/DD/YYYY")
-                : "Please select date"
-            }`}</Text>
-            <Button
-              color="#1D5E33"
-              title="Fecha Inicio"
-              onPress={showDatePicker1}
-            />
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible1}
-              mode="date"
-              onConfirm={handleConfirm1}
-              onCancel={hideDatePicker1}
-            />
-          </View>
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Fecha Fin</Text>
-            <Text>{`Fecha:  ${
-              theTratamiento.fechafin
-                ? moment(theTratamiento.fechafin).format("MM/DD/YYYY")
-                : "Please select date"
-            }`}</Text>
-            <Button
-              color="#1D5E33"
-              title="Fecha Fin"
-              onPress={showDatePicker}
-            />
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
-          </View>
-        </View>
-
-        <View style={styles.container}>
-          {/* //! Tiempo y Orden de Trabajo / */}
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Tiempo</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Ingrese Tiempo"
-              placeholderTextColor="#888"
-              defaultValue={
-                theTratamiento.tiempo ? theTratamiento.tiempo.toString() : ""
-              }
-              onChangeText={(text) => {
-                theTratamiento.tiempo = text;
-              }}
-            />
-          </View>
-        </View>
-        <View style={styles.container}>
-          {/* //! Orden de Trabajo / */}
-
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Orden de Trabajo</Text>
-
-            <Button
-              color="#1D5E33"
-              title="Seleccionar Archivo"
-              onPress={pickDocument}
-            />
-            {selectedFile && (
-              <>
-                <View style={styles.imageContainer}>
-                  <Image source={{ uri: selectedFile }} style={styles.image} />
-                </View>
-              </>
-            )}
-          </View>
-        </View>
-
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => {
-              let action = "";
-              let mensaje = "";
-              theTratamiento.insumo = Insumos;
-              {
-                theTratamiento.id
-                  ? (action = "updateTratamiento")
-                  : (action = "createTratamiento");
-              }
-              dispatch({ type: action, payload: theTratamiento });
-              theTratamiento.id
-                ? (mensaje = "Tratamiento Editado")
-                : (mensaje = "Tratamiento Creado");
-
-              setModalMensaje(mensaje);
-              setShowModal(true);
-            }}
-          >
-            <Text style={styles.buttonText}>
-              {theTratamiento.id ? "Editar" : "Crear"} Tratamiento
+      {EstadoInsumos.length > 0 &&
+      EstadoUsuarios.length > 0 &&
+      EstadoZona.length > 0 ? (
+        <View style={styles.distancia}>
+          <View style={styles.container}>
+            <Text style={styles.titulo}>
+              {theTratamiento.id ? "Editar" : "Alta"} Tratamiento
             </Text>
-          </TouchableOpacity>
+          </View>
+          <View style={styles.container}>
+            {/* //! IDentificador y Nombre / */}
+            {/* <View style={styles.elseparador}>
+         <Text style={styles.subtitulo}>Identificación</Text>
+         <TextInput
+           style={styles.input}
+           keyboardType="default"
+           placeholder="Ingrese Identificacion"
+           placeholderTextColor="#888"
+         />
+       </View> */}
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Nombre</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="default"
+                placeholder="Ingrese Nombre"
+                placeholderTextColor="#888"
+                defaultValue={
+                  theTratamiento.nombre ? theTratamiento.nombre.toString() : ""
+                }
+                onChangeText={(text) => {
+                  theTratamiento.nombre = text;
+                }}
+                // onChangeText={(text) => setnombre(text)}
+              />
+            </View>
+          </View>
+
+          {/* //! Zona y Usuario / */}
+          <View style={{ marginTop: 10 }}>
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Zona</Text>
+              <Dropdown
+                label={
+                  theTratamiento.id
+                    ? `${laZona.id} ${laZona.lugar} ${laZona.depto}`
+                    : "Zona"
+                }
+                data={optionsZona}
+                onSelect={(selected) => (theTratamiento.zona = selected.value)}
+              />
+            </View>
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Usuarios</Text>
+              <Dropdown
+                label={
+                  theTratamiento.id
+                    ? `${elUser.id} ${elUser.nombre} ${elUser.apellido} ${elUser.cedula} `
+                    : "Usuario"
+                }
+                data={optionsUsuarios}
+                onSelect={(selected) =>
+                  (theTratamiento.usuario = selected.value)
+                }
+              />
+            </View>
+          </View>
+
+          {/* //! Insumos / */}
+          <View style={{ marginTop: 10 }}>
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Insumos</Text>
+              {/* <Dropdown
+           label="Insumos"
+           data={optionsInsumos}
+           onSelect={setInsumos}
+         /> */}
+              <Button
+                color="#1D5E33"
+                title={"Seleccionar Insumos"}
+                onPress={openInsumosModal}
+              />
+              <Modal
+                visible={showInsumosModal}
+                onRequestClose={closeInsumosModal}
+                transparent={true}
+              >
+                <View style={styles.modalContainer}>
+                  <MultipleSelect
+                    items={optionsInsumos}
+                    uniqueKey="value"
+                    onSelectedItemsChange={setInsumos}
+                    selectedItems={Insumos}
+                    selectText="Seleccionar Insumos"
+                    searchInputPlaceholderText="Buscar insumos..."
+                    tagRemoveIconColor="#1D5E33"
+                    tagBorderColor="#1D5E33"
+                    tagTextColor="#1D5E33"
+                    selectedItemTextColor="#1D5E33"
+                    selectedItemIconColor="#1D5E33"
+                    itemTextColor="#000"
+                    displayKey="label"
+                    searchInputStyle={{ color: "#1D5E33" }}
+                    submitButtonColor="#1D5E33"
+                    submitButtonText="Seleccionar"
+                  />
+                  <Button
+                    color="#1D5E33"
+                    title="Confirmar"
+                    onPress={closeInsumosModal}
+                  />
+                </View>
+              </Modal>
+            </View>
+          </View>
+
+          {/* //! Fecha Inicio y FechaFin / */}
+          <View style={styles.container}>
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Fecha Inicio</Text>
+              <Text>{`Fecha:  ${
+                theTratamiento.fechainicial
+                  ? moment(theTratamiento.fechainicial).format("MM/DD/YYYY")
+                  : "Please select date"
+              }`}</Text>
+              <Button
+                color="#1D5E33"
+                title="Fecha Inicio"
+                onPress={showDatePicker1}
+              />
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible1}
+                mode="date"
+                onConfirm={handleConfirm1}
+                onCancel={hideDatePicker1}
+              />
+            </View>
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Fecha Fin</Text>
+              <Text>{`Fecha:  ${
+                theTratamiento.fechafin
+                  ? moment(theTratamiento.fechafin).format("MM/DD/YYYY")
+                  : "Please select date"
+              }`}</Text>
+              <Button
+                color="#1D5E33"
+                title="Fecha Fin"
+                onPress={showDatePicker}
+              />
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
+            </View>
+          </View>
+
+          <View style={styles.container}>
+            {/* //! Tiempo y Orden de Trabajo / */}
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Tiempo</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="Ingrese Tiempo"
+                placeholderTextColor="#888"
+                defaultValue={
+                  theTratamiento.tiempo ? theTratamiento.tiempo.toString() : ""
+                }
+                onChangeText={(text) => {
+                  theTratamiento.tiempo = text;
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.container}>
+            {/* //! Orden de Trabajo / */}
+
+            <View style={styles.elseparador}>
+              <Text style={styles.subtitulo}>Orden de Trabajo</Text>
+
+              <Button
+                color="#1D5E33"
+                title="Seleccionar Archivo"
+                onPress={pickDocument}
+              />
+              {selectedFile && (
+                <>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={{ uri: selectedFile }}
+                      style={styles.image}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => {
+                let action = "";
+                let mensaje = "";
+                theTratamiento.insumo = Insumos;
+                {
+                  theTratamiento.id
+                    ? (action = "updateTratamiento")
+                    : (action = "createTratamiento");
+                }
+                dispatch({ type: action, payload: theTratamiento });
+                theTratamiento.id
+                  ? (mensaje = "Tratamiento Editado")
+                  : (mensaje = "Tratamiento Creado");
+
+                setModalMensaje(mensaje);
+                setShowModal(true);
+              }}
+            >
+              <Text style={styles.buttonText}>
+                {theTratamiento.id ? "Editar" : "Crear"} Tratamiento
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.distancia}>
+          <View style={styles.container2}>
+            <Text style={styles.titulo}>
+              No puedes hacer Tratamientos, debes tener Datos en Insumos,
+              Usuarios y Zonas
+            </Text>
+          </View>
+        </View>
+      )}
+
       {showModal && (
         <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
       )}
@@ -419,6 +438,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10, // Agrega espacio horizontal en los extremos del formulario
     marginTop: 30,
+    justifyContent: "center",
+    alignItems: "center", // Ajusta el espacio entre el componente Layout y el formulario
+    flexDirection: "row",
+  },
+  container2: {
+    flex: 1,
+    paddingHorizontal: 10, // Agrega espacio horizontal en los extremos del formulario
+    marginTop: 150,
     justifyContent: "center",
     alignItems: "center", // Ajusta el espacio entre el componente Layout y el formulario
     flexDirection: "row",

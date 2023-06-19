@@ -40,13 +40,18 @@ const createObsSQL = `
    img VARCHAR(100)
    );`;
 
-//  const createTratSQL = `
-// CREATE TABLE tratamientos(
-//  id INTEGER PRIMARY KEY AUTOINCREMENT,
-//  nombre VARCHAR(60),
-//  zona INTEGER REFERENCES zonas(id),
-//  usuario zona INTEGER REFERENCES users(id),
-//  );`;
+const createTratSQL = `
+CREATE TABLE tratamientos(
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ nombre VARCHAR(60),
+ zona INTEGER REFERENCES zonas(id),
+ usuario INTEGER REFERENCES users(id),
+ insumo VARCHAR(20),
+ fechainicial VARCHAR(60),
+ fechafin VARCHAR(60),
+ tiempo INTEGER,
+ orden VARCHAR(60)
+ );`;
 
 // inicialiar la db
 const setupDatabase = async (db) => {
@@ -90,6 +95,17 @@ const setupDatabase = async (db) => {
         [],
         (_, error) => {
           console.log("error on createObsSQL", error);
+          reject(error);
+        },
+        (_, succes) => {
+          resolve(succes);
+        }
+      );
+      tx.executeSql(
+        createTratSQL,
+        [],
+        (_, error) => {
+          console.log("error on createTratSQL", error);
           reject(error);
         },
         (_, succes) => {

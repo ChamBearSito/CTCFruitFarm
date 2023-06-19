@@ -1,4 +1,26 @@
 import React, { useState, createContext, useReducer } from "react";
+import { dataTrat } from "../data/datatrat";
+
+const getTrats = async () => {
+  const Trats = await dataTrat.getTrat();
+  return Trats;
+};
+getTrats().then((trat) => {
+  trat.map((eltratamiento) => {
+    Tratamientos.push({
+      id: eltratamiento.id,
+      nombre: eltratamiento.nombre,
+      zona: eltratamiento.zona,
+      usuario: eltratamiento.usuario,
+      insumo: eltratamiento.insumo,
+      fechainicial: eltratamiento.fechainicial,
+      fechafin: eltratamiento.fechafin,
+      tiempo: eltratamiento.tiempo,
+      orden: eltratamiento.orden,
+    });
+  });
+});
+
 let Tratamientos = [
   // {
   //   id: 1,
@@ -18,7 +40,9 @@ const actions = {
     const Tratamiento = action.payload;
     Tratamiento.id = generateNumericId();
     // guardar el usuario en la db
-    //database.insertUser(user);
+    dataTrat.insertTrat(Tratamiento).then((insertedId) => {
+      Tratamiento.id = insertedId;
+    });
     return [...state, Tratamiento];
   },
   updateTratamiento(state, action) {
@@ -27,6 +51,7 @@ const actions = {
     const id = TratamientoUpdated.id;
     console.log("### id ###", id);
     //database.editUser(userUpdated);
+    dataTrat.editTrat(TratamientoUpdated);
     return [
       ...state.map((Tra) =>
         Tra.id === TratamientoUpdated.id ? TratamientoUpdated : Tra
@@ -37,6 +62,7 @@ const actions = {
     const TratamientoDelete = action.payload;
     // Borrar el usuario de la db
     //database.deleteUser(userDelete.id);
+    dataTrat.deleteTrat(TratamientoDelete.id);
     return [...state.filter((trat) => trat.id !== TratamientoDelete.id)];
   },
 };

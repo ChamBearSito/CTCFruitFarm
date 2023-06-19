@@ -15,6 +15,21 @@ const useDatabase = () => {
 
         setDb(openDb);
         await database.setupDatabase(openDb);
+        openDb.transaction((tx) => {
+          tx.executeSql(
+            "SELECT name FROM sqlite_master WHERE type='table';",
+            [],
+            (_, result) => {
+              const tables = result.rows;
+              for (let i = 0; i < tables.length; i++) {
+                console.log("Tabla Creada:", tables.item(i).name);
+              }
+            },
+            (_, error) => {
+              console.log("Error en la consulta SQL:", error);
+            }
+          );
+        });
 
         setIsDBLoadingComplete(true);
       } catch (err) {

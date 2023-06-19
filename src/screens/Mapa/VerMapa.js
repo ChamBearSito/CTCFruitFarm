@@ -28,7 +28,10 @@ const VerMapa = () => {
           {TratamientosQueHay.map((Tratamiento) => {
             const zona = getZonaById(Zonas, Tratamiento.zona);
             const coordenadas = zona
-              ? { latitude: zona.latitude, longitude: zona.longitude }
+              ? {
+                  latitude: parseFloat(zona.latitude),
+                  longitude: parseFloat(zona.longitude),
+                }
               : null;
             return (
               <Marker
