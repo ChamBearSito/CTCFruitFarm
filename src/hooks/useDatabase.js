@@ -12,12 +12,9 @@ const useDatabase = () => {
       try {
         // llamar a una funcion que me haga la conexion a la db
         const openDb = dataFunction.getConnection();
+
         setDb(openDb);
         await database.setupDatabase(openDb);
-        // const users = database.getUsers(db);
-        // if (users.length == 0) {
-        //   await openDb.dropDatabaseTable();
-        // }
 
         setIsDBLoadingComplete(true);
       } catch (err) {

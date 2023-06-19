@@ -41,7 +41,6 @@ let Observaciones = [
 const actions = {
   createObs(state, action) {
     const Obs = action.payload;
-
     dataObs.insertObs(Obs).then((insertedId) => {
       Obs.id = insertedId;
     });
@@ -65,21 +64,6 @@ const actions = {
     dataObs.deleteObs(ObsDelete.id);
     return [...state.filter((Obd) => Obd.id !== ObsDelete.id)];
   },
-};
-
-const generateNumericId = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  // Concatenamos los componentes de la fecha y hora en un solo string numérico
-  const numericId = `${year}${month}${day}${hours}${minutes}${seconds}`;
-
-  return numericId;
 };
 
 //! Creamos contexto para el reducer

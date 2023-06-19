@@ -2,30 +2,30 @@ import { dataFunction } from "./database.js";
 
 let db = dataFunction.getConnection();
 
-const insertObsSQL =
-  "INSERT INTO observaciones (titulo, zonaId, img) VALUES (?,?,?)";
+const insertObsSQL = "INSERT INTO obs(titulo, zonaId, img) VALUES (?,?,?)";
 const updateObsSQL = `
-  UPDATE observaciones 
+  UPDATE obs 
   SET titulo = (?),
   zonaId = (?),
-  img = (?)`;
-const deletetObsSQL = "DELETE FROM observaciones WHERE id = (?)";
+  img = (?)
+  WHERE id = (?)`;
+const deletetObsSQL = "DELETE FROM obs WHERE id = (?)";
 
 const getObs = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "SELECT * FROM observaciones",
+        "SELECT * FROM obs",
         [],
         (_, { rows: { _array } }) => {
           resolve(_array);
         },
         (_, error) => {
-          console.log("error get observaciones", error);
+          console.log("error get obs", error);
           reject(error);
         },
         (_, succes) => {
-          console.log("succes get observaciones", succes);
+          console.log("succes get obs", succes);
           resolve(succes);
         }
       );
@@ -54,13 +54,13 @@ const insertObs = async (obs) => {
 };
 
 const editObs = (obs) => {
-  const { titulo, zonaId, img } = obs;
+  const { id, titulo, zonaId, img } = obs;
   console.log("### id ###", id);
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         updateObsSQL,
-        [titulo, zonaId, img],
+        [titulo, zonaId, img, id],
         (_, succes) => {
           console.log("succes update Obs", succes);
           resolve(succes);

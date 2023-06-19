@@ -33,7 +33,7 @@ const createZonaSQL = `
    );`;
 
 const createObsSQL = `
-  CREATE TABLE observaciones(
+  CREATE TABLE obs(
    id INTEGER PRIMARY KEY AUTOINCREMENT,
    titulo VARCHAR(60),
    zonaId INTEGER REFERENCES zonas(id),
@@ -188,6 +188,7 @@ const exportDB = async () => {
 export const database = {
   //Inicializar DB
   setupDatabase,
+
   dropDatabaseTable,
   // importar y exportar
   importDB,
