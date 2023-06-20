@@ -8,37 +8,11 @@ const getZonas = async () => {
 
 getZonas().then((zonas) => {
   zonas.map((zona) => {
-    console.log(zona);
     Zonas.push(zona);
   });
 });
 
-let Zonas = [
-  // {
-  //   id: 1,
-  //   lugar: "Estanicia",
-  //   depto: "Colonia",
-  //   trabajadores: 44,
-  //   latitude: -34.312977,
-  //   longitude: -57.230646,
-  // },
-  // {
-  //   id: 2,
-  //   lugar: "Estancia",
-  //   depto: "Colonia",
-  //   trabajadores: 23,
-  //   latitude: 35.2123,
-  //   longitude: 67.1213,
-  // },
-  // {
-  //   id: 3,
-  //   lugar: "Quinta",
-  //   depto: "Mendoza",
-  //   trabajadores: 435,
-  //   latitude: -32.8895,
-  //   longitude: -68.8458,
-  // },
-];
+let Zonas = [];
 
 //! Definimos las Acciones para el Reducer
 const actions = {

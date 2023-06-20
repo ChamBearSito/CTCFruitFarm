@@ -24,13 +24,11 @@ const TratamientoInfo = () => {
   const { Tratamiento } = route.params;
   const navigation = useNavigation();
   const { dispatch } = useContext(TratContext);
-
   const fechaInicial = new Date(Tratamiento.fechainicial);
   const dia = fechaInicial.getDate();
   const mes = fechaInicial.getMonth() + 1;
   const anio = fechaInicial.getFullYear();
   const fechaFormateada = `${dia}/${mes}/${anio}`;
-
   const { state: EstadoUsuarios, getUserById } = useContext(UserContext);
   const { state: EstadoObs, getObsById } = useContext(ObsContext);
   const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
@@ -39,7 +37,6 @@ const TratamientoInfo = () => {
   const lasObservaciones = getObsById(EstadoObs, Tratamiento.zona);
   const lazona = getZonaById(EstadoZona, Tratamiento.zona);
   const elInsumo = getInsumoById(EstadoInsumo, Tratamiento.insumo);
-
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
@@ -135,8 +132,13 @@ const TratamientoInfo = () => {
         <View style={styles.container}>
           {/* //! Orden de Trabajo / */}
 
-          <View style={styles.elseparador}>
-            <Text style={styles.subtitulo}>Orden de Trabajo</Text>
+          <View
+            style={[
+              styles.elseparador,
+              { justifyContent: "center", alignItems: "center" },
+            ]}
+          >
+            <Text style={styles.subtitulo2}>Orden de Trabajo</Text>
             <View style={styles.imageContainer}>
               <Image source={{ uri: Tratamiento.orden }} style={styles.image} />
             </View>
@@ -208,6 +210,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#1D5E33",
+    justifyContent: "center",
+    alignItems: "center",
   },
   subtitulo2: {
     fontSize: 20,
@@ -266,10 +270,9 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "space-around",
-    width: "180%",
-    height: 200,
+    width: 350,
+    height: 300,
     marginVertical: 20,
-    marginLeft: "-40%",
   },
   image: {
     width: "100%",
