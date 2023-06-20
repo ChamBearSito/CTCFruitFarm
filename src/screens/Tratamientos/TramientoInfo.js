@@ -24,11 +24,11 @@ const TratamientoInfo = () => {
   const { Tratamiento } = route.params;
   const navigation = useNavigation();
   const { dispatch } = useContext(TratContext);
+  console.log("QUE TRAE TRATAMIENTO: ", Tratamiento);
 
-  console.log("QUE TRAE TRATAMIENTO: ", Tratamiento.orden);
   const fechaInicial = new Date(Tratamiento.fechainicial);
   const dia = fechaInicial.getDate();
-  const mes = fechaInicial.getMonth() + 1; // Los meses en JavaScript son indexados desde 0, por eso se suma 1
+  const mes = fechaInicial.getMonth() + 1;
   const anio = fechaInicial.getFullYear();
   const fechaFormateada = `${dia}/${mes}/${anio}`;
 
@@ -40,14 +40,12 @@ const TratamientoInfo = () => {
   const lasObservaciones = getObsById(EstadoObs, Tratamiento.zona);
   const lazona = getZonaById(EstadoZona, Tratamiento.zona);
   const elInsumo = getInsumoById(EstadoInsumo, Tratamiento.insumo);
-  console.log("EL INSUMO XD: ", elInsumo);
 
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
-  console.log("LA URI: ", Tratamiento.orden);
 
   return (
     <Layout>
@@ -100,40 +98,39 @@ const TratamientoInfo = () => {
           )}
           <Text style={styles.subtitulo}>{Tratamiento.observaciones}</Text>
           <Text style={styles.subtitulo2}>Insumos Utilizados</Text>
-          <Text style={styles.subtitulo}>
-            {elInsumo.length > 0 ? (
-              <ScrollView>
-                <View>
-                  <View
-                    style={{
-                      marginHorizontal: 70,
-                      backgroundColor: "white",
-                      borderRadius: 10,
-                      borderWidth: 1,
-                      borderColor: "#1D5E33",
-                    }}
-                  >
-                    {elInsumo.map((insumos) => (
-                      <View key={insumos.id} style={styles.itemContainer}>
-                        <TouchableOpacity
-                          style={styles.observaciones1}
-                          onPress={() => {
-                            navigation.navigate("InfoInsumo", { insumos });
-                          }}
-                        >
-                          <Text style={styles.subtitulo}>{insumos.nombre}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    ))}
-                  </View>
+
+          {elInsumo.length > 0 ? (
+            <ScrollView>
+              <View>
+                <View
+                  style={{
+                    marginHorizontal: 70,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: "#1D5E33",
+                  }}
+                >
+                  {elInsumo.map((insumos) => (
+                    <View key={insumos.id} style={styles.itemContainer}>
+                      <TouchableOpacity
+                        style={styles.observaciones1}
+                        onPress={() => {
+                          navigation.navigate("InfoInsumo", { insumos });
+                        }}
+                      >
+                        <Text style={styles.subtitulo}>{insumos.nombre}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
                 </View>
-              </ScrollView>
-            ) : (
-              <View style={{ alignItems: "center" }}>
-                <Text style={styles.subtitulo}>No hay Insumos</Text>
               </View>
-            )}
-          </Text>
+            </ScrollView>
+          ) : (
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.subtitulo}>No hay Insumos</Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.container}>
@@ -143,8 +140,7 @@ const TratamientoInfo = () => {
             <Text style={styles.subtitulo}>Orden de Trabajo</Text>
             <View style={styles.imageContainer}>
               <Image source={{ uri: Tratamiento.orden }} style={styles.image} />
-            </View>{" "}
-            |
+            </View>
           </View>
         </View>
 

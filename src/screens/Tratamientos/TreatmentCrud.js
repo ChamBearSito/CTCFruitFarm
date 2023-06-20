@@ -16,7 +16,6 @@ import moment from "moment";
 import Dropdown from "../../components/Dropdown";
 import ModalMensaje from "../../components/ModalMensaje";
 import * as DocumentPicker from "expo-document-picker";
-
 import * as ImagePicker from "expo-image-picker";
 import { useRoute } from "@react-navigation/native";
 import TratContext from "../../provider/tratamientoProvider";
@@ -24,6 +23,8 @@ import ZonaContext from "../../provider/zonaProvider";
 import UserContext from "../../provider/userProvider";
 import InsumoContext from "../../provider/insumoProvider";
 import MultipleSelect from "react-native-multiple-select";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const TratamientoCrud = () => {
   const route = useRoute();
@@ -72,6 +73,7 @@ const TratamientoCrud = () => {
     if (result.type === "success") {
       setSelectedFile(result.uri);
       theTratamiento.orden = result.uri;
+      formik.setFieldValue("orden", result.uri);
     }
   };
 
@@ -85,6 +87,7 @@ const TratamientoCrud = () => {
 
   const handleConfirm = (date) => {
     theTratamiento.fechafin = date.toISOString();
+    formik.setFieldValue("fechafin", date.toISOString());
     hideDatePicker();
   };
 
@@ -98,6 +101,7 @@ const TratamientoCrud = () => {
 
   const handleConfirm1 = (date) => {
     theTratamiento.fechainicial = date.toISOString();
+    formik.setFieldValue("fechainicial", date.toISOString());
     hideDatePicker1();
   };
 
@@ -132,6 +136,51 @@ const TratamientoCrud = () => {
     value: item.id,
   }));
 
+  const validationSchema = yup.object().shape({
+    nombre: yup
+      .string()
+      .required("El Nombre es requerido")
+      .matches(/^[A-Za-z\s]+$/, "El Nombre no puede contener números"),
+    orden: yup.string().required("El Documento es requerido"),
+    zona: yup.string().required("La zona es requerida"),
+    usuario: yup.string().required("El Usuario es requerido"),
+    insumo: yup
+      .array()
+      .test(
+        "min-insumos",
+        "Debes tener por lo menos 1 Insumo",
+        (value) => value && value.length > 0
+      )
+      .required("Los Insumos son requeridos"),
+    fechainicial: yup.string().required("La fecha Inicial es Requerida"),
+    fechafin: yup
+      .string()
+      .required("La fecha Final es Requerida")
+      .test(
+        "fechas",
+        `La fecha de finalización debe ser más reciente \n que la fecha de inicio`,
+        function (value) {
+          const { fechainicial } = this.parent; // Obtener el valor de la fecha inicial
+
+          if (!fechainicial || !value) {
+            // Si falta alguna fecha, no se realiza la validación
+            return true;
+          }
+
+          // Convertir las fechas a objetos Date para comparar
+          const fechaInicial = new Date(fechainicial);
+          const fechaFinal = new Date(value);
+
+          return fechaFinal > fechaInicial; // Validar si la fecha de finalización es más reciente
+        }
+      ),
+    tiempo: yup
+      .number()
+      .required("El tiempo es requerido")
+      .typeError("Solo se aceptan Numeros")
+      .positive("El numero debe ser positivo"),
+  });
+
   let elTratamiento = {
     id: "",
     nombre: "",
@@ -143,15 +192,6 @@ const TratamientoCrud = () => {
     tiempo: "",
     orden: "",
   };
-
-  // elTratamiento.insumo = Insumos;
-  // elTratamiento.usuario = usuario;
-  // elTratamiento.nombre = nombre;
-  // elTratamiento.zona = zona;
-  // elTratamiento.fechainicial = selectedDate1;
-  // elTratamiento.fechafin = selectedDate;
-  // elTratamiento.tiempo = tiempo;
-  // elTratamiento.orden = selectedFile.uri;
 
   const [theTratamiento] = useState(
     route.params ? route.params : elTratamiento
@@ -179,9 +219,42 @@ const TratamientoCrud = () => {
     setInsumos(selectedItems);
   };
 
-  useEffect(() => {
-    console.log("QUE VA CAMBIANDO", theTratamiento);
-  }, [theTratamiento]);
+  const formik = useFormik({
+    initialValues: {
+      id: theTratamiento.id,
+      nombre: theTratamiento.nombre,
+      usuario: theTratamiento.usuario,
+      zona: theTratamiento.zona,
+      insumo: theTratamiento.insumo,
+      fechainicial: theTratamiento.fechainicial,
+      fechafin: theTratamiento.fechafin,
+      tiempo: theTratamiento.tiempo,
+      orden: theTratamiento.orden,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      let action = "";
+      let mensaje = "";
+
+      if (theTratamiento.id) {
+        action = "updateTratamiento";
+        mensaje = "Tratamiento editado";
+      } else {
+        action = "createTratamiento";
+        mensaje = "Tratamiento creado";
+      }
+
+      dispatch({ type: action, payload: { ...theTratamiento, ...values } });
+      setModalMensaje(mensaje);
+      setShowModal(true);
+    },
+  });
+  const handleInsumosChange = (selectedItems) => {
+    setInsumos(selectedItems);
+    formik.setFieldValue("insumo", selectedItems);
+    formik.setFieldTouched("insumo", false);
+    console.log("LOS SELECCIONADOS: ", selectedItems);
+  };
   return (
     <TratamientoLayout>
       {EstadoInsumos.length > 0 &&
@@ -195,15 +268,7 @@ const TratamientoCrud = () => {
           </View>
           <View style={styles.container}>
             {/* //! IDentificador y Nombre / */}
-            {/* <View style={styles.elseparador}>
-         <Text style={styles.subtitulo}>Identificación</Text>
-         <TextInput
-           style={styles.input}
-           keyboardType="default"
-           placeholder="Ingrese Identificacion"
-           placeholderTextColor="#888"
-         />
-       </View> */}
+
             <View style={styles.elseparador}>
               <Text style={styles.subtitulo}>Nombre</Text>
               <TextInput
@@ -211,14 +276,15 @@ const TratamientoCrud = () => {
                 keyboardType="default"
                 placeholder="Ingrese Nombre"
                 placeholderTextColor="#888"
-                defaultValue={
-                  theTratamiento.nombre ? theTratamiento.nombre.toString() : ""
-                }
-                onChangeText={(text) => {
-                  theTratamiento.nombre = text;
-                }}
+                defaultValue={theTratamiento.id ? theTratamiento.nombre : ""}
+                onChangeText={formik.handleChange("nombre")}
+                onBlur={formik.handleBlur("nombre")}
+                value={formik.values.nombre}
                 // onChangeText={(text) => setnombre(text)}
               />
+              {formik.touched.nombre && formik.errors.nombre && (
+                <Text style={styles.errorText}>{formik.errors.nombre}</Text>
+              )}
             </View>
           </View>
 
@@ -233,8 +299,19 @@ const TratamientoCrud = () => {
                     : "Zona"
                 }
                 data={optionsZona}
-                onSelect={(selected) => (theTratamiento.zona = selected.value)}
+                onBlur={formik.handleBlur("zona")}
+                value={formik.values.zona}
+                onSelect={(selected) => {
+                  theTratamiento.zona = selected.value;
+                  formik.setFieldValue("zona", selected.value);
+                  formik.setFieldTouched("zona", false);
+                }}
               />
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                {formik.touched.zona && formik.errors.zona && (
+                  <Text style={styles.errorText}>{formik.errors.zona}</Text>
+                )}
+              </View>
             </View>
           </View>
           <View style={{ marginTop: 10 }}>
@@ -247,10 +324,19 @@ const TratamientoCrud = () => {
                     : "Usuario"
                 }
                 data={optionsUsuarios}
-                onSelect={(selected) =>
-                  (theTratamiento.usuario = selected.value)
-                }
+                onBlur={formik.handleBlur("usuario")}
+                value={formik.values.usuario}
+                onSelect={(selected) => {
+                  theTratamiento.usuario = selected.value;
+                  formik.setFieldValue("usuario", selected.value);
+                  formik.setFieldTouched("usuario", false);
+                }}
               />
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                {formik.touched.usuario && formik.errors.usuario && (
+                  <Text style={styles.errorText}>{formik.errors.usuario}</Text>
+                )}
+              </View>
             </View>
           </View>
 
@@ -258,11 +344,7 @@ const TratamientoCrud = () => {
           <View style={{ marginTop: 10 }}>
             <View style={styles.elseparador}>
               <Text style={styles.subtitulo}>Insumos</Text>
-              {/* <Dropdown
-           label="Insumos"
-           data={optionsInsumos}
-           onSelect={setInsumos}
-         /> */}
+
               <Button
                 color="#1D5E33"
                 title={"Seleccionar Insumos"}
@@ -277,7 +359,7 @@ const TratamientoCrud = () => {
                   <MultipleSelect
                     items={optionsInsumos}
                     uniqueKey="value"
-                    onSelectedItemsChange={setInsumos}
+                    onSelectedItemsChange={handleInsumosChange}
                     selectedItems={Insumos}
                     selectText="Seleccionar Insumos"
                     searchInputPlaceholderText="Buscar insumos..."
@@ -299,6 +381,11 @@ const TratamientoCrud = () => {
                   />
                 </View>
               </Modal>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                {formik.touched.insumo && formik.errors.insumo && (
+                  <Text style={styles.errorText}>{formik.errors.insumo}</Text>
+                )}
+              </View>
             </View>
           </View>
 
@@ -322,6 +409,9 @@ const TratamientoCrud = () => {
                 onConfirm={handleConfirm1}
                 onCancel={hideDatePicker1}
               />
+              <View
+                style={{ justifyContent: "center", alignItems: "center" }}
+              ></View>
             </View>
             <View style={styles.elseparador}>
               <Text style={styles.subtitulo}>Fecha Fin</Text>
@@ -343,23 +433,41 @@ const TratamientoCrud = () => {
               />
             </View>
           </View>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            {formik.touched.fechainicial && formik.errors.fechainicial && (
+              <View style={styles.errorContainer}>
+                <Text style={[styles.errorText1, { marginHorizontal: 5 }]}>
+                  {formik.errors.fechainicial}
+                </Text>
+              </View>
+            )}
+            {formik.touched.fechafin && formik.errors.fechafin && (
+              <View style={styles.errorContainer}>
+                <Text style={[styles.errorText1, { marginHorizontal: 5 }]}>
+                  {formik.errors.fechafin}
+                </Text>
+              </View>
+            )}
+          </View>
 
           <View style={styles.container}>
             {/* //! Tiempo y Orden de Trabajo / */}
             <View style={styles.elseparador}>
-              <Text style={styles.subtitulo}>Tiempo</Text>
+              <Text style={styles.subtitulo}>Tiempo Horas</Text>
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
                 placeholder="Ingrese Tiempo"
                 placeholderTextColor="#888"
-                defaultValue={
-                  theTratamiento.tiempo ? theTratamiento.tiempo.toString() : ""
-                }
-                onChangeText={(text) => {
-                  theTratamiento.tiempo = text;
-                }}
+                defaultValue={theTratamiento.id ? theTratamiento.tiempo : ""}
+                onChangeText={formik.handleChange("tiempo")}
+                onBlur={formik.handleBlur("tiempo")}
               />
+              {formik.touched.tiempo && formik.errors.tiempo && (
+                <Text style={[styles.errorText, { marginHorizontal: 5 }]}>
+                  {formik.errors.tiempo}
+                </Text>
+              )}
             </View>
           </View>
           <View style={styles.container}>
@@ -383,29 +491,33 @@ const TratamientoCrud = () => {
                   </View>
                 </>
               )}
+              {formik.touched.orden && formik.errors.orden && (
+                <Text style={styles.errorText}>{formik.errors.orden}</Text>
+              )}
             </View>
           </View>
 
           <View style={styles.container}>
             <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={() => {
-                let action = "";
-                let mensaje = "";
-                theTratamiento.insumo = Insumos;
-                {
-                  theTratamiento.id
-                    ? (action = "updateTratamiento")
-                    : (action = "createTratamiento");
-                }
-                dispatch({ type: action, payload: theTratamiento });
-                theTratamiento.id
-                  ? (mensaje = "Tratamiento Editado")
-                  : (mensaje = "Tratamiento Creado");
+              onPress={formik.handleSubmit}
+              // onPress={() => {
+              //   let action = "";
+              //   let mensaje = "";
+              //   theTratamiento.insumo = Insumos;
+              //   {
+              //     theTratamiento.id
+              //       ? (action = "updateTratamiento")
+              //       : (action = "createTratamiento");
+              //   }
+              //   dispatch({ type: action, payload: theTratamiento });
+              //   theTratamiento.id
+              //     ? (mensaje = "Tratamiento Editado")
+              //     : (mensaje = "Tratamiento Creado");
 
-                setModalMensaje(mensaje);
-                setShowModal(true);
-              }}
+              //   setModalMensaje(mensaje);
+              //   setShowModal(true);
+              // }}
             >
               <Text style={styles.buttonText}>
                 {theTratamiento.id ? "Editar" : "Crear"} Tratamiento
@@ -529,5 +641,15 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 5,
+  },
+  errorText1: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 5,
   },
 });
