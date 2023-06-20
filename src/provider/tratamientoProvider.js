@@ -38,7 +38,7 @@ let Tratamientos = [
 const actions = {
   createTratamiento(state, action) {
     const Tratamiento = action.payload;
-    Tratamiento.id = generateNumericId();
+    // Tratamiento.id = generateNumericId();
     // guardar el usuario en la db
     dataTrat.insertTrat(Tratamiento).then((insertedId) => {
       Tratamiento.id = insertedId;

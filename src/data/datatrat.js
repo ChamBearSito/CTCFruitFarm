@@ -40,6 +40,7 @@ const getTrat = async () => {
 };
 
 const insertTrat = async (Trat) => {
+  console.log('El trat:',Trat);
   const {
     nombre,
     zona,

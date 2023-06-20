@@ -244,7 +244,7 @@ const TratamientoCrud = () => {
         mensaje = "Tratamiento creado";
       }
 
-      dispatch({ type: action, payload: { ...theTratamiento, ...values } });
+      dispatch({ type: action, payload: values });
       setModalMensaje(mensaje);
       setShowModal(true);
     },

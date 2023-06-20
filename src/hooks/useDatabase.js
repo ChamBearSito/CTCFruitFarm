@@ -11,7 +11,9 @@ const useDatabase = () => {
         // llamar a una funcion que me haga la conexion a la db
         const openDb = dataFunction.getConnection();
 
-        await database.setupDatabase(openDb);
+        await database.setupDatabase(openDb).then(()=>{
+          setIsDBLoadingComplete(true);
+        });
         // openDb.transaction((tx) => {
         //   tx.executeSql(
         //     "SELECT name FROM sqlite_master WHERE type='table';",
@@ -27,8 +29,6 @@ const useDatabase = () => {
         //     }
         //   );
         // });
-
-        setIsDBLoadingComplete(true);
       } catch (err) {
         console.log("error on useDatabase Hook", err);
       }
