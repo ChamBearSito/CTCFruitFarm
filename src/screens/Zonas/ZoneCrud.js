@@ -90,7 +90,7 @@ const ZoneCrud = () => {
       theZona.latitude = latitude;
       theZona.longitude = longitude;
       setLocation(`${state}, ${country}`);
-      formik.setFieldValue("depto", location);
+      formik.setFieldValue("depto", `${state}, ${country}`);
       theZona.depto = `${state}, ${country}`;
     } catch (error) {
       console.warn(error);
@@ -161,12 +161,9 @@ const ZoneCrud = () => {
             style={styles.input}
             placeholder="Ingrese cantidad de Trabajadores"
             placeholderTextColor="#888"
-            defaultValue={
-              theZona.trabajadores ? theZona.trabajadores.toString() : ""
-            }
+            defaultValue={theZona.id ? theZona.trabajadores.toString() : ""}
             onChangeText={formik.handleChange("trabajadores")}
             onBlur={formik.handleBlur("trabajadores")}
-            value={formik.values.trabajadores}
           />
           {formik.touched.trabajadores && formik.errors.trabajadores && (
             <Text style={styles.errorText}>{formik.errors.trabajadores}</Text>
@@ -181,8 +178,8 @@ const ZoneCrud = () => {
             initialRegion={
               theZona.id
                 ? {
-                    latitude: theZona.latitude,
-                    longitude: theZona.longitude,
+                    latitude: parseFloat(theZona.latitude),
+                    longitude: parseFloat(theZona.longitude),
                     latitudeDelta: 5.0,
                     longitudeDelta: 5.0,
                   }
@@ -198,7 +195,10 @@ const ZoneCrud = () => {
             <Marker
               coordinate={
                 theZona.id
-                  ? { latitude: theZona.latitude, longitude: theZona.longitude }
+                  ? {
+                      latitude: parseFloat(theZona.latitude),
+                      longitude: parseFloat(theZona.longitude),
+                    }
                   : { latitude, longitude }
               }
               draggable

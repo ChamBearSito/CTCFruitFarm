@@ -8,14 +8,8 @@ const getZonas = async () => {
 
 getZonas().then((zonas) => {
   zonas.map((zona) => {
-    Zonas.push({
-      id: zona.id,
-      lugar: zona.lugar,
-      depto: zona.depto,
-      trabajadores: zona.trabajadores,
-      latitude: zona.latitude,
-      longitude: zona.longitude,
-    });
+    console.log(zona);
+    Zonas.push(zona);
   });
 });
 

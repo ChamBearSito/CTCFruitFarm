@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import {
   View,
@@ -31,8 +31,9 @@ const InfoZona = () => {
   const handleModalClose = () => {
     setShowModal(false);
   };
-  const observaciones = getObsById(state, zona.id);
-  console.log("TieneObservaciones?", observaciones);
+
+  const [observaciones] = useState(getObsById(state, zona.id));
+  console.log("QUE MIERDA ES ESTO :", observaciones);
 
   return (
     <Layout>
@@ -47,6 +48,7 @@ const InfoZona = () => {
           <Text style={styles.subtitulo}>Trabajadores</Text>
           <Text style={styles.titulo}>{zona.trabajadores}</Text>
         </View>
+
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Ubicacion</Text>
           <Text>
@@ -55,22 +57,21 @@ const InfoZona = () => {
           <MapView
             style={styles.map}
             initialRegion={{
-              latitude: zona.latitude,
-              longitude: zona.longitude,
+              latitude: parseFloat(zona.latitude),
+              longitude: parseFloat(zona.longitude),
               latitudeDelta: 1,
               longitudeDelta: 0.07,
             }}
           >
-            {zona.latitude && zona.longitude && (
-              <Marker
-                coordinate={{
-                  latitude: zona.latitude,
-                  longitude: zona.longitude,
-                }}
-              />
-            )}
+            <Marker
+              coordinate={{
+                latitude: parseFloat(zona.latitude),
+                longitude: parseFloat(zona.longitude),
+              }}
+            />
           </MapView>
         </View>
+
         <View style={styles.container}>
           <Text style={styles.titulo}>Observaciones</Text>
         </View>
@@ -123,7 +124,6 @@ const InfoZona = () => {
                 dispatch({ type: "deleteZona", payload: zona });
                 setModalMensaje("Zona Eliminada");
                 setShowModal(true);
-                navigation.navigate("Home");
               }}
             >
               <Text style={styles.buttonText}>Eliminar</Text>
@@ -143,7 +143,7 @@ const InfoZona = () => {
         <ModalMensaje
           mensaje={modalMensaje}
           closeModal={handleModalClose}
-          navega={false}
+          navega={true}
         />
       )}
     </Layout>

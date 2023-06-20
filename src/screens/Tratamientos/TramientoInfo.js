@@ -25,7 +25,7 @@ const TratamientoInfo = () => {
   const navigation = useNavigation();
   const { dispatch } = useContext(TratContext);
 
-  console.log("QUE TRAE TRATAMIENTO: ", Tratamiento);
+  console.log("QUE TRAE TRATAMIENTO: ", Tratamiento.orden);
   const fechaInicial = new Date(Tratamiento.fechainicial);
   const dia = fechaInicial.getDate();
   const mes = fechaInicial.getMonth() + 1; // Los meses en JavaScript son indexados desde 0, por eso se suma 1
@@ -141,10 +141,10 @@ const TratamientoInfo = () => {
 
           <View style={styles.elseparador}>
             <Text style={styles.subtitulo}>Orden de Trabajo</Text>
-
             <View style={styles.imageContainer}>
               <Image source={{ uri: Tratamiento.orden }} style={styles.image} />
-            </View>
+            </View>{" "}
+            |
           </View>
         </View>
 

@@ -69,7 +69,7 @@ const actions = {
 //! Creamos contexto para el reducer
 const ObsContext = createContext();
 const getObsById = (state, obsId) => {
-  return state.filter((obs) => obs.zonaId === obsId);
+  return [...state.filter((obs) => obs.zonaId === obsId)];
 };
 
 export const ObsProvider = (props) => {

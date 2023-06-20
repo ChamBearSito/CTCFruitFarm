@@ -55,14 +55,14 @@ const ObservationCrud = () => {
   };
   const route = useRoute();
   const { zona } = route.params;
-
+  console.log("param Obs:", route.params);
   let laOb = {
     id: "",
     titulo: "",
-    zonaId: zona.id,
+    zonaId: zona ? zona.id : "",
     img: "",
   };
-  const [theOb] = useState(route.params ? route.params : laOb);
+  const [theOb] = useState(route.params.lugar ? laOb : route.params);
   console.log("LA ZONA: ", zona);
   theOb.zonaId = zona.id;
   useEffect(() => {

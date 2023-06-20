@@ -19,15 +19,19 @@ const UserCrud = () => {
     apellido: yup
       .string()
       .typeError("No puedes Agregar Numeros, Solo Letras")
-      .required("El nombre es requerido")
+      .required("El Apellido es requerido")
       .matches(/^[A-Za-z\s]+$/, "El Apellido no puede contener números"),
 
     cedula: yup
       .number()
       .typeError("No puedes Agregar Letras, Solo numeros")
-      .required("La cantidad es requerida")
-      .positive("La cantidad debe ser mayor a cero")
-      .integer("La cantidad debe ser un número entero"),
+      .required("La cedula es requerida")
+      .positive("La cedula debe ser mayor a cero")
+      // .matches(/^\d{7,8}$/, "La cédula debe tener 7 u 8 números")
+      .test("length", "La cédula debe tener exactamente 8 números", (value) => {
+        return /^\d{8}$/.test(value);
+      })
+      .integer("La cedula debe ser un número entero"),
   });
 
   //El route es por si recibe un usuario significa que es para editar no
