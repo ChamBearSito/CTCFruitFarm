@@ -12,7 +12,7 @@ getTrats().then((trat) => {
       nombre: eltratamiento.nombre,
       zona: eltratamiento.zona,
       usuario: eltratamiento.usuario,
-      insumo: eltratamiento.insumo,
+      insumo: eltratamiento.insumo.split(",").map(Number),
       fechainicial: eltratamiento.fechainicial,
       fechafin: eltratamiento.fechafin,
       tiempo: eltratamiento.tiempo,
@@ -40,7 +40,10 @@ const actions = {
     const Tratamiento = action.payload;
     // Tratamiento.id = generateNumericId();
     // guardar el usuario en la db
-    dataTrat.insertTrat(Tratamiento).then((insertedId) => {
+    let elTrat = Tratamiento;
+    elTrat.insumo = elTrat.insumo.toString();
+
+    dataTrat.insertTrat(elTrat).then((insertedId) => {
       Tratamiento.id = insertedId;
     });
     return [...state, Tratamiento];
@@ -48,10 +51,12 @@ const actions = {
   updateTratamiento(state, action) {
     const TratamientoUpdated = action.payload;
     // update del usuario en la db
-    const id = TratamientoUpdated.id;
-    console.log("### id ###", id);
+    console.log("### id ###", TratamientoUpdated.id);
+
+    let elTrat = TratamientoUpdated;
+    elTrat.insumo = elTrat.insumo.toString();
     //database.editUser(userUpdated);
-    dataTrat.editTrat(TratamientoUpdated);
+    dataTrat.editTrat(elTrat);
     return [
       ...state.map((Tra) =>
         Tra.id === TratamientoUpdated.id ? TratamientoUpdated : Tra
@@ -65,21 +70,6 @@ const actions = {
     dataTrat.deleteTrat(TratamientoDelete.id);
     return [...state.filter((trat) => trat.id !== TratamientoDelete.id)];
   },
-};
-
-const generateNumericId = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  // Concatenamos los componentes de la fecha y hora en un solo string numérico
-  const numericId = `${year}${month}${day}${hours}${minutes}${seconds}`;
-
-  return numericId;
 };
 
 const TratContext = createContext();

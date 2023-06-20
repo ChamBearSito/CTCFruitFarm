@@ -59,12 +59,20 @@ getUsers().then((users) => {
 const actions = {
   createUser(state, action) {
     const user = action.payload;
-    // user.id = generateNumericId();
+    let userExists = {};
+
     // guardar el usuario en la db
-    datauser.insertUser(user).then((insertedId) => {
-      user.id = insertedId;
+    datauser.getAUser(user.cedula).then((result) => {
+      userExists = result;
     });
-    return [...state, user];
+    if (!userExists) {
+      datauser.insertUser(user).then((insertedId) => {
+        user.id = insertedId;
+      });
+      return [...state, user];
+    } else {
+      return [...state];
+    }
   },
   updateUser(state, action) {
     const userUpdated = action.payload;

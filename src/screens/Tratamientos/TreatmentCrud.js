@@ -458,7 +458,9 @@ const TratamientoCrud = () => {
                 keyboardType="numeric"
                 placeholder="Ingrese Tiempo"
                 placeholderTextColor="#888"
-                defaultValue={theTratamiento.id ? theTratamiento.tiempo : ""}
+                defaultValue={
+                  theTratamiento.id ? theTratamiento.tiempo.toString() : ""
+                }
                 onChangeText={formik.handleChange("tiempo")}
                 onBlur={formik.handleBlur("tiempo")}
               />

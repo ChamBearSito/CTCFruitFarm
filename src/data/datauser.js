@@ -10,6 +10,28 @@ const updateUserSQL =
 const deletetUserSQL = "DELETE FROM users WHERE id = (?)";
 
 // Crud usuario
+const getAUser = async (cedula) => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM users WHERE cedula=${cedula}`,
+        [],
+        (_, { rows: { _array } }) => {
+          resolve(_array);
+        },
+        (_, error) => {
+          console.log("error get a user", error);
+          reject(error);
+        },
+        (_, succes) => {
+          console.log("succes get a user", succes);
+          resolve(succes);
+        }
+      );
+    });
+  });
+};
+
 const getUsers = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
@@ -94,6 +116,7 @@ const deleteUser = (id) => {
 
 export const datauser = {
   // crud
+  getAUser,
   getUsers,
   insertUser,
   editUser,

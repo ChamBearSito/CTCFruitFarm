@@ -46,7 +46,7 @@ CREATE TABLE tratamientos(
  nombre VARCHAR(60),
  zona INTEGER REFERENCES zonas(id),
  usuario INTEGER REFERENCES users(id),
- insumo INTEGER REFERENCES insumos(id),
+ insumo VARCHAR(30),
  fechainicial VARCHAR(60),
  fechafin VARCHAR(60),
  tiempo INTEGER,
