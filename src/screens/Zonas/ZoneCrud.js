@@ -12,8 +12,23 @@ import ModalMensaje from "../../components/ModalMensaje";
 import { useRoute } from "@react-navigation/native";
 import ZonaContext from "../../provider/zonaProvider";
 import axios from "axios";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const ZoneCrud = () => {
+  const validationSchema = yup.object().shape({
+    lugar: yup.string().required("El Lugar es requerido"),
+
+    trabajadores: yup
+      .number()
+      .typeError("No puedes Agregar Letras, Solo numeros")
+      .required("La cantidad es requerida")
+      .positive("La cantidad debe ser mayor a cero")
+      .integer("La cantidad debe ser un número entero"),
+    depto: yup.string().required("El departamento es requerido"),
+    // .matches(/^[A-Za-z\s]+$/, "El nombre no puede contener números"),
+  });
+
   //El route es por si recibe un usuario significa que es para editar no
   // para hacer alta
   const route = useRoute();
@@ -37,6 +52,31 @@ const ZoneCrud = () => {
   };
 
   const [theZona] = useState(route.params ? route.params : laZona);
+  const formik = useFormik({
+    initialValues: {
+      lugar: laZona.lugar,
+      trabajadores: laZona.trabajadores,
+      depto: laZona.depto,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      let action = "";
+      let mensaje = "";
+
+      if (theZona.id) {
+        action = "updateZona";
+        mensaje = "Zona editada";
+      } else {
+        action = "createZona";
+        mensaje = "Zona creada";
+      }
+
+      dispatch({ type: action, payload: { ...theZona, ...values } });
+      setModalMensaje(mensaje);
+      setShowModal(true);
+    },
+  });
+
   const [latitude, setLatitude] = useState(-34.312977);
   const [longitude, setLongitude] = useState(-57.230646);
 
@@ -50,6 +90,7 @@ const ZoneCrud = () => {
       theZona.latitude = latitude;
       theZona.longitude = longitude;
       setLocation(`${state}, ${country}`);
+      formik.setFieldValue("depto", location);
       theZona.depto = `${state}, ${country}`;
     } catch (error) {
       console.warn(error);
@@ -90,14 +131,27 @@ const ZoneCrud = () => {
           <Dropdown
             label={theZona.id ? theZona.lugar : "Lugar"}
             data={Lugares}
-            onSelect={(selected) => (theZona.lugar = selected.value)}
+            onBlur={formik.handleBlur("lugar")}
+            value={formik.values.lugar}
+            onSelect={(selected) => {
+              theZona.lugar = selected.value;
+              formik.setFieldValue("lugar", selected.value);
+              formik.setFieldTouched("lugar", true);
+            }}
           />
+          {formik.touched.lugar && formik.errors.lugar && (
+            <Text style={styles.errorText}>{formik.errors.lugar}</Text>
+          )}
         </View>
 
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Departamento</Text>
 
           <Text>{location}</Text>
+
+          {formik.touched.depto && formik.errors.depto && (
+            <Text style={styles.errorText}>{formik.errors.depto}</Text>
+          )}
         </View>
 
         <View style={styles.container}>
@@ -110,10 +164,13 @@ const ZoneCrud = () => {
             defaultValue={
               theZona.trabajadores ? theZona.trabajadores.toString() : ""
             }
-            onChangeText={(text) => {
-              theZona.trabajadores = text;
-            }}
+            onChangeText={formik.handleChange("trabajadores")}
+            onBlur={formik.handleBlur("trabajadores")}
+            value={formik.values.trabajadores}
           />
+          {formik.touched.trabajadores && formik.errors.trabajadores && (
+            <Text style={styles.errorText}>{formik.errors.trabajadores}</Text>
+          )}
         </View>
 
         <View style={styles.container}>
@@ -153,20 +210,21 @@ const ZoneCrud = () => {
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => {
-              let action = "";
-              let mensaje = "";
-              {
-                theZona.id ? (action = "updateZona") : (action = "createZona");
-              }
-              dispatch({ type: action, payload: theZona });
-              theZona.id
-                ? (mensaje = "Zona Editada")
-                : (mensaje = "Zona Creada");
+            onPress={formik.handleSubmit}
+            // onPress={() => {
+            //   let action = "";
+            //   let mensaje = "";
+            //   {
+            //     theZona.id ? (action = "updateZona") : (action = "createZona");
+            //   }
+            //   dispatch({ type: action, payload: theZona });
+            //   theZona.id
+            //     ? (mensaje = "Zona Editada")
+            //     : (mensaje = "Zona Creada");
 
-              setModalMensaje(mensaje);
-              setShowModal(true);
-            }}
+            //   setModalMensaje(mensaje);
+            //   setShowModal(true);
+            // }}
           >
             <Text style={styles.buttonText}>
               {theZona.id ? "Editar" : "Crear"} Zona
@@ -241,5 +299,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 5,
     borderColor: "black",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 5,
   },
 });
