@@ -71,20 +71,6 @@ const ListaInsumos = () => {
         </TouchableOpacity>
       </View>
     </SwipeRow>
-
-    // <TouchableOpacity onPress={() => handleTratamentPress(item)}>
-    //   <View style={styles.itemContainer}>
-    //     <FontAwesome
-    //       style={{ marginLeft: 10 }}
-    //       name="medkit"
-    //       size={60}
-    //       color="#1D5E33"
-    //     />
-    //     <Text style={styles.itemSubtitle}>
-    //       {item.tratamiento} {item.nombre} {item.apellido}
-    //     </Text>
-    //   </View>
-    // </TouchableOpacity>
   );
 
   const [showModal, setShowModal] = useState(false);
@@ -95,10 +81,6 @@ const ListaInsumos = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      {/* <Image
-        style={styles.imageBackground}
-        source={require("../../../assets/FondodePantalla.png")}
-      /> */}
       <BarraSuperior />
 
       <View style={styles.container}>

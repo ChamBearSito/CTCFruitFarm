@@ -24,7 +24,6 @@ const TratamientoInfo = () => {
   const { Tratamiento } = route.params;
   const navigation = useNavigation();
   const { dispatch } = useContext(TratContext);
-  console.log("QUE TRAE TRATAMIENTO: ", Tratamiento);
 
   const fechaInicial = new Date(Tratamiento.fechainicial);
   const dia = fechaInicial.getDate();

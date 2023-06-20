@@ -26,7 +26,6 @@ const ZoneCrud = () => {
       .positive("La cantidad debe ser mayor a cero")
       .integer("La cantidad debe ser un número entero"),
     depto: yup.string().required("El departamento es requerido"),
-    // .matches(/^[A-Za-z\s]+$/, "El nombre no puede contener números"),
   });
 
   //El route es por si recibe un usuario significa que es para editar no
@@ -34,8 +33,6 @@ const ZoneCrud = () => {
   const route = useRoute();
   const { dispatch } = useContext(ZonaContext);
   const [location, setLocation] = useState("Seleccione una ubicacion");
-  // const [place, setPlace] = useState(undefined);
-  // const [trabajadores, settrabajadores] = useState("");
   useEffect(() => {
     if (theZona.id) {
       setLocation(theZona.depto);
@@ -211,20 +208,6 @@ const ZoneCrud = () => {
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={formik.handleSubmit}
-            // onPress={() => {
-            //   let action = "";
-            //   let mensaje = "";
-            //   {
-            //     theZona.id ? (action = "updateZona") : (action = "createZona");
-            //   }
-            //   dispatch({ type: action, payload: theZona });
-            //   theZona.id
-            //     ? (mensaje = "Zona Editada")
-            //     : (mensaje = "Zona Creada");
-
-            //   setModalMensaje(mensaje);
-            //   setShowModal(true);
-            // }}
           >
             <Text style={styles.buttonText}>
               {theZona.id ? "Editar" : "Crear"} Zona

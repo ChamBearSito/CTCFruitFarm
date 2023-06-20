@@ -77,12 +77,7 @@ const ListadoUsuarios = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      {/* <Image
-        style={styles.imageBackground}
-        source={require("../../assets/FondodePantalla.png")}
-      /> */}
       <BarraSuperior />
-
       <View style={styles.container}>
         <Text style={styles.titulo}>Usuarios</Text>
       </View>

@@ -33,75 +33,6 @@ const ListTreataments = () => {
     setShowModal(false);
   };
 
-  // const [tratamientos, settratamientos] = useState(
-  //   // Array de tratamientos de ejemplo
-  //   [
-  //     {
-  //       id: 1,
-  //       nombre: "Luis",
-  //       apellido: "Miguel",
-  //       tratamiento: "T-46545",
-  //       fechaT: "24/03/2023",
-  //       observaciones: "Zi",
-  //       ci: 635351,
-  //     },
-  //     {
-  //       id: 2,
-  //       nombre: "Sergio",
-  //       apellido: "Rico",
-  //       tratamiento: "T-34345",
-  //       fechaT: "24/09/2021",
-  //       observaciones: "No",
-  //       ci: 54878,
-  //     },
-  //     {
-  //       id: 3,
-  //       nombre: "Ana",
-  //       apellido: "García",
-  //       tratamiento: "T-12345",
-  //       fechaT: "12/06/2023",
-  //       observaciones: "Sí",
-  //       ci: 784536,
-  //     },
-  //     {
-  //       id: 4,
-  //       nombre: "Carlos",
-  //       apellido: "Pérez",
-  //       tratamiento: "T-67890",
-  //       fechaT: "05/02/2023",
-  //       observaciones: "No",
-  //       ci: 963214,
-  //     },
-  //     {
-  //       id: 5,
-  //       nombre: "María",
-  //       apellido: "López",
-  //       tratamiento: "T-24680",
-  //       fechaT: "30/11/2022",
-  //       observaciones: "Sí",
-  //       ci: 745812,
-  //     },
-  //     {
-  //       id: 6,
-  //       nombre: "Pedro",
-  //       apellido: "Gómez",
-  //       tratamiento: "T-13579",
-  //       fechaT: "18/08/2023",
-  //       observaciones: "No",
-  //       ci: 874563,
-  //     },
-  //     {
-  //       id: 7,
-  //       nombre: "Laura",
-  //       apellido: "Hernández",
-  //       tratamiento: "T-97531",
-  //       fechaT: "22/04/2022",
-  //       observaciones: "Sí",
-  //       ci: 632548,
-  //     },
-  //   ]
-  // );
-
   // Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
@@ -143,30 +74,11 @@ const ListTreataments = () => {
         </TouchableOpacity>
       </View>
     </SwipeRow>
-
-    // <TouchableOpacity onPress={() => handleTratamentPress(item)}>
-    //   <View style={styles.itemContainer}>
-    //     <FontAwesome
-    //       style={{ marginLeft: 10 }}
-    //       name="medkit"
-    //       size={60}
-    //       color="#1D5E33"
-    //     />
-    //     <Text style={styles.itemSubtitle}>
-    //       {item.tratamiento} {item.nombre} {item.apellido}
-    //     </Text>
-    //   </View>
-    // </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      {/* <Image
-        style={styles.imageBackground}
-        source={require("../../../assets/FondodePantalla.png")}
-      /> */}
       <BarraSuperior />
-
       <View style={styles.container}>
         <Text style={styles.titulo}>Tratamientos</Text>
       </View>

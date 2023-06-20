@@ -12,10 +12,7 @@ import * as yup from "yup";
 
 const ObservationCrud = () => {
   const { dispatch } = useContext(ObsContext);
-  // const [Titulo, setTitulo] = useState(undefined);
-  // const [zona, setZona] = useState(undefined);
   const [selectedImage, setSelectedImage] = useState(null);
-
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const [laZona, setlaZona] = useState("");
@@ -60,7 +57,7 @@ const ObservationCrud = () => {
   };
   const route = useRoute();
   const { zona } = route.params;
-  console.log("param Obs:", route.params);
+
   let laOb = {
     id: "",
     titulo: "",
@@ -68,16 +65,13 @@ const ObservationCrud = () => {
     img: "",
   };
   const [theOb] = useState(route.params.lugar ? laOb : route.params);
-  console.log("LA ZONA: ", zona);
+
   theOb.zonaId = zona.id;
   useEffect(() => {
     if (theOb.id) {
       setSelectedImage(theOb.img);
     }
   }, []);
-  useEffect(() => {
-    console.log("theOb", theOb);
-  }, [theOb]);
 
   const titulooption = [
     { label: "Planta en mal estado", value: "Planta en mal estado" },
@@ -156,19 +150,6 @@ const ObservationCrud = () => {
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={formik.handleSubmit}
-            // onPress={() => {
-            //   let action = "";
-            //   let mensaje = "";
-
-            //   {
-            //     theOb.id ? (action = "updateObs") : (action = "createObs");
-            //   }
-            //   dispatch({ type: action, payload: theOb });
-            //   theOb.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
-
-            //   setModalMensaje(mensaje);
-            //   setShowModal(true);
-            // }}
           >
             <Text style={styles.buttonText}>
               {theOb.id ? "Editar" : "Crear"} Observacion

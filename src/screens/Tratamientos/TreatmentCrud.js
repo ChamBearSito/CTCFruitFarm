@@ -253,7 +253,6 @@ const TratamientoCrud = () => {
     setInsumos(selectedItems);
     formik.setFieldValue("insumo", selectedItems);
     formik.setFieldTouched("insumo", false);
-    console.log("LOS SELECCIONADOS: ", selectedItems);
   };
   return (
     <TratamientoLayout>

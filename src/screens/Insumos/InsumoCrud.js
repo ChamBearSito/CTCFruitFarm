@@ -24,7 +24,6 @@ const validationSchema = yup.object().shape({
     .typeError("No puedes Agregar Letras, Solo numeros")
     .required("La cantidad es requerida")
     .positive("La cantidad debe ser mayor a cero"),
-  // .integer("La cantidad debe ser un número entero"),
 });
 
 const InsumoCrud = () => {

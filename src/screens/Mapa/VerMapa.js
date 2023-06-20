@@ -11,8 +11,6 @@ const VerMapa = () => {
   const { state: TratamientosQueHay } = useContext(TratContext);
   const { state: Zonas, getZonaById } = useContext(ZonaContext);
 
-  console.log("ESTADO PARA MAPA QUE VIENE? :", TratamientosQueHay);
-
   return (
     <Layout>
       <View style={styles.container}>

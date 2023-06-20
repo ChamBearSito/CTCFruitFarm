@@ -33,7 +33,6 @@ const ListaObservaciones = () => {
   };
 
   const { state, dispatch } = useContext(ObsContext);
-  console.log("Estado de Observaciones en la lista", state);
 
   // Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
@@ -76,30 +75,11 @@ const ListaObservaciones = () => {
         </TouchableOpacity>
       </View>
     </SwipeRow>
-
-    // <TouchableOpacity onPress={() => handleTratamentPress(item)}>
-    //   <View style={styles.itemContainer}>
-    //     <FontAwesome
-    //       style={{ marginLeft: 10 }}
-    //       name="medkit"
-    //       size={60}
-    //       color="#1D5E33"
-    //     />
-    //     <Text style={styles.itemSubtitle}>
-    //       {item.tratamiento} {item.nombre} {item.apellido}
-    //     </Text>
-    //   </View>
-    // </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      {/* <Image
-        style={styles.imageBackground}
-        source={require("../../../assets/FondodePantalla.png")}
-      /> */}
       <BarraSuperior />
-
       <View style={styles.container}>
         <Text style={styles.titulo}>Observaciones</Text>
       </View>

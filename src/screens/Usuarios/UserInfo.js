@@ -16,7 +16,7 @@ const UserInfo = ({ route }) => {
   const handleModalClose = () => {
     setShowModal(false);
   };
-  console.log(usuario);
+
   return (
     <Layout>
       <View style={styles.distancia}>

@@ -33,7 +33,6 @@ const InfoZona = () => {
   };
 
   const [observaciones] = useState(getObsById(state, zona.id));
-  console.log("QUE MIERDA ES ESTO :", observaciones);
 
   return (
     <Layout>
@@ -149,20 +148,6 @@ const InfoZona = () => {
     </Layout>
   );
 };
-
-// {observaciones.length === 0 ? (
-//   <Text>No hay observaciones</Text>
-// ) : (
-//   <FlatList
-//     data={observaciones}
-//     renderItem={({ item }) => (
-//       <View key={item.id} style={styles.itemContainer}>
-//         <Text style={styles.itemText}>{item}</Text>
-//       </View>
-//     )}
-//     keyExtractor={(item) => item.id.toString()}
-//   />
-// )}
 
 export default InfoZona;
 

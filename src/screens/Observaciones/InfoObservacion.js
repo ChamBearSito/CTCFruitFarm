@@ -42,26 +42,6 @@ const InfoObservacion = ({ route }) => {
             Lat:{zona.latitude} Lon:{zona.longitude}
           </Text>
         </View>
-        {/* <View style={styles.container}>
-          <Text style={styles.subtitulo}>Ubicacion</Text>
-
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: zona.latitude,
-              longitude: zona.longitude,
-              latitudeDelta: 0.09,
-              longitudeDelta: 0.04,
-            }}
-          >
-            <Marker
-              coordinate={{
-                latitude: zona.latitude,
-                longitude: zona.longitude,
-              }}
-            />
-          </MapView>
-        </View> */}
 
         <View style={styles.container}>
           <View style={styles.minicontainer}>

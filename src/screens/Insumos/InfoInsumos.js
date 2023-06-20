@@ -10,7 +10,7 @@ import ModalMensaje from "../../components/ModalMensaje";
 
 const InsumoInfo = ({ route }) => {
   const { insumos } = route.params;
-  console.log(insumos);
+
   const navigation = useNavigation();
   const { dispatch } = useContext(InsumoContext);
   const [showModal, setShowModal] = useState(false);

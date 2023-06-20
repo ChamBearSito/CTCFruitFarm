@@ -142,21 +142,6 @@ const UserCrud = () => {
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={formik.handleSubmit}
-            // onPress={() => {
-            //   let action = "";
-            //   let mensaje = "";
-            //   //esto compara si tiene id, significa que hay un user para editar
-            //   {
-            //     theUser.id ? (action = "updateUser") : (action = "createUser");
-            //   }
-            //   dispatch({ type: action, payload: theUser });
-            //   theUser.id
-            //     ? (mensaje = "Usuario editado")
-            //     : (mensaje = "Usuario Creado");
-
-            //   setModalMensaje(mensaje);
-            //   setShowModal(true);
-            // }}
           >
             <Text style={styles.buttonText}>
               {theUser.id ? "Editar" : "Crear"} Usuario
