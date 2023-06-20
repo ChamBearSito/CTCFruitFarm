@@ -5,9 +5,30 @@ import { TextInput } from "react-native-gesture-handler";
 import UserContext from "../../provider/userProvider";
 import { useRoute } from "@react-navigation/native";
 import ModalMensaje from "../../components/ModalMensaje";
-
+import { useFormik } from "formik";
+import * as yup from "yup";
 const UserCrud = () => {
   const { dispatch } = useContext(UserContext);
+
+  const validationSchema = yup.object().shape({
+    nombre: yup
+      .string()
+      .typeError("No puedes Agregar Numeros, Solo Letras")
+      .required("El Nombre es requerido")
+      .matches(/^[A-Za-z\s]+$/, "El nombre no puede contener números"),
+    apellido: yup
+      .string()
+      .typeError("No puedes Agregar Numeros, Solo Letras")
+      .required("El nombre es requerido")
+      .matches(/^[A-Za-z\s]+$/, "El Apellido no puede contener números"),
+
+    cedula: yup
+      .number()
+      .typeError("No puedes Agregar Letras, Solo numeros")
+      .required("La cantidad es requerida")
+      .positive("La cantidad debe ser mayor a cero")
+      .integer("La cantidad debe ser un número entero"),
+  });
 
   //El route es por si recibe un usuario significa que es para editar no
   // para hacer alta
@@ -21,6 +42,31 @@ const UserCrud = () => {
   };
 
   route.params ? (theUser = route.params) : [];
+
+  const formik = useFormik({
+    initialValues: {
+      nombre: theUser.nombre,
+      apellido: theUser.apellido,
+      cedula: theUser.cedula,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      let action = "";
+      let mensaje = "";
+
+      if (theUser.id) {
+        action = "updateUser";
+        mensaje = "Usuario editado";
+      } else {
+        action = "createUser";
+        mensaje = "Usuario creado";
+      }
+
+      dispatch({ type: action, payload: { ...theUser, ...values } });
+      setModalMensaje(mensaje);
+      setShowModal(true);
+    },
+  });
 
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
@@ -44,12 +90,15 @@ const UserCrud = () => {
             style={styles.input}
             keyboardType="default"
             defaultValue={theUser.nombre}
-            onChangeText={(text) => {
-              theUser.nombre = text;
-            }}
+            onChangeText={formik.handleChange("nombre")}
+            onBlur={formik.handleBlur("nombre")}
+            value={formik.values.nombre}
             placeholder="Ingrese su Nombre"
             placeholderTextColor="#888"
           />
+          {formik.touched.nombre && formik.errors.nombre && (
+            <Text style={styles.errorText}>{formik.errors.nombre}</Text>
+          )}
         </View>
 
         <View style={styles.container}>
@@ -58,12 +107,15 @@ const UserCrud = () => {
             keyboardType="default"
             style={styles.input}
             defaultValue={theUser.apellido}
-            onChangeText={(text) => {
-              theUser.apellido = text;
-            }}
+            onChangeText={formik.handleChange("apellido")}
+            onBlur={formik.handleBlur("apellido")}
+            value={formik.values.apellido}
             placeholder="Ingrese su Apellido"
             placeholderTextColor="#888"
           />
+          {formik.touched.apellido && formik.errors.apellido && (
+            <Text style={styles.errorText}>{formik.errors.apellido}</Text>
+          )}
         </View>
 
         <View style={styles.container}>
@@ -72,31 +124,35 @@ const UserCrud = () => {
             keyboardType="numeric"
             style={styles.input}
             defaultValue={theUser.cedula.toString()}
-            onChangeText={(text) => {
-              theUser.cedula = text;
-            }}
+            onChangeText={formik.handleChange("cedula")}
+            onBlur={formik.handleBlur("cedula")}
+            value={formik.values.cedula}
             placeholder="Ingrese su Cédula"
             placeholderTextColor="#888"
           />
+          {formik.touched.cedula && formik.errors.cedula && (
+            <Text style={styles.errorText}>{formik.errors.cedula}</Text>
+          )}
         </View>
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => {
-              let action = "";
-              let mensaje = "";
-              //esto compara si tiene id, significa que hay un user para editar
-              {
-                theUser.id ? (action = "updateUser") : (action = "createUser");
-              }
-              dispatch({ type: action, payload: theUser });
-              theUser.id
-                ? (mensaje = "Usuario editado")
-                : (mensaje = "Usuario Creado");
+            onPress={formik.handleSubmit}
+            // onPress={() => {
+            //   let action = "";
+            //   let mensaje = "";
+            //   //esto compara si tiene id, significa que hay un user para editar
+            //   {
+            //     theUser.id ? (action = "updateUser") : (action = "createUser");
+            //   }
+            //   dispatch({ type: action, payload: theUser });
+            //   theUser.id
+            //     ? (mensaje = "Usuario editado")
+            //     : (mensaje = "Usuario Creado");
 
-              setModalMensaje(mensaje);
-              setShowModal(true);
-            }}
+            //   setModalMensaje(mensaje);
+            //   setShowModal(true);
+            // }}
           >
             <Text style={styles.buttonText}>
               {theUser.id ? "Editar" : "Crear"} Usuario
@@ -168,5 +224,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 40,
     fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 5,
   },
 });
