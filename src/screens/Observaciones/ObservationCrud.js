@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import ModalDropdown from "react-native-modal-dropdown";
-import MapView, { Marker } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import Dropdown from "../../components/Dropdown";
 import ModalMensaje from "../../components/ModalMensaje";
-
 import { useRoute } from "@react-navigation/native";
-
 import ZonaContext from "../../provider/zonaProvider";
 import ObsContext from "../../provider/observacionProvider";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const ObservationCrud = () => {
   const { dispatch } = useContext(ObsContext);
@@ -22,6 +19,13 @@ const ObservationCrud = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const [laZona, setlaZona] = useState("");
+  const validationSchema = yup.object().shape({
+    titulo: yup
+      .string()
+      .required("El Titulo es requerido")
+      .matches(/^[A-Za-z\s]+$/, "El Titulo no puede contener números"),
+    img: yup.string().required("La Imagen es requerida"),
+  });
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -51,6 +55,7 @@ const ObservationCrud = () => {
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
       theOb.img = result.assets[0].uri;
+      formik.setFieldValue("img", result.assets[0].uri);
     }
   };
   const route = useRoute();
@@ -80,13 +85,29 @@ const ObservationCrud = () => {
     { label: "Falta de riego ", value: "Falta de riego" },
   ];
 
-  // const laZona = getZonaById(state, theOb.zona);
+  const formik = useFormik({
+    initialValues: {
+      titulo: theOb.titulo,
+      img: theOb.img,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      let action = "";
+      let mensaje = "";
 
-  // const zonasOptions = state.map((item) => ({
-  //   label: `${item.id} ${item.lugar} ${item.depto}`,
-  //   value: item.id,
-  // }));
+      if (theOb.id) {
+        action = "updateObs";
+        mensaje = "Observación editada";
+      } else {
+        action = "createObs";
+        mensaje = "Observación creada";
+      }
 
+      dispatch({ type: action, payload: { ...theOb, ...values } });
+      setModalMensaje(mensaje);
+      setShowModal(true);
+    },
+  });
   return (
     <Layout>
       <View style={styles.distancia}>
@@ -102,36 +123,20 @@ const ObservationCrud = () => {
             Id:{laOb.zonaId} {zona.lugar} {zona.depto}
           </Text>
           <Text style={[styles.subtitulo, { marginTop: 20 }]}>Titulo</Text>
-          {/* <ModalDropdown
-            options={[
-              "Plaga detectada",
-              "Planta en mal estado",
-              "Falta de riego)",
-            ]}
-            defaultValue="Seleccione Titulo"
-            onSelect={handlePlaceChange}
-            textStyle={{ fontSize: 30 }}
-          /> */}
 
           <Dropdown
             label={theOb.id ? theOb.titulo : "Titulo"}
             data={titulooption}
-            onSelect={(selected) => (theOb.titulo = selected.value)}
+            onSelect={(selected) => {
+              theOb.titulo = selected.value;
+              formik.setFieldValue("titulo", selected.value);
+              formik.setFieldTouched("titulo", true);
+            }}
           />
+          {formik.touched.titulo && formik.errors.titulo && (
+            <Text style={styles.errorText}>{formik.errors.titulo}</Text>
+          )}
         </View>
-
-        {/* <View style={styles.container}>
-            <Text style={styles.subtitulo}>Zona</Text>
-            <Dropdown
-              label={
-                theOb.id
-                  ? `${laZona.id} ${laZona.lugar} ${laZona.depto}`
-                  : "Zona"
-              }
-              data={zonasOptions}
-              onSelect={(selected) => (theOb.zona = selected.value)}
-            />
-          </View> */}
 
         <View style={styles.container}>
           <Text style={styles.subtitulo}>Imagen</Text>
@@ -142,24 +147,28 @@ const ObservationCrud = () => {
               <Text style={styles.placeholderText}>Seleccionar foto</Text>
             )}
           </TouchableOpacity>
+          {formik.touched.img && formik.errors.img && (
+            <Text style={styles.errorText}>{formik.errors.img}</Text>
+          )}
         </View>
 
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => {
-              let action = "";
-              let mensaje = "";
+            onPress={formik.handleSubmit}
+            // onPress={() => {
+            //   let action = "";
+            //   let mensaje = "";
 
-              {
-                theOb.id ? (action = "updateObs") : (action = "createObs");
-              }
-              dispatch({ type: action, payload: theOb });
-              theOb.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
+            //   {
+            //     theOb.id ? (action = "updateObs") : (action = "createObs");
+            //   }
+            //   dispatch({ type: action, payload: theOb });
+            //   theOb.id ? (mensaje = "Obs Editada") : (mensaje = "Obs Creada");
 
-              setModalMensaje(mensaje);
-              setShowModal(true);
-            }}
+            //   setModalMensaje(mensaje);
+            //   setShowModal(true);
+            // }}
           >
             <Text style={styles.buttonText}>
               {theOb.id ? "Editar" : "Crear"} Observacion
@@ -249,5 +258,10 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 16,
     color: "#888",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 5,
   },
 });
