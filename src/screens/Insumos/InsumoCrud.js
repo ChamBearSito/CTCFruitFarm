@@ -9,10 +9,13 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
 import Layout from "../../components/Layout/Layout";
 import InsumoContext from "../../provider/insumoProvider";
 import ModalMensaje from "../../components/ModalMensaje";
+
+//!SCREEN PARA EL INSUMO CRUD
+
+//#region //! ValidationSchema
 
 const validationSchema = yup.object().shape({
   nombre: yup
@@ -26,11 +29,18 @@ const validationSchema = yup.object().shape({
     .positive("La cantidad debe ser mayor a cero"),
 });
 
+//#endregion
+
 const InsumoCrud = () => {
   const { dispatch } = useContext(InsumoContext);
   const route = useRoute();
+  //#region //! Estados de ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+  //#endregion
 
   let theInsumo = {
     id: "",
@@ -40,6 +50,7 @@ const InsumoCrud = () => {
 
   route.params ? (theInsumo = route.params) : [];
 
+  //#region //! FORMIK
   const formik = useFormik({
     initialValues: {
       nombre: theInsumo.nombre,
@@ -63,10 +74,7 @@ const InsumoCrud = () => {
       setShowModal(true);
     },
   });
-
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
+  //#endregion
 
   return (
     <Layout>

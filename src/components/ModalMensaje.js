@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-const ModalMensaje = ({ mensaje, closeModal, navega = true }) => {
+
+//! Este componente se encarga digamos de ser como una alerta personalizada
+const ModalMensaje = ({
+  mensaje,
+  closeModal,
+  navega = true,
+  icono = "checkcircle",
+}) => {
   const navigation = useNavigation();
 
   const [modalVisible, setModalVisible] = useState(true);
@@ -26,7 +33,7 @@ const ModalMensaje = ({ mensaje, closeModal, navega = true }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <AntDesign name="checkcircle" size={50} color="white" />
+            <AntDesign name={icono} size={50} color="white" />
             <Text style={styles.modalText}>{mensaje}</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}

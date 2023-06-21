@@ -51,3 +51,7 @@ hay que ver si podemos con alguna api porque lo hice a distancias con la capital
 14/06/2023:
 -Se arreglo el editar tratamientos
 -Se hizo la bdd para crud de usuarios
+
+21/06/2023:
+-En el Transcurso de la semana se termino todo lo que faltaba, principalmente la base de datos y las validaciones
+de formularios.

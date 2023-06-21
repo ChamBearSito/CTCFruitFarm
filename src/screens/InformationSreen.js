@@ -1,9 +1,10 @@
 import React from "react";
 import Layout from "../components/Layout/Layout";
 import { View, Text, StyleSheet, Image } from "react-native";
-import RouteButton from "../components/RouteButton";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+
+//! Es una Pagina de Informacion para cada boton de la pagina Principal
 
 const InformationSreen = () => {
   return (

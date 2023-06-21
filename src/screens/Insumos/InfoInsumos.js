@@ -1,23 +1,24 @@
 import React, { useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import InsumoContext from "../../provider/insumoProvider";
-
 import ModalMensaje from "../../components/ModalMensaje";
+
+//! En esta screen se muestra la informacion de ese Insumo en especifico
 
 const InsumoInfo = ({ route }) => {
   const { insumos } = route.params;
-
   const navigation = useNavigation();
   const { dispatch } = useContext(InsumoContext);
+  //#region //! Estado ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
   return (
     <Layout>
       <View style={styles.distancia}>

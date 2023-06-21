@@ -1,8 +1,7 @@
-import * as SQlite from "expo-sqlite";
 import { dataFunction } from "./database.js";
-
 let db = dataFunction.getConnection();
 
+//#region //! Usuarios SQL
 const createUserSQL = `
   CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -15,7 +14,9 @@ const updateUserSQL =
   "UPDATE users SET nombre = (?), apellido = (?), cedula = (?) WHERE id = (?)";
 const deletetUserSQL = "DELETE FROM users WHERE id = (?)";
 
-// Crud usuario
+//#endregion
+
+//#region //! Operaciones de Usuarios
 const getAUser = async (cedula) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
@@ -40,9 +41,7 @@ const getAUser = async (cedula) => {
 const getUsers = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql(
-        createUserSQL, 
-        [], () => {
+      tx.executeSql(createUserSQL, [], () => {
         tx.executeSql(
           "SELECT * FROM users",
           [],
@@ -123,6 +122,7 @@ const deleteUser = (id) => {
   });
 };
 
+//#endregion
 export const datauser = {
   // crud
   getAUser,

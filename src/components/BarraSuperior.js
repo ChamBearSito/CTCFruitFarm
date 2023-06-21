@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, View, StyleSheet } from "react-native";
 
+//! Se definio el diseño de la barra superior
 const BarraSuperior = () => {
   return (
     <View style={styles.logoContainer}>

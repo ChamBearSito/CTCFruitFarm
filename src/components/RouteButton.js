@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-//! Nombres : adduser,search1
+//! Botones de La Pagina Principal
 const RouteButton = ({
   nombre = "adduser",
   packageName = "AntDesign",

@@ -10,6 +10,8 @@ import {
 import BarraInferior from "../BarraInferior";
 import BarraSuperior from "../BarraSuperior";
 
+//! Definimos el Layout que iban a utilizar todas las Screens para reutilizar el codigo
+
 const Layout = ({ children }) => {
   return (
     <SafeAreaView style={styles.safeAreaView}>

@@ -1,18 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
-
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   FlatList,
-  Button,
   SafeAreaView,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
@@ -24,14 +19,16 @@ import ModalMensaje from "../../components/ModalMensaje";
 const ListadoUsuarios = () => {
   const navigation = useNavigation();
 
+  //#region //! Navegacion a Editar(UserCrud) mandandole el usuario
   const handleUserPress = (usuario) => {
     navigation.navigate("InfoUser", { usuario });
   };
+  //#endregion
 
-  // Array de usuarios del contexto
+  //! Traemos el estado y el dispach desde el contexto porque los necesitamos para eliminar
   const { state, dispatch } = useContext(UserContext);
 
-  // Función para renderizar cada item de la lista
+  //#region //! Función para renderizar cada item de la lista
   const renderUsuariosItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
@@ -68,12 +65,15 @@ const ListadoUsuarios = () => {
       </View>
     </SwipeRow>
   );
+  //#endregion
 
+  //#region //! Estados ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
 
   return (
     <SafeAreaView style={styles.safeAreaView}>

@@ -1,7 +1,6 @@
 import { dataFunction } from "./database.js";
-
 let db = dataFunction.getConnection();
-
+//#region //! Observaciones SQL
 const createObsSQL = `
   CREATE TABLE IF NOT EXISTS obs(
    id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,31 +16,32 @@ const updateObsSQL = `
   img = (?)
   WHERE id = (?)`;
 const deletetObsSQL = "DELETE FROM obs WHERE id = (?)";
+//#endregion
 
+//#region //! Operaciones de Observaciones
 const getObs = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql(
-        createObsSQL, 
-        [], () => {
-      tx.executeSql(
-        "SELECT * FROM obs",
-        [],
-        (_, { rows: { _array } }) => {
-          resolve(_array);
-        },
-        (_, error) => {
-          console.log("error get obs", error);
-          reject(error);
-        },
-        (_, succes) => {
-          console.log("succes get obs", succes);
-          resolve(succes);
-        }
-      );
+      tx.executeSql(createObsSQL, [], () => {
+        tx.executeSql(
+          "SELECT * FROM obs",
+          [],
+          (_, { rows: { _array } }) => {
+            resolve(_array);
+          },
+          (_, error) => {
+            console.log("error get obs", error);
+            reject(error);
+          },
+          (_, succes) => {
+            console.log("succes get obs", succes);
+            resolve(succes);
+          }
+        );
+      });
     });
   });
-})};
+};
 
 const insertObs = async (obs) => {
   const { titulo, zonaId, img } = obs;
@@ -102,6 +102,7 @@ const deleteObs = (id) => {
     });
   });
 };
+//#endregion
 
 export const dataObs = {
   // crud

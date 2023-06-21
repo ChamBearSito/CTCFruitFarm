@@ -1,6 +1,6 @@
-import React, { useReducer, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import UserContext from "../../provider/userProvider";
 import { useRoute } from "@react-navigation/native";
@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 const UserCrud = () => {
   const { dispatch, state, getUserById } = useContext(UserContext);
-
+  //#region //! ValidationSchema
   const validationSchema = yup.object().shape({
     nombre: yup
       .string()
@@ -33,11 +33,9 @@ const UserCrud = () => {
       })
       .integer("La cedula debe ser un número entero"),
   });
+  //#endregion
 
-  //El route es por si recibe un usuario significa que es para editar no
-  // para hacer alta
   const route = useRoute();
-
   let theUser = {
     id: "",
     nombre: "",
@@ -47,6 +45,7 @@ const UserCrud = () => {
 
   route.params ? (theUser = route.params) : [];
 
+  //#region  //! FORMIK
   const formik = useFormik({
     initialValues: {
       nombre: theUser.nombre,
@@ -65,27 +64,35 @@ const UserCrud = () => {
         action = "createUser";
         mensaje = "Usuario creado";
       }
-      const result=getUserById(state,values.cedula);
-      if(!result){
+      const result = getUserById(state, values.cedula);
+      if (
+        (!result && action == "createUser") ||
+        (result && action == "updateUser")
+      ) {
         dispatch({
           type: action,
           payload: { ...theUser, ...values },
         });
-      }else{
-        mensaje="Ya existe el usuario";
+      } else {
+        mensaje = "Ya existe el usuario";
+        seticono("closecircleo");
       }
-    
+
       setModalMensaje(mensaje);
       setShowModal(true);
     },
   });
+  //#endregion
 
+  //#region  //! Estados ModalMensaje y icono
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
+  const [icono, seticono] = useState("checkcircle");
 
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
 
   return (
     <Layout>
@@ -158,7 +165,11 @@ const UserCrud = () => {
         </View>
       </View>
       {showModal && (
-        <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
+        <ModalMensaje
+          mensaje={modalMensaje}
+          icono={icono}
+          closeModal={handleModalClose}
+        />
       )}
     </Layout>
   );

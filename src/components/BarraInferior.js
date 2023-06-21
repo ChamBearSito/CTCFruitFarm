@@ -6,12 +6,18 @@ import { Alert, Modal, Text, Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
+//! Se definio la Barra inferior que es la barra de navegacion con un Menu
+
 const BarraInferior = () => {
   const navigation = useNavigation();
+  //#region //! Estados
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [subOption, setSubOption] = useState(null);
+  //#endregion
 
+  //#region  //! Funciones de seleccion para el menu y para ocultarlo o mostralo
   const handlePress = () => {
     navigation.navigate("Home");
   };
@@ -27,10 +33,6 @@ const BarraInferior = () => {
     setSubOption(null);
   };
 
-  const handleSubOptionPress = (option) => {
-    setSubOption(option);
-  };
-
   const handleBackPress = () => {
     if (subOption !== null) {
       setSubOption(null);
@@ -44,7 +46,9 @@ const BarraInferior = () => {
     setSelectedOption(null);
     setSubOption(null);
   };
+  //#endregion
 
+  //#region //! Las Opciones del Menu(RenderMenuOptiones)
   const renderMenuOptions = () => {
     if (subOption !== null) {
       return <></>;
@@ -70,30 +74,7 @@ const BarraInferior = () => {
               />
               <Text style={styles.optionText}>Alta Usuarios</Text>
             </Pressable>
-            {/* <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="user-minus"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Baja Usuarios</Text>
-            </Pressable> */}
-            {/* <Pressable
-              style={styles.optionButton}
-              onPress={() => handleSubOptionPress("Suboption 1.2")}
-            >
-              <FontAwesome5
-                style={styles.iconocentrado}
-                name="user-edit"
-                size={24}
-                color="#1D5E33"
-              />
-              <Text style={styles.optionText}>Editar Usuarios</Text>
-            </Pressable> */}
+
             <Pressable
               style={styles.optionButton}
               onPress={() => {
@@ -346,6 +327,7 @@ const BarraInferior = () => {
       );
     }
   };
+  //#endregion
 
   return (
     <View style={styles.FooterContainer}>

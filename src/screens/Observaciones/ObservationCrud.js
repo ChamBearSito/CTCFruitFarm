@@ -5,17 +5,23 @@ import * as ImagePicker from "expo-image-picker";
 import Dropdown from "../../components/Dropdown";
 import ModalMensaje from "../../components/ModalMensaje";
 import { useRoute } from "@react-navigation/native";
-import ZonaContext from "../../provider/zonaProvider";
 import ObsContext from "../../provider/observacionProvider";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+//! Este crud de Observaciones se decidio hacerlo en el InfoZona, hay una opcion que dice agregar Observacion, esto para asi ya al hacer un tratamiento ya se traen las observaciones de esa zona en especifico.
 const ObservationCrud = () => {
   const { dispatch } = useContext(ObsContext);
+  //#region  //! Estados ModalMensaje y Imagen Seleccionada
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
-  const [laZona, setlaZona] = useState("");
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+  //#endregion
+
+  //#region //! ValidationSchema
   const validationSchema = yup.object().shape({
     titulo: yup
       .string()
@@ -23,11 +29,9 @@ const ObservationCrud = () => {
       .matches(/^[A-Za-z\s]+$/, "El Titulo no puede contener números"),
     img: yup.string().required("La Imagen es requerida"),
   });
+  //#endregion
 
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
+  //#region  //! Permisos para Entrar a la galeria, y el PickImage
   useEffect(() => {
     getPermission();
   }, []);
@@ -55,6 +59,8 @@ const ObservationCrud = () => {
       formik.setFieldValue("img", result.assets[0].uri);
     }
   };
+
+  //#endregion
   const route = useRoute();
   const { zona } = route.params;
 
@@ -79,6 +85,7 @@ const ObservationCrud = () => {
     { label: "Falta de riego ", value: "Falta de riego" },
   ];
 
+  //#region  //!FORMIK
   const formik = useFormik({
     initialValues: {
       titulo: theOb.titulo,
@@ -102,6 +109,7 @@ const ObservationCrud = () => {
       setShowModal(true);
     },
   });
+  //#endregion
   return (
     <Layout>
       <View style={styles.distancia}>

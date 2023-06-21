@@ -4,6 +4,7 @@ import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import { Platform } from "react-native";
 
+//! Creamos funcion para abir la database
 export const dataFunction = {
   getConnection: () => {
     let db = SQlite.openDatabase("database.db");
@@ -11,7 +12,8 @@ export const dataFunction = {
   },
 };
 
-// FUNCIONES PARA IMPORTAR Y EXPORTAR
+//#region //! FUNCIONES PARA IMPORTAR Y EXPORTAR
+
 const importDB = async () => {
   const result = await DocumentPicker.getDocumentAsync({
     copyToCacheDirectory: true,
@@ -68,7 +70,7 @@ const exportDB = async () => {
     await Sharing.shareAsync(directory + "/database.db");
   }
 };
-
+//#endregion
 export const database = {
   // importar y exportar
   importDB,

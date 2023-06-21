@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
@@ -11,9 +10,6 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
@@ -23,18 +19,24 @@ import ModalMensaje from "../../components/ModalMensaje";
 
 const ListaObservaciones = () => {
   const navigation = useNavigation();
+  //#region //! Navegacion a Editar(ObsCrud) mandandole el Obs
   const handleObsPress = (Obs) => {
     navigation.navigate("ObsInfo", { Obs });
   };
+  //#endregion
+
+  //#region //! Estados ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
 
+  //! Traemos el estado y el dispach desde el contexto porque los necesitamos para eliminar
   const { state, dispatch } = useContext(ObsContext);
 
-  // Función para renderizar cada item de la lista
+  //#region //! Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
@@ -76,6 +78,7 @@ const ListaObservaciones = () => {
       </View>
     </SwipeRow>
   );
+  //#endregion
 
   return (
     <SafeAreaView style={styles.safeAreaView}>

@@ -1,11 +1,11 @@
 import React, { useState, createContext, useReducer } from "react";
 import { dataZona } from "../data/datazona";
-
+//! Traemos los datos que hayan
 const getZonas = async () => {
   const zonas = await dataZona.getZona();
   return zonas;
 };
-
+//! y por cada dato que haya que lo pushee a el Array de Zonas
 getZonas().then((zonas) => {
   zonas.map((zona) => {
     Zonas.push(zona);
@@ -14,7 +14,7 @@ getZonas().then((zonas) => {
 
 let Zonas = [];
 
-//! Definimos las Acciones para el Reducer
+//#region  //! Definimos las Acciones para el Reducer + el getId
 const actions = {
   createZona(state, action) {
     const zona = action.payload;
@@ -45,6 +45,7 @@ const actions = {
 const getZonaById = (state, zonaId) => {
   return state.find((zona) => zona.id === zonaId);
 };
+//#endregion
 
 //! Creamos contexto para el reducer
 const ZonaContext = createContext();

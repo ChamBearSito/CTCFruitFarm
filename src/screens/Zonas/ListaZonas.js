@@ -1,19 +1,14 @@
 import React, { useState, useContext } from "react";
-import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
@@ -23,19 +18,23 @@ import ZonaContext from "../../provider/zonaProvider";
 
 const ListaZonas = () => {
   const navigation = useNavigation();
-
+  //#region //! Navegacion a Editar(ZonaCrud) mandandole la zona
   const handleZonaPress = (zona) => {
     navigation.navigate("InfoZona", { zona });
   };
+  //#endregion
 
+  //#region //! Estados ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
 
+  //! Traemos el estado y el dispach desde el contexto porque los necesitamos para eliminar
   const { state, dispatch } = useContext(ZonaContext);
-
+  //#region //! Función para renderizar cada item de la lista
   const renderTratamientoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
@@ -79,6 +78,7 @@ const ListaZonas = () => {
       </View>
     </SwipeRow>
   );
+  //#endregion
 
   return (
     <SafeAreaView style={styles.safeAreaView}>

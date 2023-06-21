@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import Layout from "../../components/Layout/Layout";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
@@ -11,26 +10,25 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import BarraInferior from "../../components/BarraInferior";
 import BarraSuperior from "../../components/BarraSuperior";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import InsumoContext from "../../provider/insumoProvider";
 import ModalMensaje from "../../components/ModalMensaje";
-
+//! LISTA PARA MOSTRAR INSUMOS
 const ListaInsumos = () => {
   const navigation = useNavigation();
+  //#region //! Navegacion a Editar(InsumoCrud) mandandole el Insumo
   const handleObsPress = (insumos) => {
     navigation.navigate("InfoInsumo", { insumos });
   };
+  //#endregion
 
-  // Array de usuarios del contexto
+  //! Traemos el estado y el dispach desde el contexto porque los necesitamos para eliminar
   const { state, dispatch } = useContext(InsumoContext);
 
-  // Función para renderizar cada item de la lista
+  //#region //! Función para renderizar cada item de la lista
   const renderInsumoItem = ({ item }) => (
     <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
       <View style={styles.standaloneRowBack}>
@@ -72,12 +70,14 @@ const ListaInsumos = () => {
       </View>
     </SwipeRow>
   );
-
+  //#endregion
+  //#region //! Estados ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
 
   return (
     <SafeAreaView style={styles.safeAreaView}>

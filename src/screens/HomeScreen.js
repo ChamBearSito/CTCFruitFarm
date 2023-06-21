@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-
 import RouteButton from "../components/RouteButton";
-
 import Layout from "../components/Layout/Layout";
+//! Se definieron los 6 botones principales, donde se reutilizo el routeButton,
+//!donde se le agrego a cada boton su correspondiente ruta e icono
 
 const HomeSreen = () => {
   return (

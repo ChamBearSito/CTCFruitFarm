@@ -6,8 +6,10 @@ import { useNavigation } from "@react-navigation/native";
 import TratContext from "../../provider/tratamientoProvider";
 import ZonaContext from "../../provider/zonaProvider";
 
+//! Screen para mostrar en el Mapa Los tratamienos Activos
 const VerMapa = () => {
   const navigation = useNavigation();
+  //! Traemos el estado de cuentos tratamientos hay y tambien el estado de zonas mas un getzonaById para poder buscar en el tratamiento su zonaId para marcar el marker con sus Latitudes de esa Zona
   const { state: TratamientosQueHay } = useContext(TratContext);
   const { state: Zonas, getZonaById } = useContext(ZonaContext);
 

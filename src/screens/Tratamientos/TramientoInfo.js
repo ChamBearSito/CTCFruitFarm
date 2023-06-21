@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-
 import { FontAwesome } from "@expo/vector-icons";
 import UserContext from "../../provider/userProvider";
 import ObsContext from "../../provider/observacionProvider";
@@ -23,26 +22,36 @@ const TratamientoInfo = () => {
   const route = useRoute();
   const { Tratamiento } = route.params;
   const navigation = useNavigation();
-  const { dispatch } = useContext(TratContext);
+  //#region //! FORMATEO DE FECHA Inicial
   const fechaInicial = new Date(Tratamiento.fechainicial);
   const dia = fechaInicial.getDate();
   const mes = fechaInicial.getMonth() + 1;
   const anio = fechaInicial.getFullYear();
   const fechaFormateada = `${dia}/${mes}/${anio}`;
+  //#endregion
+  //! Traemos el dispach de Tratamientos y todos los state y getIds que necesitamos
+  const { dispatch } = useContext(TratContext);
+  //#region //! Estados y getsIds
   const { state: EstadoUsuarios, getUserById } = useContext(UserContext);
   const { state: EstadoObs, getObsById } = useContext(ObsContext);
   const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
   const { state: EstadoInsumo, getInsumoById } = useContext(InsumoContext);
+  //#endregion
+
+  //#region //! Asigamos dependiendo el Id que venga la Info
   const elusuario = getUserById(EstadoUsuarios, Tratamiento.usuario);
   const lasObservaciones = getObsById(EstadoObs, Tratamiento.zona);
   const lazona = getZonaById(EstadoZona, Tratamiento.zona);
   const elInsumo = getInsumoById(EstadoInsumo, Tratamiento.insumo);
+  //#endregion
+
+  //#region //! Estado ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
-
+  //#endregion
   return (
     <Layout>
       <View style={styles.distancia}>

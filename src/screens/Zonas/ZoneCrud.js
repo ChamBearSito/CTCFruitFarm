@@ -2,13 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-
 import MapView, { Marker } from "react-native-maps";
-
 import Dropdown from "../../components/Dropdown";
-
 import ModalMensaje from "../../components/ModalMensaje";
-
 import { useRoute } from "@react-navigation/native";
 import ZonaContext from "../../provider/zonaProvider";
 import axios from "axios";
@@ -16,6 +12,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 const ZoneCrud = () => {
+  //#region //! ValidationSchema
   const validationSchema = yup.object().shape({
     lugar: yup.string().required("El Lugar es requerido"),
 
@@ -27,17 +24,18 @@ const ZoneCrud = () => {
       .integer("La cantidad debe ser un número entero"),
     depto: yup.string().required("El departamento es requerido"),
   });
-
-  //El route es por si recibe un usuario significa que es para editar no
-  // para hacer alta
+  //#endregion
   const route = useRoute();
+  //! Traemos dispach de el ZonaContext
   const { dispatch } = useContext(ZonaContext);
+  //#region  //! Estado Location (pais y departamento o provincia), ademas de el useEffect del mismo setLocation
   const [location, setLocation] = useState("Seleccione una ubicacion");
   useEffect(() => {
     if (theZona.id) {
       setLocation(theZona.depto);
     }
   }, []);
+  //#endregion
 
   let laZona = {
     id: "",
@@ -49,6 +47,7 @@ const ZoneCrud = () => {
   };
 
   const [theZona] = useState(route.params ? route.params : laZona);
+  //#region //! Formik
   const formik = useFormik({
     initialValues: {
       lugar: laZona.lugar,
@@ -73,10 +72,14 @@ const ZoneCrud = () => {
       setShowModal(true);
     },
   });
+  //#endregion
 
+  //#region //! Estado de Longitud y Latitud
   const [latitude, setLatitude] = useState(-34.312977);
   const [longitude, setLongitude] = useState(-57.230646);
+  //#endregion
 
+  //#region //! GEOCODING PARA CONSEGUIR INFO DEL LAS COORDENADAS
   const reverseGeocode = async (latitude, longitude) => {
     try {
       const response = await axios.get(
@@ -88,31 +91,38 @@ const ZoneCrud = () => {
       theZona.longitude = longitude;
       setLocation(`${state}, ${country}`);
       formik.setFieldValue("depto", `${state}, ${country}`);
+      formik.setFieldTouched("depto", false);
       theZona.depto = `${state}, ${country}`;
     } catch (error) {
       console.warn(error);
     }
   };
+  //#endregion
 
+  //#region //! Estados ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
-
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
 
+  //#region //! handleLocationSelect
   const handleLocationSelect = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setLatitude(latitude);
     setLongitude(longitude);
     reverseGeocode(latitude, longitude);
   };
+  //#endregion
 
+  //#region //! Opciones Lugares
   const Lugares = [
     { label: "Estancia", value: "Estancia" },
     { label: "Quinta", value: "Quinta" },
     { label: "Plantación ", value: "Plantación" },
   ];
+  //#endregion
 
   return (
     <Layout>

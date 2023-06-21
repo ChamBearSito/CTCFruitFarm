@@ -1,7 +1,6 @@
 import { dataFunction } from "./database.js";
-
 let db = dataFunction.getConnection();
-
+//#region //! tratamientos SQL
 const createTratSQL = `
 CREATE TABLE IF NOT EXISTS tratamientos(
  id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,33 +28,35 @@ const updateTratSQL = `
   WHERE id = (?)`;
 const deletetTratSQL = "DELETE FROM tratamientos WHERE id = (?)";
 
+//#endregion
+
+//#region //! Operaciones de tratamientos
 const getTrat = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql(
-        createTratSQL, 
-        [], () => {
-      tx.executeSql(
-        "SELECT * FROM tratamientos",
-        [],
-        (_, { rows: { _array } }) => {
-          resolve(_array);
-        },
-        (_, error) => {
-          console.log("error get tratamientos", error);
-          reject(error);
-        },
-        (_, succes) => {
-          console.log("succes get tratamientos", succes);
-          resolve(succes);
-        }
-      );
+      tx.executeSql(createTratSQL, [], () => {
+        tx.executeSql(
+          "SELECT * FROM tratamientos",
+          [],
+          (_, { rows: { _array } }) => {
+            resolve(_array);
+          },
+          (_, error) => {
+            console.log("error get tratamientos", error);
+            reject(error);
+          },
+          (_, succes) => {
+            console.log("succes get tratamientos", succes);
+            resolve(succes);
+          }
+        );
+      });
     });
   });
-})};
+};
 
 const insertTrat = async (Trat) => {
-  console.log('El trat:',Trat);
+  console.log("El trat:", Trat);
   const {
     nombre,
     zona,
@@ -143,6 +144,7 @@ const deleteTrat = (id) => {
     });
   });
 };
+//#endregion
 
 export const dataTrat = {
   // crud

@@ -1,10 +1,11 @@
 import React, { useState, createContext, useReducer } from "react";
 import { dataTrat } from "../data/datatrat";
-
+//! Traemos los datos que hayan
 const getTrats = async () => {
   const Trats = await dataTrat.getTrat();
   return Trats;
 };
+//! y por cada dato que haya que lo pushee a el Array de Tratamientos
 getTrats().then((trat) => {
   trat.map((eltratamiento) => {
     Tratamientos.push({
@@ -21,20 +22,8 @@ getTrats().then((trat) => {
   });
 });
 
-let Tratamientos = [
-  // {
-  //   id: 1,
-  //   nombre: "JUANITO",
-  //   zona: 3,
-  //   usuario: 1,
-  //   insumo: 2,
-  //   fechainicial: "2023-06-24T19:50:48.623Z",
-  //   fechafin: "2023-06-24T19:50:48.623Z",
-  //   tiempo: 4,
-  //   orden: "undefined",
-  // },
-];
-
+let Tratamientos = [];
+//#region  //! Definimos las Acciones para el Reducer
 const actions = {
   createTratamiento(state, action) {
     const Tratamiento = action.payload;
@@ -71,6 +60,7 @@ const actions = {
     return [...state.filter((trat) => trat.id !== TratamientoDelete.id)];
   },
 };
+//#endregion
 
 const TratContext = createContext();
 

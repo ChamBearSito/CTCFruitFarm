@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
+//! Esto es un dropdown que se saco de la pagina de expo para poder mostrar el dropdown, Siempre sale con un error pero despues desaparece
 
 interface Props {
   label: string;

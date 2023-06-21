@@ -1,16 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
-import { SwipeRow } from "react-native-swipe-list-view";
-import { FontAwesome5 } from "@expo/vector-icons";
-
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import ModalMensaje from "../../components/ModalMensaje";
@@ -23,15 +13,17 @@ import { useRoute } from "@react-navigation/native";
 const InfoZona = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  //! traemos el estado y el getobsId ademas del dispatch de zonacontext
   const { state, getObsById } = useContext(ObsContext);
   const { dispatch } = useContext(ZonaContext);
   const { zona } = route.params;
+  //#region //! Estado ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
-
+  //#endregion
   const [observaciones] = useState(getObsById(state, zona.id));
 
   return (

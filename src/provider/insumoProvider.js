@@ -1,16 +1,13 @@
 import React, { useState, createContext, useReducer } from "react";
 import { dataInsumo } from "../data/datainsumo";
 
-// const getInsumos = async () => {
-//   const users = await database.getUsers();
-//   return users;
-// };
-
+//! Traemos los datos que hayan
 const getInsumo = async () => {
   const insumos = await dataInsumo.getInsumo();
   return insumos;
 };
 
+//! y por cada dato que haya que lo pushee a el Array de Insumos
 getInsumo().then((insumos) => {
   insumos.map((insumo) => {
     Insumos.push({
@@ -21,22 +18,13 @@ getInsumo().then((insumos) => {
   });
 });
 
-//! Creamos juego de prueba
+let Insumos = [];
 
-let Insumos = [
-  // { id: 1, nombre: "Hipermicida", cantidad: 400 },
-  // { id: 2, nombre: "Desinfectante Ultra", cantidad: 200 },
-  // { id: 3, nombre: "Gel Antibacterial Plus", cantidad: 150 },
-  // { id: 4, nombre: "Limpiador Poderoso", cantidad: 300 },
-  // { id: 5, nombre: "Spray Desinfectante", cantidad: 250 },
-];
+//#region  //! Definimos las Acciones para el Reducer y el getInsumoById
 
-//! Definimos las Acciones para el Reducer
 const actions = {
   createInsumo(state, action) {
     const Insumo = action.payload;
-    // Insumo.id = generateNumericId();
-    // guardar el usuario en la db
     dataInsumo.insertInsumo(Insumo).then((insertedId) => {
       Insumo.id = insertedId;
     });
@@ -65,6 +53,8 @@ const actions = {
 const getInsumoById = (state, insumoIds) => {
   return state.filter((insumo) => insumoIds.includes(insumo.id));
 };
+
+//#endregion
 //! Creamos contexto para el reducer
 const InsumoContext = createContext();
 

@@ -1,25 +1,17 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-
 const Stack = createStackNavigator();
-
 import HomeScreen from "../screens/HomeScreen";
-
 import InsumoCrud from "../screens/Insumos/InsumoCrud";
 import ZoneCrud from "../screens/Zonas/ZoneCrud";
 import ObservationCrud from "../screens/Observaciones/ObservationCrud";
 import UserCrud from "../screens/Usuarios/UserCrud";
-
 import ListTreataments from "../screens/Tratamientos/ListTreatments";
 import InformationSreen from "../screens/InformationSreen";
-
 import ListadoUsuarios from "../screens/Usuarios/ListadoUsuarios";
-
 import UserInfo from "../screens/Usuarios/UserInfo";
-
 import TratamientoInfo from "../screens/Tratamientos/TramientoInfo";
-
 import ListaZonas from "../screens/Zonas/ListaZonas";
 import InfoZona from "../screens/Zonas/InfoZona";
 import InfoObservacion from "../screens/Observaciones/InfoObservacion";

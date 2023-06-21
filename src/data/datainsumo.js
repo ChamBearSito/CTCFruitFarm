@@ -1,8 +1,6 @@
-import * as SQlite from "expo-sqlite";
 import { dataFunction } from "./database.js";
-
 let db = dataFunction.getConnection();
-
+//#region //! INSUMO SQL
 const createInsumoSQL = `
   CREATE TABLE IF NOT EXISTS insumos(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,31 +11,32 @@ const updateInsumoSQL =
   "UPDATE insumos SET nombre = (?), cantidad = (?), WHERE id = (?)";
 const deletetInsumoSQL = "DELETE FROM insumos WHERE id = (?)";
 
-// Crud usuario
+//#endregion
+
+//#region //! Operaciones de Insumos
 const getInsumo = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql(
-        createInsumoSQL, 
-        [], () => {
-      tx.executeSql(
-        "SELECT * FROM insumos",
-        [],
-        (_, { rows: { _array } }) => {
-          resolve(_array);
-        },
-        (_, error) => {
-          console.log("error get insumos", error);
-          reject(error);
-        },
-        (_, succes) => {
-          console.log("succes get insumos", succes);
-          resolve(succes);
-        }
-      );
+      tx.executeSql(createInsumoSQL, [], () => {
+        tx.executeSql(
+          "SELECT * FROM insumos",
+          [],
+          (_, { rows: { _array } }) => {
+            resolve(_array);
+          },
+          (_, error) => {
+            console.log("error get insumos", error);
+            reject(error);
+          },
+          (_, succes) => {
+            console.log("succes get insumos", succes);
+            resolve(succes);
+          }
+        );
+      });
     });
   });
-})};
+};
 
 const insertInsumo = async (insumo) => {
   const { nombre, cantidad } = insumo;
@@ -98,6 +97,7 @@ const deleteInsumo = (id) => {
     });
   });
 };
+//#endregion
 
 export const dataInsumo = {
   // crud

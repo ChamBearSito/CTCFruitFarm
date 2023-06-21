@@ -1,8 +1,7 @@
-import * as SQlite from "expo-sqlite";
 import { dataFunction } from "./database.js";
-
 let db = dataFunction.getConnection();
 
+//#region //! zonas SQL
 const createZonaSQL = `
   CREATE TABLE IF NOT EXISTS zonas(
    id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,32 +22,32 @@ const updateZonaSQL = `
   longitude = (?) 
   WHERE id = (?)`;
 const deletetZonaSQL = "DELETE FROM zonas WHERE id = (?)";
+//#endregion
 
-// Crud usuario
+//#region //! Operaciones de zonas
 const getZona = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql(
-        createZonaSQL, 
-        [], () => {
-      tx.executeSql(
-        "SELECT * FROM zonas",
-        [],
-        (_, { rows: { _array } }) => {
-          resolve(_array);
-        },
-        (_, error) => {
-          console.log("error get zonas", error);
-          reject(error);
-        },
-        (_, succes) => {
-          console.log("succes get zonas", succes);
-          resolve(succes);
-        }
-      );
+      tx.executeSql(createZonaSQL, [], () => {
+        tx.executeSql(
+          "SELECT * FROM zonas",
+          [],
+          (_, { rows: { _array } }) => {
+            resolve(_array);
+          },
+          (_, error) => {
+            console.log("error get zonas", error);
+            reject(error);
+          },
+          (_, succes) => {
+            console.log("succes get zonas", succes);
+            resolve(succes);
+          }
+        );
+      });
     });
   });
-})};
+};
 
 const insertZona = async (zona) => {
   const { lugar, trabajadores, depto, latitude, longitude } = zona;
@@ -110,6 +109,7 @@ const deleteZona = (id) => {
   });
 };
 
+//#endregion
 export const dataZona = {
   // crud
   getZona,

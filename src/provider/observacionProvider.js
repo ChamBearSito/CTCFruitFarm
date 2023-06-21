@@ -1,10 +1,11 @@
 import React, { useState, createContext, useReducer } from "react";
 import { dataObs } from "../data/dataobs";
+//! Traemos los datos que hayan
 const getObs = async () => {
   const Obs = await dataObs.getObs();
   return Obs;
 };
-
+//! y por cada dato que haya que lo pushee a el Array de Observaciones
 getObs().then((obs) => {
   obs.map((observacion) => {
     Observaciones.push({
@@ -16,28 +17,9 @@ getObs().then((obs) => {
   });
 });
 
-let Observaciones = [
-  // {
-  //   id: 1,
-  //   titulo: "Plaga Detectada",
-  //   img: "https://source.unsplash.com/featured/?nature",
-  //   zonaId: 2,
-  // },
-  // {
-  //   id: 2,
-  //   titulo: "Falta de Riego",
-  //   img: "https://source.unsplash.com/featured/?nature",
-  //   zonaId: 2,
-  // },
-  // {
-  //   id: 3,
-  //   titulo: "Planta en mal Estado",
-  //   img: "https://source.unsplash.com/featured/?nature",
-  //   zonaId: 2,
-  // },
-];
+let Observaciones = [];
 
-//! Definimos las Acciones para el Reducer
+//#region  //! Definimos las Acciones para el Reducer + el getId
 const actions = {
   createObs(state, action) {
     const Obs = action.payload;
@@ -66,11 +48,13 @@ const actions = {
   },
 };
 
-//! Creamos contexto para el reducer
-const ObsContext = createContext();
 const getObsById = (state, obsId) => {
   return [...state.filter((obs) => obs.zonaId === obsId)];
 };
+
+//#endregion
+//! Creamos contexto para el reducer
+const ObsContext = createContext();
 
 export const ObsProvider = (props) => {
   const reducer = (state, action) => {

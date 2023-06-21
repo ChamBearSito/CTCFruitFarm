@@ -1,27 +1,27 @@
 import React, { useContext, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-
 import { FontAwesome } from "@expo/vector-icons";
 import ObsContext from "../../provider/observacionProvider";
 import ZonaContext from "../../provider/zonaProvider";
-import MapView, { Marker } from "react-native-maps";
-
 import ModalMensaje from "../../components/ModalMensaje";
 import { useNavigation } from "@react-navigation/native";
 
 const InfoObservacion = ({ route }) => {
   const { Obs } = route.params;
-
   const navigation = useNavigation();
+  //! Traemos el Dispach de Observaciones y traemos el estado de zona y el getzonaById para asi poder marcar a que zona le pertenece esa observacion
   const { dispatch } = useContext(ObsContext);
   const { state, getZonaById } = useContext(ZonaContext);
   const zona = getZonaById(state, Obs.zonaId);
+
+  //#region //! Estado ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
   return (
     <Layout>
       <View style={styles.distancia}>

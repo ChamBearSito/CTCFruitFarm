@@ -1,50 +1,14 @@
 import React, { useState, createContext, useReducer } from "react";
 import { datauser } from "../data/datauser";
-
+//! Traemos los datos que hayan
 const getUsers = async () => {
   const users = await datauser.getUsers();
   return users;
 };
 
-let Users = [
-  // {
-  //   id: 1,
-  //   nombre: "JUANITO",
-  //   apellido: "Suarez",
-  //   cedula: 455454,
-  // },
-  // {
-  //   id: 2,
-  //   nombre: "JUANITO",
-  //   apellido: "JIJIJA",
-  //   cedula: 4564664,
-  // },
-  // {
-  //   id: 3,
-  //   nombre: "Marceliño",
-  //   apellido: "Albariño",
-  //   cedula: 584864,
-  // },
-  // {
-  //   id: 4,
-  //   nombre: "MARCELA",
-  //   apellido: "Cavani",
-  //   cedula: 8476354,
-  // },
-  // {
-  //   id: 5,
-  //   nombre: "OSVALDO",
-  //   apellido: "Chambonardo",
-  //   cedula: 4564664,
-  // },
-  // {
-  //   id: 6,
-  //   nombre: "YESSICA",
-  //   apellido: "Mimosha",
-  //   cedula: 456797,
-  // },
-];
+let Users = [];
 
+//! y por cada dato que haya que lo pushee a el Array de Users
 getUsers().then((users) => {
   users.map((user) => {
     Users.push({
@@ -56,17 +20,17 @@ getUsers().then((users) => {
   });
 });
 
+//#region  //! Definimos las Acciones para el Reducer + el getId
 const actions = {
   createUser(state, action) {
     const user = action.payload;
-    console.log('elEstado',state)
+    console.log("elEstado", state);
     // guardar el usuario en la db
 
-      datauser.insertUser(user).then((insertedId) => {
-        user.id = insertedId;
-      });
-      return [...state, user];
-    
+    datauser.insertUser(user).then((insertedId) => {
+      user.id = insertedId;
+    });
+    return [...state, user];
   },
   updateUser(state, action) {
     const userUpdated = action.payload;
@@ -86,8 +50,11 @@ const actions = {
 };
 
 const getUserById = (state, UserId) => {
-  return state.find((usuario) => usuario.id === UserId || usuario.cedula==UserId);
+  return state.find(
+    (usuario) => usuario.id === UserId || usuario.cedula == UserId
+  );
 };
+//#endregion
 
 const UserContext = createContext();
 

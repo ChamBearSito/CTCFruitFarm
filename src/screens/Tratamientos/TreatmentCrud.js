@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import Layout from "../../components/Layout/Layout";
-import TratamientoLayout from "../../components/Layout/TratamientoLayout";
 import {
   View,
   Text,
@@ -28,18 +27,20 @@ import * as yup from "yup";
 
 const TratamientoCrud = () => {
   const route = useRoute();
+  //! Traemos el dispach del contexto de Tratamientos, y luego traemos los estados de los contextos de zona,Insumo,Usuarios
+  //! ademas de traer el getzonaId y el getUserId
   const { dispatch } = useContext(TratContext);
   const { state: EstadoZona, getZonaById } = useContext(ZonaContext);
   const { state: EstadoUsuarios, getUserById } = useContext(UserContext);
   const { state: EstadoInsumos } = useContext(InsumoContext);
-
-  const [selectedDate, setSelectedDate] = useState();
+  const [Insumos, setInsumos] = useState([]);
+  //#region //! Estados del DATEPICKER Y EL SELECTEDFILE
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const [selectedDate1, setSelectedDate1] = useState();
   const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
+  //#endregion
 
+  //#region  //! Permisos de MediaLibrary y el PickDocument
   const requestMediaLibraryPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -76,7 +77,9 @@ const TratamientoCrud = () => {
       formik.setFieldValue("orden", result.uri);
     }
   };
+  //#endregion
 
+  //#region //! ShowDataPickers y Los HandleConfirm
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -104,23 +107,17 @@ const TratamientoCrud = () => {
     formik.setFieldValue("fechainicial", date.toISOString());
     hideDatePicker1();
   };
+  //#endregion
 
-  const [usuario, setusuario] = useState(undefined);
-  const [nombre, setnombre] = useState(undefined);
-
-  const [zona, setzona] = useState(undefined);
-  const [tiempo, settiempo] = useState(undefined);
-
-  const [Insumos, setInsumos] = useState([]);
-
-  const [Obs, setObs] = useState(undefined);
-
+  //#region //! Estados ModalMensaje
   const [showModal, setShowModal] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
-
   const handleModalClose = () => {
     setShowModal(false);
   };
+  //#endregion
+
+  //#region  //! Estas son las Opciones de los Dropdown, donde el value de cada 1 es el Id
   const optionsUsuarios = EstadoUsuarios.map((item) => ({
     label: `${item.id} ${item.nombre} ${item.apellido} ${item.cedula}`,
     value: item.id,
@@ -135,7 +132,9 @@ const TratamientoCrud = () => {
     label: `${item.id} ${item.nombre} ${item.cantidad}`,
     value: item.id,
   }));
+  //#endregion
 
+  //#region //! validationSchema
   const validationSchema = yup.object().shape({
     nombre: yup
       .string()
@@ -180,6 +179,7 @@ const TratamientoCrud = () => {
       .typeError("Solo se aceptan Numeros")
       .positive("El numero debe ser positivo"),
   });
+  //#endregion
 
   let elTratamiento = {
     id: "",
@@ -197,9 +197,11 @@ const TratamientoCrud = () => {
     route.params ? route.params : elTratamiento
   );
 
+  //! Traemos la zona y el Usuario
   const laZona = getZonaById(EstadoZona, theTratamiento.zona);
   const elUser = getUserById(EstadoUsuarios, theTratamiento.usuario);
 
+  //#region //! Estados para abrir el Modal de MultipleOpcion de Insumos y handleInsumosChange
   // Estado para controlar la visibilidad del modal
   const [showInsumosModal, setShowInsumosModal] = useState(false);
 
@@ -213,12 +215,14 @@ const TratamientoCrud = () => {
     setShowInsumosModal(false);
   };
 
-  // Función para manejar los insumos seleccionados
-  const handleInsumosSelection = (selectedItems) => {
-    // Actualiza el estado con los insumos seleccionados
+  const handleInsumosChange = (selectedItems) => {
     setInsumos(selectedItems);
+    formik.setFieldValue("insumo", selectedItems);
+    formik.setFieldTouched("insumo", false);
   };
+  //#endregion
 
+  //#region  //! Formik
   const formik = useFormik({
     initialValues: {
       id: theTratamiento.id,
@@ -249,13 +253,10 @@ const TratamientoCrud = () => {
       setShowModal(true);
     },
   });
-  const handleInsumosChange = (selectedItems) => {
-    setInsumos(selectedItems);
-    formik.setFieldValue("insumo", selectedItems);
-    formik.setFieldTouched("insumo", false);
-  };
+  //#endregion
+
   return (
-    <TratamientoLayout>
+    <Layout>
       {EstadoInsumos.length > 0 &&
       EstadoUsuarios.length > 0 &&
       EstadoZona.length > 0 ? (
@@ -502,23 +503,6 @@ const TratamientoCrud = () => {
             <TouchableOpacity
               style={styles.buttonContainer}
               onPress={formik.handleSubmit}
-              // onPress={() => {
-              //   let action = "";
-              //   let mensaje = "";
-              //   theTratamiento.insumo = Insumos;
-              //   {
-              //     theTratamiento.id
-              //       ? (action = "updateTratamiento")
-              //       : (action = "createTratamiento");
-              //   }
-              //   dispatch({ type: action, payload: theTratamiento });
-              //   theTratamiento.id
-              //     ? (mensaje = "Tratamiento Editado")
-              //     : (mensaje = "Tratamiento Creado");
-
-              //   setModalMensaje(mensaje);
-              //   setShowModal(true);
-              // }}
             >
               <Text style={styles.buttonText}>
                 {theTratamiento.id ? "Editar" : "Crear"} Tratamiento
@@ -540,7 +524,7 @@ const TratamientoCrud = () => {
       {showModal && (
         <ModalMensaje mensaje={modalMensaje} closeModal={handleModalClose} />
       )}
-    </TratamientoLayout>
+    </Layout>
   );
 };
 
