@@ -3,6 +3,15 @@ import { dataFunction } from "./database.js";
 
 let db = dataFunction.getConnection();
 
+const createZonaSQL = `
+  CREATE TABLE IF NOT EXISTS zonas(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   lugar VARCHAR(12),
+   trabajadores INTEGER,
+   depto VARCHAR(50),
+   latitude VARCHAR(50),
+   longitude VARCHAR(50)
+   );`;
 const insertZonaSQL =
   "INSERT INTO zonas (lugar, trabajadores, depto, latitude, longitude) VALUES (?,?,?,?,?)";
 const updateZonaSQL = `
@@ -20,6 +29,9 @@ const getZona = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
+        createZonaSQL, 
+        [], () => {
+      tx.executeSql(
         "SELECT * FROM zonas",
         [],
         (_, { rows: { _array } }) => {
@@ -36,7 +48,7 @@ const getZona = async () => {
       );
     });
   });
-};
+})};
 
 const insertZona = async (zona) => {
   const { lugar, trabajadores, depto, latitude, longitude } = zona;

@@ -59,20 +59,14 @@ getUsers().then((users) => {
 const actions = {
   createUser(state, action) {
     const user = action.payload;
-    let userExists = {};
-
+    console.log('elEstado',state)
     // guardar el usuario en la db
-    datauser.getAUser(user.cedula).then((result) => {
-      userExists = result;
-    });
-    if (!userExists) {
+
       datauser.insertUser(user).then((insertedId) => {
         user.id = insertedId;
       });
       return [...state, user];
-    } else {
-      return [...state];
-    }
+    
   },
   updateUser(state, action) {
     const userUpdated = action.payload;
@@ -91,22 +85,8 @@ const actions = {
   },
 };
 
-const generateNumericId = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  // Concatenamos los componentes de la fecha y hora en un solo string numérico
-  const numericId = `${year}${month}${day}${hours}${minutes}${seconds}`;
-
-  return numericId;
-};
 const getUserById = (state, UserId) => {
-  return state.find((usuario) => usuario.id === UserId);
+  return state.find((usuario) => usuario.id === UserId || usuario.cedula==UserId);
 };
 
 const UserContext = createContext();

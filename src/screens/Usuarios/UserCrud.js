@@ -8,7 +8,7 @@ import ModalMensaje from "../../components/ModalMensaje";
 import { useFormik } from "formik";
 import * as yup from "yup";
 const UserCrud = () => {
-  const { dispatch, state } = useContext(UserContext);
+  const { dispatch, state, getUserById } = useContext(UserContext);
 
   const validationSchema = yup.object().shape({
     nombre: yup
@@ -65,17 +65,16 @@ const UserCrud = () => {
         action = "createUser";
         mensaje = "Usuario creado";
       }
-
-      const oldState = state;
-
-      dispatch({
-        type: action,
-        payload: { ...theUser, ...values },
-      });
-
-      if (oldState.lenght == state.lenght) {
-        mensaje = "Ya existe el Usuario";
+      const result=getUserById(state,values.cedula);
+      if(!result){
+        dispatch({
+          type: action,
+          payload: { ...theUser, ...values },
+        });
+      }else{
+        mensaje="Ya existe el usuario";
       }
+    
       setModalMensaje(mensaje);
       setShowModal(true);
     },

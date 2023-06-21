@@ -2,6 +2,18 @@ import { dataFunction } from "./database.js";
 
 let db = dataFunction.getConnection();
 
+const createTratSQL = `
+CREATE TABLE IF NOT EXISTS tratamientos(
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ nombre VARCHAR(60),
+ zona INTEGER REFERENCES zonas(id),
+ usuario INTEGER REFERENCES users(id),
+ insumo VARCHAR(30),
+ fechainicial VARCHAR(60),
+ fechafin VARCHAR(60),
+ tiempo INTEGER,
+ orden VARCHAR(60)
+ );`;
 const insertTratSQL =
   "INSERT INTO tratamientos(nombre, zona, usuario,insumo,fechainicial,fechafin,tiempo,orden) VALUES (?,?,?,?,?,?,?,?)";
 const updateTratSQL = `
@@ -21,6 +33,9 @@ const getTrat = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
+        createTratSQL, 
+        [], () => {
+      tx.executeSql(
         "SELECT * FROM tratamientos",
         [],
         (_, { rows: { _array } }) => {
@@ -37,7 +52,7 @@ const getTrat = async () => {
       );
     });
   });
-};
+})};
 
 const insertTrat = async (Trat) => {
   console.log('El trat:',Trat);

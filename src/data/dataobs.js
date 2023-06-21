@@ -2,6 +2,13 @@ import { dataFunction } from "./database.js";
 
 let db = dataFunction.getConnection();
 
+const createObsSQL = `
+  CREATE TABLE IF NOT EXISTS obs(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   titulo VARCHAR(60),
+   zonaId INTEGER REFERENCES zonas(id),
+   img VARCHAR(100)
+   );`;
 const insertObsSQL = "INSERT INTO obs(titulo, zonaId, img) VALUES (?,?,?)";
 const updateObsSQL = `
   UPDATE obs 
@@ -14,6 +21,9 @@ const deletetObsSQL = "DELETE FROM obs WHERE id = (?)";
 const getObs = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
+      tx.executeSql(
+        createObsSQL, 
+        [], () => {
       tx.executeSql(
         "SELECT * FROM obs",
         [],
@@ -31,7 +41,7 @@ const getObs = async () => {
       );
     });
   });
-};
+})};
 
 const insertObs = async (obs) => {
   const { titulo, zonaId, img } = obs;

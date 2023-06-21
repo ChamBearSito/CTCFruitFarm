@@ -3,6 +3,12 @@ import { dataFunction } from "./database.js";
 
 let db = dataFunction.getConnection();
 
+const createUserSQL = `
+  CREATE TABLE IF NOT EXISTS users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    nombre VARCHAR(50), 
+    apellido VARCHAR(50), 
+    cedula VARCHAR(8));`;
 const insertUserSQL =
   "INSERT INTO users (nombre, apellido, cedula) VALUES (?,?,?)";
 const updateUserSQL =
@@ -15,7 +21,6 @@ const getAUser = async (cedula) => {
     db.transaction((tx) => {
       tx.executeSql(
         `SELECT * FROM users WHERE cedula=${cedula}`,
-        [],
         (_, { rows: { _array } }) => {
           resolve(_array);
         },
@@ -36,20 +41,24 @@ const getUsers = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "SELECT * FROM users",
-        [],
-        (_, { rows: { _array } }) => {
-          resolve(_array);
-        },
-        (_, error) => {
-          console.log("error get users", error);
-          reject(error);
-        },
-        (_, succes) => {
-          console.log("succes get users", succes);
-          resolve(succes);
-        }
-      );
+        createUserSQL, 
+        [], () => {
+        tx.executeSql(
+          "SELECT * FROM users",
+          [],
+          (_, { rows: { _array } }) => {
+            resolve(_array);
+          },
+          (_, error) => {
+            console.log("error get users", error);
+            reject(error);
+          },
+          (_, succes) => {
+            console.log("succes get users", succes);
+            resolve(succes);
+          }
+        );
+      });
     });
   });
 };

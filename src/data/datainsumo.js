@@ -3,6 +3,11 @@ import { dataFunction } from "./database.js";
 
 let db = dataFunction.getConnection();
 
+const createInsumoSQL = `
+  CREATE TABLE IF NOT EXISTS insumos(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre VARCHAR(50),
+    cantidad INTEGER);`;
 const insertInsumoSQL = "INSERT INTO insumos (nombre, cantidad) VALUES (?,?)";
 const updateInsumoSQL =
   "UPDATE insumos SET nombre = (?), cantidad = (?), WHERE id = (?)";
@@ -12,6 +17,9 @@ const deletetInsumoSQL = "DELETE FROM insumos WHERE id = (?)";
 const getInsumo = async () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
+      tx.executeSql(
+        createInsumoSQL, 
+        [], () => {
       tx.executeSql(
         "SELECT * FROM insumos",
         [],
@@ -29,7 +37,7 @@ const getInsumo = async () => {
       );
     });
   });
-};
+})};
 
 const insertInsumo = async (insumo) => {
   const { nombre, cantidad } = insumo;
