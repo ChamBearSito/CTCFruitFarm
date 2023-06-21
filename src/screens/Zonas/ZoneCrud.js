@@ -90,8 +90,9 @@ const ZoneCrud = () => {
       theZona.latitude = latitude;
       theZona.longitude = longitude;
       setLocation(`${state}, ${country}`);
+      formik.setFieldTouched("depto", true);
       formik.setFieldValue("depto", `${state}, ${country}`);
-      formik.setFieldTouched("depto", false);
+
       theZona.depto = `${state}, ${country}`;
     } catch (error) {
       console.warn(error);
