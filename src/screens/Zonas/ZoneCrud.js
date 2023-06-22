@@ -50,9 +50,9 @@ const ZoneCrud = () => {
   //#region //! Formik
   const formik = useFormik({
     initialValues: {
-      lugar: laZona.lugar,
-      trabajadores: laZona.trabajadores,
-      depto: laZona.depto,
+      lugar: theZona.lugar,
+      trabajadores: theZona.trabajadores,
+      depto: theZona.depto,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -147,7 +147,7 @@ const ZoneCrud = () => {
               formik.setFieldTouched("lugar", true);
             }}
           />
-          {formik.touched.lugar && formik.errors.lugar && (
+          {formik.touched.lugar && formik.errors.lugar && !theZona.id && (
             <Text style={styles.errorText}>{formik.errors.lugar}</Text>
           )}
         </View>
@@ -157,7 +157,7 @@ const ZoneCrud = () => {
 
           <Text>{location}</Text>
 
-          {formik.touched.depto && formik.errors.depto && (
+          {formik.touched.depto && formik.errors.depto && !theZona.id && (
             <Text style={styles.errorText}>{formik.errors.depto}</Text>
           )}
         </View>
@@ -173,9 +173,11 @@ const ZoneCrud = () => {
             onChangeText={formik.handleChange("trabajadores")}
             onBlur={formik.handleBlur("trabajadores")}
           />
-          {formik.touched.trabajadores && formik.errors.trabajadores && (
-            <Text style={styles.errorText}>{formik.errors.trabajadores}</Text>
-          )}
+          {formik.touched.trabajadores &&
+            !theZona.id &&
+            formik.errors.trabajadores && (
+              <Text style={styles.errorText}>{formik.errors.trabajadores}</Text>
+            )}
         </View>
 
         <View style={styles.container}>

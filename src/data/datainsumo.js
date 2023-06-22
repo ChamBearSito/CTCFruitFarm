@@ -8,7 +8,7 @@ const createInsumoSQL = `
     cantidad INTEGER);`;
 const insertInsumoSQL = "INSERT INTO insumos (nombre, cantidad) VALUES (?,?)";
 const updateInsumoSQL =
-  "UPDATE insumos SET nombre = (?), cantidad = (?), WHERE id = (?)";
+  "UPDATE insumos SET nombre = (?), cantidad = (?) WHERE id = (?)";
 const deletetInsumoSQL = "DELETE FROM insumos WHERE id = (?)";
 
 //#endregion
